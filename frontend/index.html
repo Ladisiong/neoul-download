@@ -209,6 +209,32 @@
       font-weight: 500;
     }
 
+    /* 단일 통합본(요약집) 전용 배지 — 기타 카테고리 */
+    .count-badge.summary {
+      background: #FFF9E6;
+      color: #8B6F00;
+      border: 1px solid #F5C518;
+    }
+
+    /* 자료 미업로드 카드 — 카드 자체는 표시하되 흐릿하게 처리 */
+    .subject-card.empty {
+      opacity: 0.65;
+      background: var(--neoul-white);
+    }
+    .subject-card.empty .subject-title {
+      color: var(--neoul-text-secondary);
+    }
+
+    /* "자료 준비 중입니다" 메시지 */
+    .empty-msg {
+      color: var(--neoul-text-secondary);
+      font-size: 0.9rem;
+      font-style: italic;
+      text-align: center;
+      padding: var(--spacing-md) 0;
+      margin: 0;
+    }
+
     .file-list {
       max-height: 200px;
       overflow-y: auto;
