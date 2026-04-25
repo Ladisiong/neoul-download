@@ -79,6 +79,7 @@ function initEmptyData() {
 async function loadFileList() {
   if (API_URL === 'YOUR_APPS_SCRIPT_WEBAPP_URL') {
     console.warn('⚠️ API_URL 미설정 — 데모 데이터 사용 중');
+    hideLoadingIndicator();
     return;
   }
   try {
@@ -90,7 +91,14 @@ async function loadFileList() {
     }
   } catch (error) {
     console.error('파일 목록 로드 실패:', error);
+  } finally {
+    hideLoadingIndicator();
   }
+}
+
+function hideLoadingIndicator() {
+  const el = document.getElementById('loading-indicator');
+  if (el) el.classList.add('hidden');
 }
 
 async function loadStats() {
