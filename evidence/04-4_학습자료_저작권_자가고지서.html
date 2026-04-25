@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>학습자료 저작권 자가 고지서 | 너울 TN26005859KJ</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 22mm 18mm 22mm;
+      @top-left {
+        content: "너울 · 상표 출원번호 TN26005859KJ · 학습자료 저작권 자가 고지서";
+        font-size: 7.5pt;
+        color: #5A7890;
+      }
+      @top-right {
+        content: "저작권자: 김태민";
+        font-size: 7.5pt;
+        color: #5A7890;
+      }
+      @bottom-center {
+        content: "– " counter(page) " / " counter(pages) " –";
+        font-size: 8pt;
+        color: #5A7890;
+      }
+    }
+
+    :root {
+      --deep-blue: #0A3D62;
+      --ocean-blue: #1B6CA8;
+      --sky-blue: #3498DB;
+      --light-wave: #AED6F1;
+      --soft-mist: #EAF4FB;
+      --border-gray: #D6E9F5;
+      --text-primary: #1A1A1A;
+      --text-secondary: #5A7890;
+      --caveat-bg: #FFF9E6;
+      --caveat-border: #F5C518;
+      --caveat-text: #8B6F00;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      font-family: 'Noto Sans CJK KR', 'Noto Sans KR', 'Pretendard', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.7;
+      color: var(--text-primary);
+    }
+
+    h1.doc-title {
+      font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+      font-size: 22pt;
+      font-weight: 700;
+      color: var(--deep-blue);
+      text-align: center;
+      margin-bottom: 4pt;
+    }
+
+    h1 + .subtitle {
+      font-size: 10.5pt;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 16pt;
+    }
+
+    h2 {
+      font-size: 13pt;
+      font-weight: 700;
+      color: var(--deep-blue);
+      margin: 16pt 0 8pt 0;
+      padding-bottom: 3pt;
+      border-bottom: 1.5pt solid var(--sky-blue);
+    }
+
+    p {
+      margin-bottom: 6pt;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    /* 상단 안내 박스 */
+    .header-info {
+      background: var(--soft-mist);
+      border: 0.5pt solid var(--border-gray);
+      padding: 10pt 14pt;
+      font-size: 9pt;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 14pt;
+    }
+    .header-info strong {
+      color: var(--deep-blue);
+    }
+
+    /* 인적사항 표 */
+    table.declarant {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin-bottom: 12pt;
+    }
+    table.declarant td, table.declarant th {
+      border: 0.4pt solid var(--border-gray);
+      padding: 7pt 9pt;
+      vertical-align: middle;
+    }
+    table.declarant .label {
+      background: var(--soft-mist);
+      color: var(--deep-blue);
+      font-weight: 700;
+      width: 18%;
+      white-space: nowrap;
+    }
+    table.declarant .value {
+      width: auto;
+    }
+
+    /* 과목 표 */
+    table.subjects {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin-bottom: 12pt;
+    }
+    table.subjects th {
+      background: var(--deep-blue);
+      color: white;
+      padding: 9pt;
+      text-align: center;
+      font-weight: 700;
+      border: 0.4pt solid var(--border-gray);
+    }
+    table.subjects td {
+      padding: 9pt;
+      border: 0.4pt solid var(--border-gray);
+      vertical-align: middle;
+    }
+    table.subjects td.cat {
+      background: var(--soft-mist);
+      color: var(--deep-blue);
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* 선언 조항 */
+    .declaration {
+      margin-bottom: 10pt;
+      page-break-inside: avoid;
+    }
+    .declaration-title {
+      font-weight: 700;
+      color: var(--deep-blue);
+      margin-bottom: 3pt;
+      padding-left: 10pt;
+      border-left: 3pt solid var(--ocean-blue);
+    }
+    .declaration-body {
+      padding-left: 13pt;
+      font-size: 10.5pt;
+      line-height: 1.7;
+    }
+
+    /* 위증 책임 박스 */
+    .liability-box {
+      background: var(--caveat-bg);
+      border: 0.8pt solid var(--caveat-border);
+      padding: 12pt 16pt;
+      font-size: 10.5pt;
+      line-height: 1.7;
+      color: var(--text-primary);
+      margin: 8pt 0 4pt 0;
+    }
+
+    /* 서명란 */
+    table.signature {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12pt 0 8pt 0;
+      font-size: 11pt;
+    }
+    table.signature td {
+      border: 0.5pt solid var(--border-gray);
+      padding: 12pt 14pt;
+      vertical-align: middle;
+    }
+    table.signature .label {
+      background: var(--soft-mist);
+      color: var(--deep-blue);
+      font-weight: 700;
+      text-align: center;
+      width: 24%;
+      white-space: nowrap;
+    }
+    table.signature .sig-name {
+      font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+      font-size: 13pt;
+      font-weight: 700;
+      color: var(--deep-blue);
+    }
+    table.signature .sig-empty {
+      height: 24mm;
+    }
+
+    .signature-note {
+      font-size: 9pt;
+      color: var(--text-secondary);
+      margin-top: 4pt;
+    }
+
+    /* 증인 표 */
+    table.witness {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin: 8pt 0 12pt 0;
+    }
+    table.witness th {
+      background: var(--soft-mist);
+      color: var(--deep-blue);
+      padding: 6pt;
+      text-align: center;
+      font-weight: 700;
+      border: 0.4pt solid var(--border-gray);
+    }
+    table.witness td {
+      padding: 6pt 6pt;
+      border: 0.4pt solid var(--border-gray);
+      text-align: center;
+      height: 12mm;
+    }
+
+    /* 면책 고지 */
+    .caveat-list {
+      font-size: 9pt;
+      color: var(--caveat-text);
+      line-height: 1.55;
+      padding-left: 14pt;
+    }
+    .caveat-list li {
+      margin-bottom: 4pt;
+    }
+
+    /* 푸터 브랜드 */
+    .brand-footer {
+      background: var(--deep-blue);
+      color: white;
+      padding: 12pt 16pt;
+      text-align: center;
+      font-size: 9.5pt;
+      margin-top: 18pt;
+      line-height: 1.5;
+    }
+    .brand-footer .small {
+      font-size: 8pt;
+      color: var(--light-wave);
+    }
+
+    /* Page break */
+    .page-break { page-break-before: always; }
+
+    /* Prevent breaks inside sections */
+    h2 + p, h2 + table, h2 + .header-info,
+    .declaration, .liability-box {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================= -->
+  <!-- 표지 -->
+  <!-- ========================================= -->
+  <h1 class="doc-title">학습자료 저작권 자가 고지서</h1>
+  <div class="subtitle">(Self-Declaration of Authorship for Educational Materials)</div>
+
+  <div class="header-info">
+    <strong>상표 출원번호</strong>: TN26005859KJ<br>
+    <strong>상표 표장</strong>: 너울 (국문 문자 상표 단독 출원)<br>
+    <strong>출원인 · 저작권자</strong>: 김태민<br>
+    <strong>증거 패키지 파일</strong>: 04-4_학습자료_저작권_자가고지서.pdf<br>
+    <strong>작성일 기준</strong>: 2026년 4월 ___일 (D-1 작성)
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Ⅰ. 선언자 인적사항 -->
+  <!-- ========================================= -->
+  <h2>Ⅰ. 선언자 인적사항</h2>
+  <table class="declarant">
+    <tr>
+      <td class="label">성명 (한글)</td>
+      <td class="value">김 태 민</td>
+      <td class="label">영문 성명</td>
+      <td class="value">KIM TAEMIN</td>
+    </tr>
+    <tr>
+      <td class="label">생년월일</td>
+      <td class="value">1989년 06월 10일</td>
+      <td class="label">연락처</td>
+      <td class="value">010-8788-2297</td>
+    </tr>
+    <tr>
+      <td class="label">주소</td>
+      <td class="value" colspan="3">경기도 이천시 이섭대천로 415-20</td>
+    </tr>
+    <tr>
+      <td class="label">이메일</td>
+      <td class="value" colspan="3">ktm61000@gmail.com</td>
+    </tr>
+  </table>
+
+  <!-- ========================================= -->
+  <!-- Ⅱ. 고지 대상 저작물 -->
+  <!-- ========================================= -->
+  <h2>Ⅱ. 고지 대상 저작물의 범위</h2>
+  <p>
+    본 자가 고지서의 대상은 <strong>너울 교육자료 배포 시스템</strong>을
+    통해 배포되는 수능 대비 학습자료 전체이며, 그 구체적 범위는 아래 표와 같다.
+  </p>
+  <table class="subjects">
+    <tr>
+      <th style="width:14%">카테고리</th>
+      <th style="width:38%">세부 과목 (총 19개 과목)</th>
+      <th style="width:48%">저작물 유형 및 운영 형태</th>
+    </tr>
+    <tr>
+      <td class="cat">사회탐구<br>(9과목)</td>
+      <td>한국지리, 정치와법, 윤리와사상, 세계지리, 세계사,<br>
+          생활과윤리, 사회문화, 동아시아사, 경제</td>
+      <td>회차별 운영 — <strong>문제편 PDF + 해설편 PDF = 2개 파일 1세트</strong>.<br>
+          모든 문제는 O/X 선택형 (50문항 기준, 기본 40% + 응용 40% + 고난도 20%).</td>
+    </tr>
+    <tr>
+      <td class="cat">과학탐구<br>(8과목)</td>
+      <td>화학1·2, 지구과학1·2, 생명과학1·2, 물리학1·2</td>
+      <td>회차별 운영 — <strong>문제편 PDF + 해설편 PDF = 2개 파일 1세트</strong>.<br>
+          모든 문제는 O/X 선택형 (기본 40% + 응용 40% + 고난도 20%).</td>
+    </tr>
+    <tr>
+      <td class="cat">기타<br>(2과목)</td>
+      <td>한국사, 경제이론요약집</td>
+      <td>단일 통합본 형태 — <strong>한국사는 핵심용어 및 사건정리 1파일</strong>,<br>
+          <strong>경제이론요약집은 요약집 1파일</strong>(회차·해설 분리 없음).</td>
+    </tr>
+  </table>
+  <p style="margin-top:10px; font-size:9.5pt; color:#444;">
+    ※ 위 모든 학습자료는 2015 개정 교육과정과 EBS 수능특강·수능완성 교재에 100% 연계되어 출제·집필되었으며,
+    선언자 김태민이 수능 대비 지도 경험을 바탕으로 직접 창작한 단독 저작물이다.
+  </p>
+
+  <!-- ========================================= -->
+  <!-- Ⅲ. 창작성 선언 조항 -->
+  <!-- ========================================= -->
+  <h2>Ⅲ. 창작성 선언 조항</h2>
+  <p>
+    선언자 김태민은 대한민국 저작권법 제2조 제1호, 제10조에 따라 아래 사항을
+    엄숙히 선언한다.
+  </p>
+
+  <div class="declaration">
+    <div class="declaration-title">제1조 (직접 출제·집필 선언)</div>
+    <div class="declaration-body">
+      위 Ⅱ항에 기재된 모든 학습자료의 <strong>문제와 해설</strong>은 선언자
+      김태민 본인이 직접 출제·집필한 저작물이며, 외부 기관·제3자가 작성한
+      저작물을 재가공·전재·인용하지 아니하였음을 선언한다.
+    </div>
+  </div>
+
+  <div class="declaration">
+    <div class="declaration-title">제2조 (창작 경위 선언)</div>
+    <div class="declaration-body">
+      본 학습자료는 선언자가 수능 대비 지도 경험을 바탕으로 독자적으로 기획·
+      연구·작성한 결과물이며, 선언자의 사상 또는 감정을 표현한 창작물(저작권법
+      제2조 제1호)에 해당함을 선언한다.
+    </div>
+  </div>
+
+  <div class="declaration">
+    <div class="declaration-title">제3조 (업무상 저작물 불해당 선언)</div>
+    <div class="declaration-body">
+      본 학습자료는 어떠한 법인·단체·사용자의 기획·명령·지휘 하에 작성된 업무상
+      저작물(저작권법 제9조)에 해당하지 아니하며, 재직 중 또는 퇴직 후 어떠한
+      고용주의 업무 범위에 속하는 저작물이 아님을 선언한다.
+    </div>
+  </div>
+
+  <div class="declaration">
+    <div class="declaration-title">제4조 (권리 단독 귀속 선언)</div>
+    <div class="declaration-body">
+      본 학습자료의 저작재산권(제16조 내지 제22조) 및 저작인격권(제11조 내지
+      제13조) 일체는 선언자 김태민 개인에게 단독 귀속되며, 제3자와의 공동저작·
+      업무상 귀속·양도계약 관계가 존재하지 아니함을 선언한다.
+    </div>
+  </div>
+
+  <div class="declaration">
+    <div class="declaration-title">제5조 (상표 사용 동의 선언)</div>
+    <div class="declaration-body">
+      본 학습자료는 선언자가 특허청에 출원한 상표 &quot;너울&quot;(출원번호
+      TN26005859KJ, 국문 문자 상표)로 배포되며, 해당 상표의 9류(교육용
+      소프트웨어) 및 41류(교육자료 배포업) 지정상품·서비스에 실제 사용되고
+      있음을 확인한다.
+    </div>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Ⅳ. 허위 선언 책임 -->
+  <!-- ========================================= -->
+  <h2>Ⅳ. 허위 선언 시 법적 책임 고지</h2>
+  <div class="liability-box">
+    선언자는 본 자가 고지서의 내용이 허위인 경우, 상표법 제230조(거짓행위의 죄)
+    및 형법 제152조(위증) 등 관련 법령에 따라 발생할 수 있는 일체의 민·형사상
+    책임을 부담할 것을 이해하고 수용한다. 또한 본 고지서가 상표 출원 심사·등록·
+    등록 후 분쟁 절차에서 불리하게 작용할 수 있음을 충분히 인지한다.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Ⅴ. 선언자 서명·날인 (자연 흐름 배치) -->
+  <!-- ============================================================ -->
+
+  <!-- ========================================= -->
+  <!-- Ⅴ. 서명·날인 -->
+  <!-- ========================================= -->
+  <h2 style="page-break-before: avoid;">Ⅴ. 선언자 서명·날인</h2>
+  <p>
+    선언자는 위 Ⅰ항 내지 Ⅳ항의 모든 내용을 충분히 읽고 이해하였으며, 이에
+    본인의 자유의사로 서명·날인한다.
+  </p>
+
+  <table class="signature">
+    <tr>
+      <td class="label">선 언 일</td>
+      <td>2026년    ____월    ____일</td>
+    </tr>
+    <tr>
+      <td class="label">선 언 자</td>
+      <td class="sig-name">김 태 민</td>
+    </tr>
+    <tr>
+      <td class="label">서    명</td>
+      <td class="sig-empty">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="label">날    인</td>
+      <td class="sig-empty">&nbsp;</td>
+    </tr>
+  </table>
+
+  <div class="signature-note">
+    ※ 서명란에 <strong>자필 서명</strong>, 날인란에 <strong>개인 인감 또는
+    서명용 도장</strong>을 반드시 찍어주십시오. 스캔·사진 첨부본이 아닌
+    <strong>원본 서명 PDF</strong>가 증거력이 가장 높습니다.
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Ⅵ. 증인 -->
+  <!-- ========================================= -->
+  <h2>Ⅵ. 증인 (선택 기재)</h2>
+  <div class="signature-note">
+    본 선언에 입회한 증인이 있는 경우 아래에 기재할 수 있다. 증인 기재는 선택
+    사항이며 증거력 보강을 목적으로 한다.
+  </div>
+  <table class="witness">
+    <tr>
+      <th style="width:10%">구 분</th>
+      <th style="width:22%">성 명</th>
+      <th style="width:18%">관 계</th>
+      <th style="width:28%">연 락 처</th>
+      <th style="width:22%">서 명</th>
+    </tr>
+    <tr>
+      <td><strong>증인 1</strong></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td><strong>증인 2</strong></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+
+  <!-- ========================================= -->
+  <!-- Ⅶ. 면책·제출 고지 -->
+  <!-- ========================================= -->
+  <h2>Ⅶ. 제출 용도 및 면책 고지</h2>
+  <ol class="caveat-list">
+    <li>
+      본 자가 고지서는 <strong>상표 출원 TN26005859KJ의 우선심사 증거 패키지</strong>
+      (04-4번 파일)의 일부로 변리사 윤건준을 통해 대한민국 특허청에 제출된다.
+    </li>
+    <li>
+      본 자가 고지서의 법적 효력에 관한 최종 판단은 선언자가 별도로
+      <strong>저작권 전문 변호사의 자문</strong>을 받아 확정하는 것을 권장하며,
+      본 문서 자체는 Claude(AI 어시스턴트)의 자동 생성 템플릿에 기반한 초안이다.
+    </li>
+    <li>
+      본 자가 고지서는 학습자료의 <strong>저작권 귀속 사실</strong>을 선언하는
+      문서이며, 학습자료의 <strong>질적 완성도·출판 가능성·상업적 가치</strong>를
+      보증하는 문서가 아니다.
+    </li>
+    <li>
+      본 자가 고지서의 허위 기재가 밝혀진 경우, 상표 출원 절차 및 이후 등록 유지에
+      불이익이 발생할 수 있으며, 선언자는 이러한 리스크를 사전에 인지하고 본
+      고지서에 서명한다.
+    </li>
+  </ol>
+
+  <!-- 푸터 브랜드 -->
+  <div class="brand-footer">
+    🏷️ <strong>너울</strong> · 저작권자 <strong>김태민</strong> · 상표 출원번호
+    <strong>TN26005859KJ</strong><br>
+    <span class="small">
+      © 2026 김태민 (Kim Taemin). All rights reserved. · 오늘의 한 물결이, 내일의
+      너울이 된다
+    </span>
+  </div>
+
+</body>
+</html>

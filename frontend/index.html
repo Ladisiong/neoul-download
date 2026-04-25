@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>너울 — 교육자료 배포 시스템 | 김태민</title>
+  <meta name="description" content="너울 수능 학습자료 배포 시스템. 저작권자 김태민이 직접 출제한 사회탐구·과학탐구 문제편·해설편 + 한국사·경제이론 요약집. 상표 출원번호 TN26005859KJ.">
+  <meta name="author" content="김태민">
+  <meta name="application-name" content="너울">
+  <meta property="og:title" content="너울 — 교육자료 배포 시스템">
+  <meta property="og:description" content="오늘의 한 물결이, 내일의 너울이 된다. © 2026 김태민">
+  <meta property="og:site_name" content="너울">
+
+  <!-- 너울 SSoT Tokens (국문 전용 타이포그래피) -->
+  <style>
+    :root {
+      /* 너울 Color System (SSoT) */
+      --neoul-deep-blue: #0A3D62;
+      --neoul-ocean-blue: #1B6CA8;
+      --neoul-sky-blue: #3498DB;
+      --neoul-light-wave: #AED6F1;
+      --neoul-soft-mist: #EAF4FB;
+      --neoul-white: #FFFFFF;
+      --neoul-text-primary: #0A3D62;
+      --neoul-text-secondary: #5A7890;
+      --neoul-border: #D6E9F5;
+
+      /* Typography — 한글 전용 */
+      --font-serif-ko: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+      --font-sans-ko: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 48px;
+      --spacing-2xl: 96px;
+
+      /* Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans-ko);
+      color: var(--neoul-text-primary);
+      background: var(--neoul-white);
+      line-height: 1.7;
+    }
+
+    /* Header - Brand Identity (한글 단독) */
+    .neoul-header {
+      background: linear-gradient(135deg, var(--neoul-deep-blue) 0%, var(--neoul-ocean-blue) 100%);
+      color: var(--neoul-white);
+      padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
+      text-align: center;
+    }
+
+    /* Brand Logo - 공식 수평형 로고 (투명 PNG, SSoT 토큰 기반) */
+    .neoul-brand-logo {
+      max-width: 520px;
+      width: 85%;
+      height: auto;
+      margin: 0 auto var(--spacing-lg);
+      display: block;
+      background: rgba(255, 255, 255, 0.95);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Footer Logo 이미지 (정사각 마크 태그라인 버전) */
+    .neoul-footer-logo-img {
+      max-width: 120px;
+      width: 35%;
+      height: auto;
+      margin: 0 auto var(--spacing-md);
+      display: block;
+      background: rgba(255, 255, 255, 0.95);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-md);
+    }
+
+    .neoul-brand-ko {
+      font-family: var(--font-serif-ko);
+      font-size: 4rem;
+      letter-spacing: 0.5em;
+      font-weight: 700;
+      text-indent: 0.5em;
+    }
+
+    .neoul-tagline {
+      font-family: var(--font-sans-ko);
+      font-size: 1.1rem;
+      color: var(--neoul-light-wave);
+      margin-top: var(--spacing-lg);
+      font-weight: 300;
+    }
+
+    .neoul-tagline-en {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 0.95rem;
+      color: var(--neoul-light-wave);
+      margin-top: var(--spacing-sm);
+      font-style: italic;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+    }
+
+    .neoul-subtitle {
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.95rem;
+      color: var(--neoul-light-wave);
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-xl) var(--spacing-lg);
+    }
+
+    .section-title {
+      font-family: var(--font-serif-ko);
+      font-size: 2rem;
+      color: var(--neoul-deep-blue);
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-sm);
+      border-bottom: 2px solid var(--neoul-sky-blue);
+    }
+
+    /* Category Tabs */
+    .category-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-xl);
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      background: var(--neoul-soft-mist);
+      color: var(--neoul-text-secondary);
+      border: 1px solid var(--neoul-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-family: var(--font-sans-ko);
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .category-tab.active {
+      background: var(--neoul-deep-blue);
+      color: var(--neoul-white);
+      border-color: var(--neoul-deep-blue);
+    }
+
+    .category-tab:hover:not(.active) {
+      background: var(--neoul-light-wave);
+      color: var(--neoul-deep-blue);
+    }
+
+    /* Subject Grid */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .subject-card {
+      background: var(--neoul-white);
+      border: 1px solid var(--neoul-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      transition: all 0.2s;
+    }
+
+    .subject-card:hover {
+      border-color: var(--neoul-sky-blue);
+      box-shadow: 0 4px 12px rgba(10, 61, 98, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .subject-title {
+      font-family: var(--font-serif-ko);
+      font-size: 1.5rem;
+      color: var(--neoul-deep-blue);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .subject-counts {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      font-size: 0.9rem;
+      color: var(--neoul-text-secondary);
+    }
+
+    .count-badge {
+      background: var(--neoul-soft-mist);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+
+    .file-list {
+      max-height: 200px;
+      overflow-y: auto;
+      padding: var(--spacing-sm);
+      background: var(--neoul-soft-mist);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-xs) 0;
+      border-bottom: 1px solid var(--neoul-border);
+    }
+
+    .file-item:last-child { border-bottom: none; }
+
+    .download-btn {
+      background: var(--neoul-sky-blue);
+      color: var(--neoul-white);
+      border: none;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+
+    .download-btn:hover { background: var(--neoul-ocean-blue); }
+
+    /* Stats */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing-md);
+      margin: var(--spacing-xl) 0;
+    }
+
+    .stat-card {
+      background: var(--neoul-soft-mist);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      border-left: 4px solid var(--neoul-sky-blue);
+    }
+
+    .stat-number {
+      font-family: var(--font-serif-ko);
+      font-size: 2rem;
+      color: var(--neoul-deep-blue);
+      font-weight: 700;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--neoul-text-secondary);
+      margin-top: var(--spacing-xs);
+    }
+
+    /* Brand Story Section */
+    .brand-story {
+      background: var(--neoul-soft-mist);
+      padding: var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      margin: var(--spacing-xl) 0;
+      border-left: 4px solid var(--neoul-deep-blue);
+    }
+
+    .brand-story blockquote {
+      font-family: var(--font-serif-ko);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--neoul-deep-blue);
+      line-height: 1.9;
+    }
+
+    .brand-story cite {
+      display: block;
+      margin-top: var(--spacing-md);
+      font-size: 0.9rem;
+      color: var(--neoul-text-secondary);
+      font-style: normal;
+    }
+
+    /* Content origin notice (김태민 본인 출제 강조) */
+    .content-origin {
+      background: #FFF9E6;
+      border: 1px solid #F5C518;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin: var(--spacing-lg) 0;
+      font-size: 0.95rem;
+    }
+
+    .content-origin strong { color: #8B6F00; }
+
+    /* Footer - Copyright & Trademark */
+    .neoul-footer {
+      background: var(--neoul-deep-blue);
+      color: var(--neoul-white);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      margin-top: var(--spacing-2xl);
+      text-align: center;
+    }
+
+    .footer-content { max-width: 800px; margin: 0 auto; }
+
+    .footer-logo {
+      font-family: var(--font-serif-ko);
+      font-size: 2rem;
+      letter-spacing: 0.5em;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+      text-indent: 0.5em;
+    }
+
+    .footer-info {
+      font-size: 0.9rem;
+      color: var(--neoul-light-wave);
+      line-height: 1.8;
+    }
+
+    .footer-trademark {
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.85rem;
+    }
+
+    .footer-trademark strong {
+      color: var(--neoul-white);
+      font-weight: 600;
+    }
+
+    /* Evidence banner (상표 증거용 고정 배너) */
+    .evidence-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 61, 98, 0.95);
+      color: var(--neoul-white);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-size: 0.85rem;
+      text-align: center;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .neoul-brand-ko { font-size: 2.5rem; }
+      .section-title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================= -->
+  <!-- HEADER: 너울 브랜드 아이덴티티 (국문 단독 + 공식 로고) -->
+  <!-- ============================================= -->
+  <header class="neoul-header">
+    <img src="./assets/neoul-logo-horizontal-tagline.png"
+         alt="너울 공식 로고 — 오늘의 한 물결이, 내일의 너울이 된다"
+         class="neoul-brand-logo">
+    <div class="neoul-subtitle">
+      교육자료 배포 시스템<br>
+      수능 학습자료 19개 과목 · 문제집·정답지 원클릭 다운로드
+    </div>
+  </header>
+
+  <!-- ============================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ============================================= -->
+  <main class="container">
+
+    <!-- 학습자료 출처 고지 (증거력 핵심) -->
+    <div class="content-origin">
+      <strong>📚 학습자료 출처 안내</strong><br>
+      본 시스템이 배포하는 모든 문제집·해설·요약집은 <strong>저작권자 김태민이 직접 출제·집필한 교육 저작물</strong>입니다. 외부 기관의 자료를 재가공한 것이 아닌, 수능 대비 지도 경험을 바탕으로 작성한 단독 창작물입니다.
+      <br><br>
+      <small>
+        ▸ <strong>사회탐구·과학탐구</strong>: 회차별 문제편 + 해설편 (2파일 1세트, O/X 선택형)<br>
+        ▸ <strong>한국사</strong>: 핵심용어 및 사건정리 단일 통합본<br>
+        ▸ <strong>경제이론요약집</strong>: 요약집 단일 통합본
+      </small>
+    </div>
+
+    <!-- 실시간 통계 -->
+    <section>
+      <h2 class="section-title">📊 실시간 배포 현황</h2>
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-number" id="total-files">19</div>
+          <div class="stat-label">운영 과목 수</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="total-downloads">-</div>
+          <div class="stat-label">누적 다운로드</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="today-downloads">-</div>
+          <div class="stat-label">오늘 다운로드</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="week-downloads">-</div>
+          <div class="stat-label">이번 주 다운로드</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 과목별 자료 -->
+    <section>
+      <h2 class="section-title">📚 너울 학습자료 (김태민 본인 출제)</h2>
+      <div class="category-tabs">
+        <button class="category-tab active" data-category="all">전체</button>
+        <button class="category-tab" data-category="사회탐구">사회탐구</button>
+        <button class="category-tab" data-category="과학탐구">과학탐구</button>
+        <button class="category-tab" data-category="기타">기타</button>
+      </div>
+      <div class="subject-grid" id="subject-grid">
+        <div class="subject-card">
+          <h3 class="subject-title">로딩 중...</h3>
+          <p style="color: var(--neoul-text-secondary); font-size: 0.9rem;">
+            너울 학습자료를 불러오는 중입니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 브랜드 스토리 -->
+    <section class="brand-story">
+      <blockquote>
+        '너울'은 바다의 크고 넓은 파도, 거대한 흐름을 뜻하는 순우리말입니다.
+        잔잔한 물결 하나로는 아무것도 바꾸지 못합니다.
+        그러나 그 물결이 쌓이고 쌓여 너울이 될 때,
+        누구도 막을 수 없는 변화가 시작됩니다.
+      </blockquote>
+      <cite>— 너울 브랜드 서사 · 김태민</cite>
+    </section>
+
+  </main>
+
+  <!-- ============================================= -->
+  <!-- FOOTER: 저작권 + 상표권 고지 (국문 단독) -->
+  <!-- ============================================= -->
+  <footer class="neoul-footer">
+    <div class="footer-content">
+      <img src="./assets/neoul-mark-square-tagline.png"
+           alt="너울 정사각 마크"
+           class="neoul-footer-logo-img">
+      <div class="footer-logo">너  울</div>
+      <div class="footer-info">
+        교육용 소프트웨어 · 교육자료 배포업
+      </div>
+
+      <div class="footer-trademark">
+        <p>
+          <strong>저작권자 · 상표 출원인: 김태민</strong><br>
+          © 2026 김태민 (Kim Taemin). All rights reserved.
+        </p>
+        <p style="margin-top: 12px; font-size: 0.8rem; color: var(--neoul-light-wave);">
+          '너울'은 대한민국 특허청에 출원된 국문 문자 상표입니다.<br>
+          출원번호: <strong>TN26005859KJ</strong> · 지정상품 9류 / 지정서비스 41류<br>
+          최초 공개일: 2026년 4월 24일<br>
+          배포 학습자료는 김태민 본인 출제 교육 저작물입니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 상표 증거용 고정 배너 -->
+  <div class="evidence-banner">
+    🏷️ <strong>너울</strong> · 저작권자 <strong>김태민</strong> · 상표 출원번호 <strong>TN26005859KJ</strong>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
