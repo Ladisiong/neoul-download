@@ -15,10 +15,10 @@
  * ============================================================================
  */
 
-// ⚠️ D-3 작업 시 Apps Script 배포 후 본인의 실제 URL로 교체 필수.
-// 깃허브 공개 코드에는 플레이스홀더 상태로만 푸시하고,
-// Vercel 배포 직전 로컬 또는 Vercel 환경변수에서만 실제 값을 사용하세요.
-const API_URL = 'YOUR_APPS_SCRIPT_WEBAPP_URL';
+// ✅ Apps Script 웹앱 URL — Vercel 사이트 정상 작동을 위해 실제 URL 입력
+// (폴더 ID·시트 ID는 Code.gs에만 존재하며 깃허브에 노출되지 않음 — 가이드 7-4 보안 정책 부분 준수)
+// 봇 트래픽이 의심되면 Apps Script doGet에 Referer 체크 등 추가 방어 가능
+const API_URL = 'https://script.google.com/macros/s/AKfycbxiTEEtbGCZeqteQpVeAZYuwOiYeapz6QYjb-_6ptYTDUm1jRZaGPWjdoKqSowVtI4v/exec';
 
 // 과목 설정 (백엔드와 동일)
 // format: 'session' = 회차별 운영 (문제편+해설편 2파일 1세트)
@@ -77,7 +77,7 @@ function initEmptyData() {
 }
 
 async function loadFileList() {
-  if (API_URL === 'https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZzO2Byj7gEjnszuWCp0PCyy0NnNb6x5kYWWA/exec') {
+  if (API_URL === 'YOUR_APPS_SCRIPT_WEBAPP_URL') {
     console.warn('⚠️ API_URL 미설정 — 데모 데이터 사용 중');
     return;
   }
