@@ -11,6 +11,9 @@
   <meta property="og:description" content="오늘의 한 물결이, 내일의 너울이 된다. © 2026 김태민">
   <meta property="og:site_name" content="너울">
 
+  <!-- QR Code Library (qrcode.js v1.0.0) - CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
   <!-- 너울 SSoT Tokens (국문 전용 타이포그래피) -->
   <style>
     :root {
@@ -24,6 +27,11 @@
       --neoul-text-primary: #0A3D62;
       --neoul-text-secondary: #5A7890;
       --neoul-border: #D6E9F5;
+
+      /* Warning / Notice (content-origin, evidence 카드) — 기존 원본 유지 + 신규 추가 */
+      --neoul-warn-bg: #FFF9E6;
+      --neoul-warn-text: #8B6F00;
+      --neoul-warn-border: #F5C518;
 
       /* Typography — 한글 전용 */
       --font-serif-ko: 'Noto Serif KR', 'Nanum Myeongjo', serif;
@@ -514,9 +522,12 @@
   <!-- HEADER: 너울 브랜드 아이덴티티 (국문 단독 + 공식 로고) -->
   <!-- ============================================= -->
   <header class="neoul-header">
-    <img src="./assets/neoul-logo-horizontal-tagline.png"
-         alt="너울 공식 로고 — 오늘의 한 물결이, 내일의 너울이 된다"
-         class="neoul-brand-logo">
+    <picture>
+      <source type="image/svg+xml" srcset="./assets/neoul-logo-horizontal-tagline.svg">
+      <img src="./assets/neoul-logo-horizontal-tagline.png"
+           alt="너울 공식 로고 — 오늘의 한 물결이, 내일의 너울이 된다"
+           class="neoul-brand-logo">
+    </picture>
     <div class="neoul-subtitle">
       교육자료 배포 시스템<br>
       수능 학습자료 19개 과목 · 문제집·정답지 원클릭 다운로드
@@ -571,13 +582,16 @@
         <button class="category-tab" data-category="기타">기타</button>
       </div>
 
-      <!-- ⚡ 로딩 인디케이터 — 첫 데이터 도착 시 자동 숨김 -->
+      <!-- ⚡ 로딩 인디케이터 — 첫 데이터 도착 시 자동 숨김, 10초 타임아웃 시 안내 메시지 노출 -->
       <div class="loading-indicator" id="loading-indicator">
         <div class="loading-wave">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
         <div class="loading-text">너울 학습자료를 불러오는 중입니다</div>
         <div class="loading-subtext">최초 접속 시 5~10초 정도 소요될 수 있습니다</div>
+        <div class="loading-subtext" id="loading-timeout-msg" style="display:none; color:var(--neoul-warn-text); margin-top:8px;">
+          ⚠️ 응답이 지연되고 있습니다. 페이지를 새로고침하거나 잠시 후 다시 시도해 주세요.
+        </div>
       </div>
 
       <div class="subject-grid" id="subject-grid"></div>
@@ -586,4 +600,53 @@
     <!-- 브랜드 스토리 -->
     <section class="brand-story">
       <blockquote>
-        '너울'은 바다의 크고 넓은 파도
+        '너울'은 바다의 크고 넓은 파도, 거대한 흐름을 뜻하는 순우리말입니다.<br><br>
+        잔잔한 물결 하나로는 아무것도 바꾸지 못합니다. 그러나 그 물결이 쌓이고 쌓여 너울이 될 때, 누구도 막을 수 없는 변화가 시작됩니다.<br><br>
+        영문으로는 너울을 NEO와 UL의 합성어로 해석합니다. NEO는 새로움을, UL은 All, 모든 것을 뜻합니다. 모든 것을 새롭게. Everything, new again.<br><br>
+        그리고 너울의 철학적 뿌리는 조선 교육이념에 있습니다. 주자학의 활연관통(豁然貫通) — 작은 배움이 쌓이다 어느 순간 막혔던 이치가 뚫려 큰 흐름이 된다는 통찰. 율곡 이이 선생의 격몽요결(擊蒙要訣) — 어리석음을 깨는 첫걸음. 이 전통적 지혜에 현대 인지과학의 에빙하우스 망각곡선 이론이 만나는 지점에 너울이 자리합니다.<br><br>
+        잔물결 하나는 미약합니다. 그러나 매일의 잔물결이 쌓이면, 어느 날 학생의 머릿속에 거대한 이해의 너울이 일어납니다.
+        <cite>— 너울 브랜드 서사 (저작권자 김태민)</cite>
+      </blockquote>
+    </section>
+
+  </main>
+
+  <!-- ============================================= -->
+  <!-- FOOTER: 저작권 · 상표 · 학습자료 출처 -->
+  <!-- ============================================= -->
+  <footer class="neoul-footer">
+    <div class="footer-content">
+      <picture>
+        <source type="image/svg+xml" srcset="./assets/neoul-mark-square-tagline.svg">
+        <img src="./assets/neoul-mark-square-tagline.png"
+             alt="너울 마크 — 오늘의 한 물결이, 내일의 너울이 된다"
+             class="neoul-footer-logo-img"
+             onerror="this.style.display='none'">
+      </picture>
+      <div class="footer-logo">너울</div>
+      <div class="footer-info">
+        교육자료 배포 시스템<br>
+        오늘의 한 물결이, 내일의 너울이 된다<br>
+        Today's ripple, tomorrow's wave.
+      </div>
+      <div class="footer-trademark">
+        <strong>저작권자</strong>: 김태민 (Kim Taemin)<br>
+        <strong>상표 출원번호</strong>: TN26005859KJ<br>
+        <strong>학습자료</strong>: 김태민 본인 출제 교육 저작물<br>
+        © 2026 김태민. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- 상표 증거용 고정 배너 -->
+  <div class="evidence-banner">
+    🏷️ 너울 (NEOUL) · 저작권자 김태민 · 상표 출원번호 TN26005859KJ · © 2026
+  </div>
+
+  <!-- ============================================= -->
+  <!-- SCRIPT — 이 태그가 누락되면 모든 동적 기능 마비 -->
+  <!-- ============================================= -->
+  <script src="./app.js"></script>
+
+</body>
+</html>
