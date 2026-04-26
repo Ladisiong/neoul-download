@@ -90,20 +90,27 @@ const SUBJECTS = {
 
 function doGet(e) {
   const action = e.parameter.action;
+  const callback = e.parameter.callback;  // JSONP 콜백 (CORS 우회용 옵션)
   try {
+    let payload;
     switch (action) {
       case 'getFileList':
-        return jsonResponse(getFileList());
+        payload = getFileList();
+        break;
       case 'getStats':
-        return jsonResponse(getDownloadStats());
+        payload = getDownloadStats();
+        break;
       case 'getBrandInfo':
-        return jsonResponse(getBrandInfo());
+        payload = getBrandInfo();
+        break;
       default:
-        return jsonResponse({ error: 'Invalid action' });
+        payload = { error: 'Invalid action' };
     }
+    return callback ? jsonpResponse(payload, callback) : jsonResponse(payload);
   } catch (error) {
     console.error('doGet 오류:', error);
-    return jsonResponse({ error: error.toString() });
+    const errPayload = { error: error.toString() };
+    return callback ? jsonpResponse(errPayload, callback) : jsonResponse(errPayload);
   }
 }
 
@@ -125,6 +132,23 @@ function jsonResponse(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * JSONP 응답 — CORS 우회용 폴백
+ * Apps Script ContentService는 setHeader()를 지원하지 않으므로,
+ * 일부 브라우저 확장이 CORS를 차단할 때를 대비해 JSONP 콜백 응답을 제공한다.
+ * 사용법: GET ?action=getFileList&callback=myFunc → myFunc({...JSON...})
+ */
+function jsonpResponse(obj, callback) {
+  // 콜백 이름 검증 (XSS 방어 — 영숫자·언더스코어·점만 허용)
+  const safeCallback = String(callback).replace(/[^a-zA-Z0-9_.]/g, '');
+  if (!safeCallback) {
+    return jsonResponse({ error: 'Invalid callback name' });
+  }
+  return ContentService
+    .createTextOutput(safeCallback + '(' + JSON.stringify(obj) + ');')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
 
 /**
@@ -161,12 +185,20 @@ function getBrandInfo() {
 // ========================================
 
 function getFileList() {
+  // ⚡ 캐시 조회 — 캐시 히트 시 즉시 반환 (응답 7초 → 1초 이내)
+  const cache = CacheService.getScriptCache();
+  const cached = cache.get('neoul_fileList_v1');
+  if (cached) {
+    console.log(`⚡ [${BRAND_NAME}] 캐시 히트 — 즉시 응답`);
+    return JSON.parse(cached);
+  }
+
   try {
     const mainFolder = DriveApp.getFolderById(FOLDER_ID);
     const fileList = {};
     let lastUpdated = new Date(0);
 
-    console.log(`📁 [${BRAND_NAME}] 파일 목록 조회 시작...`);
+    console.log(`📁 [${BRAND_NAME}] 파일 목록 조회 시작 (캐시 미스 — Drive 순회)...`);
 
     Object.keys(SUBJECTS).forEach(subjectKey => {
       const subjectConfig = SUBJECTS[subjectKey];
@@ -224,7 +256,7 @@ function getFileList() {
       totalFiles += fileList[subject].problems.length + fileList[subject].answers.length;
     });
 
-    return {
+    const response = {
       success: true,
       brand: BRAND_NAME,
       owner: COPYRIGHT_HOLDER,
@@ -235,6 +267,12 @@ function getFileList() {
       timestamp: new Date().toISOString(),
       totalFiles
     };
+
+    // ⚡ 캐시 저장 (10분 = 600초) — 다음 요청부터 1초 이내 응답
+    cache.put('neoul_fileList_v1', JSON.stringify(response), 600);
+    console.log(`💾 [${BRAND_NAME}] 응답 캐싱 완료 (10분 유효)`);
+
+    return response;
   } catch (error) {
     console.error('❌ 파일 목록 조회 오류:', error);
     return { success: false, error: error.toString(), files: {}, totalFiles: 0 };
@@ -304,17 +342,38 @@ function recordDownload(downloadData) {
       `https://drive.google.com/uc?export=download&id=${downloadData.fileId}`
     ]);
     console.log(`✅ [${BRAND_NAME}] 다운로드 기록: ${downloadData.fileName}`);
+
+    // ⚡ 다운로드 기록 시 stats 캐시 즉시 무효화 (다음 호출에 최신 통계 반영)
+    CacheService.getScriptCache().remove('neoul_stats_v1');
   } catch (error) {
     console.error('❌ 다운로드 기록 저장 오류:', error);
   }
 }
 
+// ========================================
+// 캐시 관리 — 새 학습자료 업로드 후 즉시 반영하려면 이 함수를 Apps Script에서 직접 실행
+// ========================================
+function clearCache() {
+  const cache = CacheService.getScriptCache();
+  cache.remove('neoul_fileList_v1');
+  cache.remove('neoul_stats_v1');
+  console.log(`🔄 [${BRAND_NAME}] 캐시 강제 초기화 완료 — 다음 호출 시 Drive에서 새로 조회`);
+  return { success: true, message: '캐시 초기화 완료' };
+}
+
 function getDownloadStats() {
+  // ⚡ 캐시 조회 (1분 짧은 캐시 — 통계는 비교적 자주 갱신)
+  const cache = CacheService.getScriptCache();
+  const cached = cache.get('neoul_stats_v1');
+  if (cached) return JSON.parse(cached);
+
   try {
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getActiveSheet();
     const lastRow = sheet.getLastRow();
     if (lastRow <= 1) {
-      return { totalDownloads: 0, todayDownloads: 0, thisWeekDownloads: 0, thisMonthDownloads: 0 };
+      const empty = { totalDownloads: 0, todayDownloads: 0, thisWeekDownloads: 0, thisMonthDownloads: 0 };
+      cache.put('neoul_stats_v1', JSON.stringify(empty), 60);
+      return empty;
     }
     const totalDownloads = lastRow - 1;
     const now = new Date();
@@ -333,11 +392,15 @@ function getDownloadStats() {
       if (downloadDate >= monthStart) thisMonthDownloads++;
     });
 
-    return {
+    const response = {
       brand: BRAND_NAME,
       totalDownloads, todayDownloads, thisWeekDownloads, thisMonthDownloads,
       timestamp: new Date().toISOString()
     };
+
+    // ⚡ 캐시 저장 (60초 = 1분)
+    cache.put('neoul_stats_v1', JSON.stringify(response), 60);
+    return response;
   } catch (error) {
     console.error('❌ 통계 조회 오류:', error);
     return { totalDownloads: 0 };
