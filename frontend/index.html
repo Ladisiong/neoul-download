@@ -324,33 +324,91 @@
 
     .download-btn:hover { background: var(--neoul-ocean-blue); }
 
-    /* Stats */
-    .stats-bar {
+    /* QR Code Access Section */
+    .qr-access {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: var(--spacing-md);
+      grid-template-columns: 220px 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+      background: linear-gradient(135deg, var(--neoul-soft-mist) 0%, #FFFFFF 100%);
+      padding: var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neoul-border);
+      border-left: 4px solid var(--neoul-deep-blue);
       margin: var(--spacing-xl) 0;
     }
 
-    .stat-card {
-      background: var(--neoul-soft-mist);
-      padding: var(--spacing-lg);
-      border-radius: var(--radius-lg);
-      text-align: center;
-      border-left: 4px solid var(--neoul-sky-blue);
+    .qr-code-box {
+      background: var(--neoul-white);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--neoul-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 220px;
+      height: 220px;
+      box-shadow: 0 4px 12px rgba(10, 61, 98, 0.08);
     }
 
-    .stat-number {
+    .qr-code-box img,
+    .qr-code-box canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: 196px;
+      max-height: 196px;
+    }
+
+    .qr-info-title {
       font-family: var(--font-serif-ko);
-      font-size: 2rem;
+      font-size: 1.4rem;
       color: var(--neoul-deep-blue);
+      margin-bottom: var(--spacing-sm);
       font-weight: 700;
     }
 
-    .stat-label {
-      font-size: 0.9rem;
+    .qr-info-desc {
+      font-size: 0.95rem;
       color: var(--neoul-text-secondary);
-      margin-top: var(--spacing-xs);
+      line-height: 1.7;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .qr-info-url {
+      display: inline-block;
+      background: var(--neoul-deep-blue);
+      color: var(--neoul-white);
+      padding: var(--spacing-xs) var(--spacing-md);
+      border-radius: var(--radius-sm);
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .qr-info-url:hover {
+      background: var(--neoul-ocean-blue);
+    }
+
+    .qr-info-steps {
+      margin-top: var(--spacing-md);
+      padding-top: var(--spacing-md);
+      border-top: 1px dashed var(--neoul-border);
+      font-size: 0.85rem;
+      color: var(--neoul-text-secondary);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+      .qr-access {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .qr-code-box {
+        margin: 0 auto;
+      }
     }
 
     /* Brand Story Section */
@@ -482,25 +540,23 @@
       </small>
     </div>
 
-    <!-- 실시간 통계 -->
+    <!-- QR 코드 모바일 접속 -->
     <section>
-      <h2 class="section-title">📊 실시간 배포 현황</h2>
-      <div class="stats-bar">
-        <div class="stat-card">
-          <div class="stat-number" id="total-files">19</div>
-          <div class="stat-label">운영 과목 수</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="total-downloads">-</div>
-          <div class="stat-label">누적 다운로드</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="today-downloads">-</div>
-          <div class="stat-label">오늘 다운로드</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="week-downloads">-</div>
-          <div class="stat-label">이번 주 다운로드</div>
+      <h2 class="section-title">📱 모바일에서 바로 접속하기</h2>
+      <div class="qr-access">
+        <div class="qr-code-box" id="qr-code-box" aria-label="너울 학습자료 다운로드 사이트 QR코드"></div>
+        <div class="qr-info">
+          <div class="qr-info-title">QR코드 스캔으로 즉시 다운로드</div>
+          <p class="qr-info-desc">
+            스마트폰 카메라로 좌측 QR코드를 스캔하면 너울 학습자료 배포 페이지로 바로 이동합니다.
+            모바일 환경에서도 19개 과목의 문제집·해설편·요약집을 동일하게 내려받을 수 있습니다.
+          </p>
+          <a href="https://neoul-download.vercel.app/" target="_blank" rel="noopener" class="qr-info-url">
+            🔗 https://neoul-download.vercel.app/
+          </a>
+          <div class="qr-info-steps">
+            ① 스마트폰 카메라 앱 실행 → ② QR코드 비추기 → ③ 알림 탭으로 사이트 접속 → ④ 원하는 과목 다운로드
+          </div>
         </div>
       </div>
     </section>
@@ -530,49 +586,4 @@
     <!-- 브랜드 스토리 -->
     <section class="brand-story">
       <blockquote>
-        '너울'은 바다의 크고 넓은 파도, 거대한 흐름을 뜻하는 순우리말입니다.
-        잔잔한 물결 하나로는 아무것도 바꾸지 못합니다.
-        그러나 그 물결이 쌓이고 쌓여 너울이 될 때,
-        누구도 막을 수 없는 변화가 시작됩니다.
-      </blockquote>
-      <cite>— 너울 브랜드 서사 · 김태민</cite>
-    </section>
-
-  </main>
-
-  <!-- ============================================= -->
-  <!-- FOOTER: 저작권 + 상표권 고지 (국문 단독) -->
-  <!-- ============================================= -->
-  <footer class="neoul-footer">
-    <div class="footer-content">
-      <img src="./assets/neoul-mark-square-tagline.png"
-           alt="너울 정사각 마크"
-           class="neoul-footer-logo-img">
-      <div class="footer-logo">너  울</div>
-      <div class="footer-info">
-        교육용 소프트웨어 · 교육자료 배포업
-      </div>
-
-      <div class="footer-trademark">
-        <p>
-          <strong>저작권자 · 상표 출원인: 김태민</strong><br>
-          © 2026 김태민 (Kim Taemin). All rights reserved.
-        </p>
-        <p style="margin-top: 12px; font-size: 0.8rem; color: var(--neoul-light-wave);">
-          '너울'은 대한민국 특허청에 출원된 국문 문자 상표입니다.<br>
-          출원번호: <strong>TN26005859KJ</strong> · 지정상품 9류 / 지정서비스 41류<br>
-          최초 공개일: 2026년 4월 24일<br>
-          배포 학습자료는 김태민 본인 출제 교육 저작물입니다.
-        </p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- 상표 증거용 고정 배너 -->
-  <div class="evidence-banner">
-    🏷️ <strong>너울</strong> · 저작권자 <strong>김태민</strong> · 상표 출원번호 <strong>TN26005859KJ</strong>
-  </div>
-
-  <script src="./app.js"></script>
-</body>
-</html>
+        '너울'은 바다의 크고 넓은 파도
