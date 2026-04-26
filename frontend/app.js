@@ -52,10 +52,76 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('🌊 너울 시스템 시작 (v2.3 심사용 + QR접속)');
   console.log('📜 저작권자: 김태민 · 상표 출원번호 TN26005859KJ');
   console.log('📚 학습자료: 김태민 본인 출제 교육 저작물');
+  generateQRCode();              // ✅ QR 코드 우선 생성 (네트워크 무관, 즉시 렌더)
   initEmptyData();
+  startLoadingTimeout();         // ✅ 10초 타임아웃 안전장치 시작
   loadFileList();
   setupCategoryTabs();
 });
+
+/**
+ * QR 코드 생성 — 모바일 접속용
+ * qrcode.js (CDN) 라이브러리 사용. 라이브러리 로드 실패 시 fallback 메시지 표시.
+ */
+function generateQRCode() {
+  const container = document.getElementById('qr-code-box');
+  if (!container) return;
+
+  const TARGET_URL = 'https://neoul-download.vercel.app/';
+
+  // qrcode.js 로드 여부 검사
+  if (typeof QRCode === 'undefined') {
+    console.warn('⚠️ qrcode.js CDN 로드 실패 — fallback 표시');
+    container.innerHTML = `
+      <div style="text-align:center; padding:16px; color:var(--neoul-text-secondary); font-size:0.85rem;">
+        QR 코드를 불러오지 못했습니다.<br>
+        직접 접속: <strong>neoul-download.vercel.app</strong>
+      </div>
+    `;
+    return;
+  }
+
+  try {
+    // 기존 자식 노드 제거 (이중 생성 방지)
+    container.innerHTML = '';
+    new QRCode(container, {
+      text: TARGET_URL,
+      width: 196,
+      height: 196,
+      colorDark: '#0A3D62',     // SSoT 토큰 --neoul-deep-blue 와 동일 값
+      colorLight: '#FFFFFF',    // SSoT 토큰 --neoul-white 와 동일 값
+      correctLevel: QRCode.CorrectLevel.H  // 고에러정정 (모바일 카메라 인식 안정성)
+    });
+    console.log('✅ QR 코드 생성 완료:', TARGET_URL);
+  } catch (err) {
+    console.error('QR 코드 생성 오류:', err);
+    container.innerHTML = `
+      <div style="text-align:center; padding:16px; color:var(--neoul-text-secondary); font-size:0.85rem;">
+        QR 생성 오류<br>직접 접속: neoul-download.vercel.app
+      </div>
+    `;
+  }
+}
+
+/**
+ * 10초 타임아웃 안전장치
+ * Apps Script 응답이 10초 이상 지연될 경우, 무한 로딩 화면을 강제 해제하고
+ * 사용자에게 안내 메시지를 표시한다. (loadFileList 성공 시 clearTimeout으로 취소됨)
+ */
+let loadingTimeoutId = null;
+function startLoadingTimeout() {
+  loadingTimeoutId = setTimeout(() => {
+    console.warn('⚠️ Apps Script 응답 10초 초과 — 로딩 강제 해제');
+    hideLoadingIndicator();
+    const msg = document.getElementById('loading-timeout-msg');
+    const indicator = document.getElementById('loading-indicator');
+    if (msg && indicator) {
+      // 인디케이터를 다시 보이되 타임아웃 메시지를 띄움
+      indicator.classList.remove('hidden');
+      msg.style.display = 'block';
+    }
+  }, 10000); // 10초
+}
 
 function initEmptyData() {
   // 빈 데이터로 초기화 — 모든 과목 카드를 "준비 중" 상태로 먼저 표시
@@ -70,6 +136,7 @@ function initEmptyData() {
 async function loadFileList() {
   if (API_URL === 'YOUR_APPS_SCRIPT_WEBAPP_URL') {
     console.warn('⚠️ API_URL 미설정 — 데모 데이터 사용 중');
+    if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
     hideLoadingIndicator();
     return;
   }
@@ -79,10 +146,14 @@ async function loadFileList() {
     if (result.success) {
       fileData = result.files;
       renderSubjects();
+    } else {
+      console.warn('Apps Script 응답: success=false', result);
     }
   } catch (error) {
     console.error('파일 목록 로드 실패:', error);
   } finally {
+    // ✅ 정상 응답이든 실패든 타임아웃 취소 후 로딩 해제
+    if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
     hideLoadingIndicator();
   }
 }
