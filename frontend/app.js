@@ -140,22 +140,50 @@ async function loadFileList() {
     hideLoadingIndicator();
     return;
   }
-  try {
-    const response = await fetch(`${API_URL}?action=getFileList`);
-    const result = await response.json();
-    if (result.success) {
-      fileData = result.files;
-      renderSubjects();
-    } else {
-      console.warn('Apps Script 응답: success=false', result);
-    }
-  } catch (error) {
-    console.error('파일 목록 로드 실패:', error);
-  } finally {
-    // ✅ 정상 응답이든 실패든 타임아웃 취소 후 로딩 해제
-    if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
-    hideLoadingIndicator();
-  }
+
+  // JSONP 호출 방식 — Apps Script의 cross-origin 302 리다이렉트를 우회
+  // Google Apps Script는 fetch 시 script.googleusercontent.com으로 리다이렉트되어
+  // 브라우저 fetch가 차단됨. JSONP는 <script> 태그 로드 방식이라 리다이렉트 자동 따라감.
+  return new Promise((resolve) => {
+    const callbackName = 'neoulCb_' + Date.now();
+    const script = document.createElement('script');
+
+    // 안전장치: 응답 처리 후 정리
+    const cleanup = () => {
+      if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
+      hideLoadingIndicator();
+      delete window[callbackName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+      resolve();
+    };
+
+    // Apps Script가 호출할 콜백 함수 정의
+    window[callbackName] = function(result) {
+      try {
+        if (result && result.success) {
+          fileData = result.files;
+          renderSubjects();
+          console.log('✅ 학습자료 목록 로드 완료:', result.files.length, '과목');
+        } else {
+          console.warn('Apps Script 응답: success=false', result);
+        }
+      } catch (err) {
+        console.error('JSONP 응답 처리 오류:', err);
+      } finally {
+        cleanup();
+      }
+    };
+
+    // 네트워크 오류 처리
+    script.onerror = function() {
+      console.error('파일 목록 로드 실패: JSONP 스크립트 로드 오류');
+      cleanup();
+    };
+
+    // JSONP 호출 시작
+    script.src = `${API_URL}?action=getFileList&callback=${callbackName}`;
+    document.body.appendChild(script);
+  });
 }
 
 function hideLoadingIndicator() {
