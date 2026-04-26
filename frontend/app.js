@@ -4,7 +4,7 @@
  * ============================================================================
  *
  *  Copyright © 2026 김태민 (상표 출원번호 TN26005859KJ)
- *  버전: 1.1.0 (v2.2 정합화)
+ *  버전: 1.2.0 (v2.3 — 실시간 통계 제거 + QR코드 모바일 접속 추가)
  *
  *  배포 학습자료 운영 형태:
  *   - 사회탐구·과학탐구: 회차별 문제편 + 해설편 (2파일 1세트, O/X 선택형)
@@ -46,16 +46,14 @@ const SUBJECTS = {
 };
 
 let fileData = {};
-let statsData = {};
 let currentCategory = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🌊 너울 시스템 시작');
+  console.log('🌊 너울 시스템 시작 (v2.3 심사용 + QR접속)');
   console.log('📜 저작권자: 김태민 · 상표 출원번호 TN26005859KJ');
   console.log('📚 학습자료: 김태민 본인 출제 교육 저작물');
   initEmptyData();
   loadFileList();
-  loadStats();
   setupCategoryTabs();
 });
 
@@ -66,14 +64,7 @@ function initEmptyData() {
   Object.keys(SUBJECTS).forEach(key => {
     fileData[key] = { problems: [], answers: [] };
   });
-  statsData = {
-    totalDownloads: '-',
-    todayDownloads: '-',
-    thisWeekDownloads: '-',
-    thisMonthDownloads: '-'
-  };
   renderSubjects();
-  renderStats();
 }
 
 async function loadFileList() {
@@ -99,18 +90,6 @@ async function loadFileList() {
 function hideLoadingIndicator() {
   const el = document.getElementById('loading-indicator');
   if (el) el.classList.add('hidden');
-}
-
-async function loadStats() {
-  if (API_URL === 'YOUR_APPS_SCRIPT_WEBAPP_URL') return;
-  try {
-    const response = await fetch(`${API_URL}?action=getStats`);
-    const result = await response.json();
-    statsData = result;
-    renderStats();
-  } catch (error) {
-    console.error('통계 로드 실패:', error);
-  }
 }
 
 function renderSubjects() {
@@ -177,16 +156,6 @@ function renderFileItems(files, subjectName, type) {
       </button>
     </div>
   `).join('');
-}
-
-function renderStats() {
-  const format = (val) => {
-    if (typeof val === 'number') return val.toLocaleString();
-    return val || '-';
-  };
-  document.getElementById('total-downloads').textContent = format(statsData.totalDownloads);
-  document.getElementById('today-downloads').textContent = format(statsData.todayDownloads);
-  document.getElementById('week-downloads').textContent = format(statsData.thisWeekDownloads);
 }
 
 function setupCategoryTabs() {
