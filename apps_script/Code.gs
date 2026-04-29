@@ -88,9 +88,21 @@ const SUBJECTS = {
 // 웹앱 메인 엔트리 포인트
 // ========================================
 
+/**
+ * 웹앱 메인 GET 엔트리 포인트
+ *
+ * 호출 경로 2가지:
+ *  1. HTTP 요청 (정상): ?action=getFileList → e 객체 자동 주입 (e.parameter.action 정상 접근)
+ *  2. 편집기 수동 실행 (▶ 실행 버튼): e 매개변수 undefined → 방어 코드로 안전 처리
+ *
+ * @param {Object} [e] - HTTP 이벤트 객체 (수동 실행 시 undefined 가능)
+ * @returns {TextOutput} JSON 또는 JSONP 응답
+ */
 function doGet(e) {
-  const action = e.parameter.action;
-  const callback = e.parameter.callback;  // JSONP 콜백 (CORS 우회용 옵션)
+  // 방어 코드: 편집기 수동 실행 시 e가 undefined인 경우 안전한 기본값 주입
+  const params = (e && e.parameter) ? e.parameter : {};
+  const action = params.action || 'getBrandInfo';  // 기본 액션: 상표 증거 엔드포인트
+  const callback = params.callback;  // JSONP 콜백 (CORS 우회용 옵션)
   try {
     let payload;
     switch (action) {
@@ -103,6 +115,17 @@ function doGet(e) {
       case 'getBrandInfo':
         payload = getBrandInfo();
         break;
+      case 'recordDownload':
+        // 🆕 v2.7: JSONP GET 방식 지원 (CORS 우회용)
+        // 프론트엔드에서 ?action=recordDownload&data=<JSON>&callback=<cbName> 형식으로 호출
+        try {
+          const downloadData = params.data ? JSON.parse(params.data) : {};
+          recordDownload(downloadData);
+          payload = { success: true };
+        } catch (parseError) {
+          payload = { error: 'Invalid data format: ' + parseError.toString() };
+        }
+        break;
       default:
         payload = { error: 'Invalid action' };
     }
@@ -114,8 +137,18 @@ function doGet(e) {
   }
 }
 
+/**
+ * 웹앱 메인 POST 엔트리 포인트
+ *
+ * @param {Object} [e] - HTTP 이벤트 객체 (수동 실행 시 undefined 가능)
+ * @returns {TextOutput} JSON 응답
+ */
 function doPost(e) {
   try {
+    // 방어 코드: 편집기 수동 실행 시 e 또는 e.postData가 undefined인 경우
+    if (!e || !e.postData || !e.postData.contents) {
+      return jsonResponse({ error: 'POST 데이터가 없습니다 (편집기 수동 실행 시 정상)' });
+    }
     const data = JSON.parse(e.postData.contents);
     if (data.action === 'recordDownload') {
       recordDownload(data.data);
@@ -425,6 +458,41 @@ function testGetBrandInfo() {
   return info;
 }
 
+/**
+ * doGet 함수 안전 테스트용 함수
+ * 편집기에서 ▶ 실행하면 모의 e 객체를 주입하여 doGet을 안전하게 호출
+ * 실제 HTTP 요청과 동일한 응답 검증 가능 (상표 증거 수집 시나리오 대응)
+ */
+function testDoGet() {
+  console.log(`🧪 [${BRAND_NAME}] doGet 테스트 시작...`);
+  // 모의 HTTP 이벤트 객체 (실제 HTTP 요청과 동일 구조)
+  const mockEvent = {
+    parameter: { action: 'getBrandInfo' }
+  };
+  const result = doGet(mockEvent);
+  console.log(`✅ doGet 정상 응답: ${result.getContent()}`);
+  return result;
+}
+
+/**
+ * doPost 함수 안전 테스트용 함수
+ */
+function testDoPost() {
+  console.log(`🧪 [${BRAND_NAME}] doPost 테스트 시작...`);
+  // 모의 HTTP POST 이벤트 객체
+  const mockEvent = {
+    postData: {
+      contents: JSON.stringify({
+        action: 'recordDownload',
+        data: { fileId: 'test-id', fileName: 'test.pdf', userAgent: 'TestRunner' }
+      })
+    }
+  };
+  const result = doPost(mockEvent);
+  console.log(`✅ doPost 정상 응답: ${result.getContent()}`);
+  return result;
+}
+
 function checkSystemStatus() {
   console.log(`🔍 [${BRAND_NAME}] 시스템 상태 확인...`);
   try {
@@ -436,6 +504,7 @@ function checkSystemStatus() {
   }
   testGetFileList();
   testGetBrandInfo();
+  testDoGet();   // 🆕 doGet HTTP 엔드포인트 안전 테스트
   console.log(`🎉 [${BRAND_NAME}] 시스템 정상 작동`);
   return true;
 }
