@@ -50,8 +50,8 @@
 // ⚠️ D-3 작업 시 본인의 실제 ID로 교체 필수.
 // 깃허브 공개 코드에는 플레이스홀더 상태로만 푸시하고,
 // Apps Script 편집기에서만 실제 값을 사용하세요. (보안 가이드라인)
-const FOLDER_ID = 'YOUR_DRIVE_FOLDER_ID'; // 너울 전용 구글 드라이브 폴더 ID
-const SPREADSHEET_ID = 'YOUR_LOG_SHEET_ID'; // 너울 다운로드 로그 시트 ID
+const FOLDER_ID = '1WqHImkxvkozJnnZnJi9T0vsFkLsUrvjb'; // 너울 전용 구글 드라이브 폴더 ID
+const SPREADSHEET_ID = '1uy96xvIUH9xroouvnYG_Rj3TNx8dnjPrGjwsGbQVMJg'; // 너울 다운로드 로그 시트 ID
 const BRAND_NAME = '너울';
 const COPYRIGHT_HOLDER = '김태민';
 const TRADEMARK_APPLICATION = '40-2026-0081306, 40-2026-0081307';
