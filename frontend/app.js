@@ -3,7 +3,7 @@
  *  너울 — 교육자료 배포 시스템 프론트엔드 로직
  * ============================================================================
  *
- *  Copyright © 2026 김태민 (상표 출원번호 TN26005859KJ)
+ *  Copyright © 2026 김태민 (상표 출원번호 40-2026-0081306, 40-2026-0081307)
  *  버전: 1.2.0 (v2.3 — 실시간 통계 제거 + QR코드 모바일 접속 추가)
  *
  *  배포 학습자료 운영 형태:
@@ -18,7 +18,7 @@
 // ✅ Apps Script 웹앱 URL — Vercel 사이트 정상 작동을 위해 실제 URL 입력
 // (폴더 ID·시트 ID는 Code.gs에만 존재하며 깃허브에 노출되지 않음 — 가이드 7-4 보안 정책 부분 준수)
 // 봇 트래픽이 의심되면 Apps Script doGet에 Referer 체크 등 추가 방어 가능
-const API_URL = 'https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZzO2Byj7gEjnszuWCp0PCyy0NnNb6x5kYWWA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxiTEEtbGCZeqteQpVeAZYuwOiYeapz6QYjb-_6ptYTDUm1jRZaGPWjdoKqSowVtI4v/exec';
 
 // 과목 설정 (백엔드와 동일)
 // format: 'session' = 회차별 운영 (문제편+해설편 2파일 1세트)
@@ -50,7 +50,7 @@ let currentCategory = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🌊 너울 시스템 시작 (v2.3 심사용 + QR접속)');
-  console.log('📜 저작권자: 김태민 · 상표 출원번호 TN26005859KJ');
+  console.log('📜 저작권자: 김태민 · 상표 출원번호 40-2026-0081306, 40-2026-0081307');
   console.log('📚 학습자료: 김태민 본인 출제 교육 저작물');
   generateQRCode();              // ✅ QR 코드 우선 생성 (네트워크 무관, 즉시 렌더)
   initEmptyData();
@@ -163,10 +163,7 @@ async function loadFileList() {
         if (result && result.success) {
           fileData = result.files;
           renderSubjects();
-          // files는 객체이므로 totalFiles 필드 또는 키 개수로 카운트
-          const fileCount = result.totalFiles
-            ?? (typeof result.files === 'object' ? Object.keys(result.files).length : 0);
-          console.log('✅ 학습자료 목록 로드 완료:', fileCount, '과목');
+          console.log('✅ 학습자료 목록 로드 완료:', result.files.length, '과목');
         } else {
           console.warn('Apps Script 응답: success=false', result);
         }
@@ -276,34 +273,27 @@ async function downloadFile(fileId, fileName, category, type) {
   console.log(`[너울] 다운로드 시작: ${fileName}`);
 
   if (fileId.startsWith('demo-')) {
-    alert(`🌊 너울 데모 버전입니다.\n\n실제 자료는 Apps Script 배포 후 제공됩니다.\n\n저작권자: 김태민\n상표 출원번호: TN26005859KJ\n학습자료: 김태민 본인 출제`);
+    alert(`🌊 너울 데모 버전입니다.\n\n실제 자료는 Apps Script 배포 후 제공됩니다.\n\n저작권자: 김태민\n상표 출원번호: 40-2026-0081306, 40-2026-0081307\n학습자료: 김태민 본인 출제`);
     return;
   }
 
-  // 다운로드 로그 기록 — fire-and-forget GET 방식
-  // POST + JSON Content-Type은 CORS preflight를 트리거하여 차단됨.
-  // 단순 GET 요청은 preflight 없이 통과되며, 응답을 기다리지 않으므로 다운로드 즉시 시작 가능.
   try {
-    const params = new URLSearchParams({
-      action: 'recordDownload',
-      timestamp: new Date().toISOString(),
-      fileName,
-      fileId,
-      category,
-      type: type || '',
-      userAgent: navigator.userAgent,
-      referrer: document.referrer || ''
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'recordDownload',
+        data: {
+          timestamp: new Date().toISOString(),
+          fileName, fileId, category, type,
+          userAgent: navigator.userAgent,
+          referrer: document.referrer
+        }
+      })
     });
-
-    // <img> 태그는 cross-origin GET을 자동 발송하며 CORS 정책에서 자유로움
-    // 응답 본문은 무시됨 (404·200 무관 — Apps Script가 받기만 하면 됨)
-    const beacon = new Image();
-    beacon.src = `${API_URL}?${params.toString()}`;
-    console.log('[너울] 다운로드 로그 발송 완료');
   } catch (err) {
-    console.warn('로그 기록 발송 실패 (다운로드는 계속 진행):', err);
+    console.warn('로그 기록 실패 (다운로드는 계속 진행):', err);
   }
 
-  // 다운로드는 로깅과 무관하게 항상 시작
   window.open(`https://drive.google.com/uc?export=download&id=${fileId}`, '_blank');
 }
