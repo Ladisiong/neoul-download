@@ -39,7 +39,7 @@
 | **상표 유형** | 국문 문자 상표 단독 출원 |
 | **슬로건** | 오늘의 한 물결이, 내일의 너울이 된다 |
 | **저작권자 · 상표 출원인** | 김태민 |
-| **상표 출원번호** | TN26005859KJ |
+| **상표 출원번호** | 40-2026-0081306, 40-2026-0081307 |
 | **지정상품 (9류)** | 교육용 소프트웨어, 내려받기 가능한 전자문서, 전자학습지, 데이터베이스 SW, 문서관리 SW |
 | **지정서비스 (41류)** | 교육 분야 정보제공업, 교육시험제공업, **교육자료 배포업**, 온라인 교육시험업 |
 | **최초 공개일** | 2026-04-24 |
@@ -79,15 +79,15 @@
 - **저장소**: Google Drive
 - **로그 DB**: Google Sheets
 - **프론트엔드**: HTML5 + CSS3 + Vanilla JavaScript
-- **호스팅**: Google Apps Script Web App
+- **호스팅**: Google Apps Script Web App + Vercel (정적 프론트엔드)
 
 ---
 
 ## 🚀 배포 URL
 
 - **깃허브 저장소**: https://github.com/Ladisiong/neoul-download
-- **너울 학습자료 배포 시스템 (Vercel)**: `https://neoul-download.vercel.app` *(D-2 배포 후 업데이트)*
-- **Apps Script 웹앱 엔드포인트**: D-3 작업 시 발급되는 본인의 실제 URL로 교체 *(보안상 README에는 미공개)*
+- **너울 학습자료 배포 시스템 (Vercel)**: `https://neoul-download.vercel.app`
+- **Apps Script 웹앱 엔드포인트**: 본인의 실제 URL은 보안상 README에 미공개 (Apps Script 편집기 + Vercel 환경변수에서만 보관)
 - **공식 유튜브 채널**: `https://youtube.com/@너울-공식` *(D-2 개설 후 업데이트)*
 
 > 🔒 **보안 가이드라인**: Apps Script 웹앱 URL과 Drive Folder ID, Spreadsheet ID는 본 저장소가 Public이므로 코드에는 플레이스홀더만 표기되어 있습니다. 실제 운영 값은 Apps Script 편집기와 Vercel 환경변수에서만 보관합니다.
@@ -198,7 +198,7 @@ cd neoul-download
 ### 3. 브랜드 정보 확인 (상표 증거용 엔드포인트)
 
 ```
-curl "https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZzO2Byj7gEjnszuWCp0PCyy0NnNb6x5kYWWA/exec?action=getBrandInfo"
+curl "https://YOUR_APPS_SCRIPT_WEBAPP_URL/exec?action=getBrandInfo"
 ```
 
 응답 예시:
@@ -206,7 +206,7 @@ curl "https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZ
 {
   "brand": "너울",
   "copyright_holder": "김태민",
-  "trademark_application": "TN26005859KJ",
+  "trademark_application": "40-2026-0081306, 40-2026-0081307",
   "trademark_type": "국문 문자 상표",
   "service_category": "교육용 소프트웨어 · 교육자료 배포업",
   "content_origin": "김태민 본인 출제·집필 수능 대비 학습자료",
@@ -246,7 +246,7 @@ curl "https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZ
 
 ### 상표권
 
-- **'너울'** 은 김태민이 특허청에 출원한 **국문 문자 상표**입니다 (출원번호: **TN26005859KJ**).
+- **'너울'** 은 김태민이 특허청에 출원한 **국문 문자 상표**입니다 (출원번호: **40-2026-0081306, 40-2026-0081307**).
 - 9류(상품) 및 41류(서비스) 지정 상품/서비스에 대한 상표권이 출원되어 있습니다.
 - 본 저장소는 '너울' 국문 상표의 **실제 사용 증거**로 활용됩니다.
 
@@ -272,9 +272,10 @@ curl "https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZ
 | 1.1.0 | 2026-04-25 | **학습자료 운영 형태 명시화 (v2.2 정합)**. 사회탐구·과학탐구를 회차별 문제편·해설편 2파일 1세트로 운영함을 명시. 한국사를 핵심용어 및 사건정리 단일 통합본으로 운영함을 명시. 경제이론요약집을 단일 통합본으로 운영함을 명시. `getBrandInfo` 응답에 `content_format` 및 `folder_structure` 필드 추가. README·Code.gs·index.html·LICENSE 일관성 정합. |
 | 1.1.1 | 2026-04-25 | (내부 검토용) 운영 인스턴스 ID 코드 반영 시도. 보안 검토 후 v1.1.2에서 회수. |
 | 1.1.2 | 2026-04-25 | **보안 가이드라인 회복 (D-3 가이드 7-4 정합)**. `Code.gs`의 `FOLDER_ID`·`SPREADSHEET_ID`를 플레이스홀더로 복원. `app.js`의 `API_URL`을 플레이스홀더로 복원 + 데모 모드 분기 복원. README의 배포 URL 섹션과 curl 예시를 일반 자리표시자로 복원. 깃허브 공개 저장소 노출 위험 차단. 깃허브 저장소 URL은 안전하므로 LICENSE에 유지. |
+| **1.1.3** | **2026-04-29** | **🆕 상표 출원번호 공식화 (변리사 안내 반영)**. 변리사 사무소로부터 내부 관리번호(`TN26005859KJ`)와 특허청 공식 출원번호(`40-2026-0081306`, `40-2026-0081307`)의 구분 안내를 받음. 9류·41류 두 건 병기 표기 방식 채택. 적용 위치: README 브랜드 정보 표·curl 응답 예시·상표권 고지·LICENSE 상표권 항목·index.html(meta·footer·banner)·app.js(헤더·console·alert)·Code.gs(헤더·상수)·SVG 4종(메타데이터)·배포가이드 — 총 14곳 + README/LICENSE 추가. **추가 기술 개선 동시 적용**: doGet/doPost 방어 코드 신설(편집기 수동 실행 시 TypeError 차단), POST fetch → JSONP GET 전환(Apps Script CORS preflight 미지원 우회), Apps Script 활성 배포 URL 동기화, verifyApiUrl 자가 검증 함수 추가. **[정합성 주석]** 1.0.0~1.1.2 변경 내용에 표기된 `TN26005859KJ`는 발행 당시 표기 사실 보존 차원에서 유지하되, 현 시점 유효 출원번호는 본 v1.1.3 이후 모든 표기와 동일하게 `40-2026-0081306, 40-2026-0081307`임을 명시함. |
 
 ---
 
 **오늘의 한 물결이, 내일의 너울이 됩니다.**
 
-*© 2026 김태민 · 너울 · 상표 출원번호 TN26005859KJ*
+*© 2026 김태민 · 너울 · 상표 출원번호 40-2026-0081306, 40-2026-0081307*
