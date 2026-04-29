@@ -7,7 +7,7 @@
  *  용도         : 교육용 소프트웨어 · 교육자료 배포업
  *  저작권자      : 김태민
  *  상표 출원인    : 김태민
- *  상표 출원번호  : TN26005859KJ (지정상품 9류 / 지정서비스 41류)
+ *  상표 출원번호  : 40-2026-0081306, 40-2026-0081307 (지정상품 9류 / 지정서비스 41류)
  *  상표 표장     : 너울 (국문 문자 상표)
  *  버전         : 1.1.0 (v2.2 정합화)
  *  최초 공개일    : 2026-04-24
@@ -50,11 +50,11 @@
 // ⚠️ D-3 작업 시 본인의 실제 ID로 교체 필수.
 // 깃허브 공개 코드에는 플레이스홀더 상태로만 푸시하고,
 // Apps Script 편집기에서만 실제 값을 사용하세요. (보안 가이드라인)
-const FOLDER_ID = '1WqHImkxvkozJnnZnJi9T0vsFkLsUrvjb'; // 너울 전용 구글 드라이브 폴더 ID
-const SPREADSHEET_ID = '1uy96xvIUH9xroouvnYG_Rj3TNx8dnjPrGjwsGbQVMJg'; // 너울 다운로드 로그 시트 ID
+const FOLDER_ID = 'YOUR_DRIVE_FOLDER_ID'; // 너울 전용 구글 드라이브 폴더 ID
+const SPREADSHEET_ID = 'YOUR_LOG_SHEET_ID'; // 너울 다운로드 로그 시트 ID
 const BRAND_NAME = '너울';
 const COPYRIGHT_HOLDER = '김태민';
-const TRADEMARK_APPLICATION = 'TN26005859KJ';
+const TRADEMARK_APPLICATION = '40-2026-0081306, 40-2026-0081307';
 
 // 과목별 설정 (너울 학습자료 체계 - 김태민 본인 출제)
 const SUBJECTS = {
