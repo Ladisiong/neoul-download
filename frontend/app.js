@@ -18,6 +18,11 @@
 // ✅ Apps Script 웹앱 URL — Vercel 사이트 정상 작동을 위해 실제 URL 입력
 // (폴더 ID·시트 ID는 Code.gs에만 존재하며 깃허브에 노출되지 않음 — 가이드 7-4 보안 정책 부분 준수)
 // 봇 트래픽이 의심되면 Apps Script doGet에 Referer 체크 등 추가 방어 가능
+//
+// ⚠️ URL 갱신 시 주의 (2026-04-29 갱신):
+//   1. Apps Script 편집기 → 배포 → 배포 관리 → 활성 배포의 "웹 앱 URL"을 정확히 복사
+//   2. 갱신 후 브라우저 Console에서 verifyApiUrl() 함수 자동 호출되어 URL 형식 검증
+//   3. 잘못된 URL이면 console.error 출력 (네트워크 호출 전 미리 감지)
 const API_URL = 'https://script.google.com/macros/s/AKfycbx30z-z93T4YYSgjwFSXdj5zb0x5PID5FZzO2Byj7gEjnszuWCp0PCyy0NnNb6x5kYWWA/exec';
 
 // 과목 설정 (백엔드와 동일)
@@ -49,15 +54,37 @@ let fileData = {};
 let currentCategory = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🌊 너울 시스템 시작 (v2.3 심사용 + QR접속)');
+  console.log('🌊 너울 시스템 시작 (v2.7 JSONP복구 + 출원번호공식화)');
   console.log('📜 저작권자: 김태민 · 상표 출원번호 40-2026-0081306, 40-2026-0081307');
   console.log('📚 학습자료: 김태민 본인 출제 교육 저작물');
+  verifyApiUrl();                // 🆕 v2.7: API_URL 형식 자가 검증 (네트워크 호출 전 미리 감지)
   generateQRCode();              // ✅ QR 코드 우선 생성 (네트워크 무관, 즉시 렌더)
   initEmptyData();
   startLoadingTimeout();         // ✅ 10초 타임아웃 안전장치 시작
   loadFileList();
   setupCategoryTabs();
 });
+
+/**
+ * 🆕 v2.7: API_URL 형식 자가 검증
+ * 네트워크 호출 전 URL의 기본 형식만 확인 (실제 응답 확인은 loadFileList에서)
+ * 잘못된 URL이면 console.error로 즉시 알림 (10초 기다리지 않고 미리 감지)
+ */
+function verifyApiUrl() {
+  const isValid = (
+    typeof API_URL === 'string' &&
+    API_URL.startsWith('https://script.google.com/macros/s/') &&
+    API_URL.endsWith('/exec') &&
+    API_URL.length > 80 &&  // 일반적인 Apps Script 배포 URL은 100자 이상
+    API_URL !== 'YOUR_APPS_SCRIPT_WEBAPP_URL'
+  );
+  if (!isValid) {
+    console.error('❌ API_URL 형식 오류 — Apps Script 배포 URL을 확인하세요:', API_URL);
+    return false;
+  }
+  console.log('✅ API_URL 형식 정상');
+  return true;
+}
 
 /**
  * QR 코드 생성 — 모바일 접속용
@@ -278,22 +305,50 @@ async function downloadFile(fileId, fileName, category, type) {
   }
 
   try {
-    await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'recordDownload',
-        data: {
-          timestamp: new Date().toISOString(),
-          fileName, fileId, category, type,
-          userAgent: navigator.userAgent,
-          referrer: document.referrer
-        }
-      })
+    // 🆕 v2.7: POST fetch → JSONP GET 전환 (CORS 정책 100% 우회)
+    // Apps Script는 OPTIONS preflight를 처리하지 않아 'Content-Type: application/json'
+    // 헤더가 있는 fetch POST를 차단함. JSONP는 <script> 태그 동적 삽입 방식이라
+    // 브라우저 same-origin 정책 우회 + Apps Script의 jsonpResponse() 함수와 호환.
+    // 단점: URL 길이 한도(2000자) — referrer는 200자로 절단해 안전 확보
+    await recordDownloadViaJsonp({
+      timestamp: new Date().toISOString(),
+      fileName, fileId, category, type,
+      userAgent: navigator.userAgent.substring(0, 200),
+      referrer: (document.referrer || '').substring(0, 200)
     });
   } catch (err) {
     console.warn('로그 기록 실패 (다운로드는 계속 진행):', err);
   }
 
   window.open(`https://drive.google.com/uc?export=download&id=${fileId}`, '_blank');
+}
+
+/**
+ * JSONP 방식으로 다운로드 로그 기록 (CORS 우회)
+ * @param {Object} data - 로그 데이터 (timestamp, fileName, fileId, category, type, userAgent, referrer)
+ * @returns {Promise<void>} 5초 타임아웃 또는 응답 도달 시 resolve
+ */
+function recordDownloadViaJsonp(data) {
+  return new Promise((resolve) => {
+    const callbackName = `_neoulCb_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const params = new URLSearchParams({
+      action: 'recordDownload',
+      data: JSON.stringify(data),
+      callback: callbackName
+    });
+    const script = document.createElement('script');
+    const timer = setTimeout(() => cleanup(), 5000);  // 5초 타임아웃 (다운로드 흐름 차단 방지)
+
+    function cleanup() {
+      clearTimeout(timer);
+      try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+      resolve();
+    }
+
+    window[callbackName] = function(_response) { cleanup(); };
+    script.onerror = cleanup;
+    script.src = `${API_URL}?${params.toString()}`;
+    document.head.appendChild(script);
+  });
 }
