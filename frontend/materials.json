@@ -1,0 +1,9 @@
+{
+  "updated": "2026-07-05",
+  "provenance": "SKY 멘토 × AI 협업 출제",
+  "items": [
+    {"category":"국어","subject":"독서","type":"개념요약","file":"국어_독서_개념요약.pdf"},
+    {"category":"국어","subject":"독서","type":"문제편","file":"국어_독서_문제편.pdf"},
+    {"category":"국어","subject":"독서","type":"해설편","file":"국어_독서_해설편.pdf"}
+  ]
+}

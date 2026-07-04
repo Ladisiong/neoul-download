@@ -109,11 +109,11 @@
     document.getElementById('foot').textContent='최근 갱신: '+new Date().toLocaleString('ko-KR');
   };
   function fetchStats(){
-    var s=document.createElement('script');
-    s.src=APPS_SCRIPT_URL+'?action=leadstats&key='+encodeURIComponent(key)+'&callback=__neoulStats&t='+Date.now();
-    s.onerror=function(){ document.getElementById('foot').textContent='백엔드 연결 실패(재시도 예정).'; };
-    s.onload=function(){ s.remove(); };
-    document.body.appendChild(s);
+    // 서버리스 프록시(same-origin) — 다계정 /u/N/ 리다이렉트 우회.
+    fetch('/api/leadstats?key='+encodeURIComponent(key)+'&t='+Date.now(),{cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(res){ window.__neoulStats(res); })
+      .catch(function(){ document.getElementById('foot').textContent='집계 연결 실패(재시도 예정).'; });
   }
   function startDash(){
     document.getElementById('gate').style.display='none';
