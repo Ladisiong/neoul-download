@@ -48,6 +48,23 @@
   footer{background:#06283d;color:#93aabd;padding:34px 0;font-size:.82rem}
   footer .wrap{text-align:center}footer b{color:#fff}
   footer .cr{margin-top:8px;font-size:.76rem;color:#6d8ba3}
+  /* ── 게이티드 퍼널 모달 ── */
+  .modal-bg{position:fixed;inset:0;background:rgba(6,40,61,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+  .modal-bg.on{display:flex}
+  .modal{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:28px 26px 24px;box-shadow:0 30px 70px -20px rgba(6,40,61,.6);animation:pop .18s ease}
+  @keyframes pop{from{transform:translateY(10px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .modal h2{font-family:var(--serif);color:var(--deep);font-size:1.24rem;margin-bottom:6px}
+  .modal .sub{color:var(--muted);font-size:.88rem;margin-bottom:18px}
+  .modal label{display:block;font-size:.8rem;font-weight:700;color:var(--deep);margin:12px 0 5px}
+  .modal input[type=email],.modal select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:.92rem;font-family:inherit;color:var(--ink);background:#fff}
+  .modal input[type=email]:focus,.modal select:focus{outline:none;border-color:var(--sky)}
+  .modal .agree{display:flex;align-items:flex-start;gap:8px;margin:16px 0 4px;font-size:.8rem;color:var(--muted);line-height:1.45}
+  .modal .agree input{margin-top:3px}
+  .modal .submit{width:100%;margin-top:16px;background:linear-gradient(135deg,#0A3D62,#2B5F8B);color:#fff;border:none;border-radius:11px;padding:13px;font-weight:800;font-size:.98rem;cursor:pointer;font-family:inherit}
+  .modal .submit:hover{filter:brightness(1.08)}
+  .modal .fine{font-size:.72rem;color:#93a7b8;margin-top:12px;text-align:center;line-height:1.5}
+  .modal .x{float:right;border:none;background:none;font-size:1.3rem;color:var(--muted);cursor:pointer;line-height:1;margin:-6px -4px 0 0}
+  .modal .err{color:#c0392b;font-size:.78rem;margin-top:8px;min-height:1em}
 </style>
 </head>
 <body>
@@ -77,12 +94,59 @@
   <div class="cr">© 2026 NEOUL. All rights reserved. · 자료는 학습 목적 제공이며 무단 상업적 재배포를 금합니다.</div>
 </div></footer>
 
-<script>
-  // ★배포 후 tmkim Apps Script 웹앱 URL(/exec)로 교체하세요.
-  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
-  var CATS = ["전체","국어","수학","영어","사탐","과탐","한국사","통합사회","통합과학"];
-  var ALL = [], cur = "전체";
+<!-- 게이티드 퍼널 모달 -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="x" id="modalClose" aria-label="닫기">×</button>
+    <h2>무료 학습자료 받기</h2>
+    <p class="sub">이 자료는 <b>무료</b>입니다. 이메일과 간단한 2가지만 알려주시면 바로 받으실 수 있어요.</p>
+    <label for="fEmail">이메일</label>
+    <input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email" />
+    <label for="fGrade">학년</label>
+    <select id="fGrade">
+      <option value="">선택해 주세요</option>
+      <option>고1</option><option>고2</option><option>고3</option><option>N수생</option><option>학부모·기타</option>
+    </select>
+    <label for="fInterest">관심 영역</label>
+    <select id="fInterest">
+      <option value="">선택해 주세요</option>
+      <option>국어</option><option>수학</option><option>영어</option><option>사탐</option><option>과탐</option><option>한국사</option><option>통합사회</option><option>통합과학</option>
+    </select>
+    <label class="agree"><input type="checkbox" id="fAgree" /><span>개인정보(이메일·학년·관심영역) 수집·이용에 동의합니다. 수집 정보는 <b>자료 제공·학습 안내 목적</b>으로만 사용되며 제3자에게 제공하지 않습니다.</span></label>
+    <div class="err" id="fErr"></div>
+    <button class="submit" id="fSubmit">자료 받기 →</button>
+    <div class="fine">신청 즉시 자료가 새 창으로 열립니다. 언제든 수신거부하실 수 있습니다.</div>
+  </div>
+</div>
 
+<script>
+  // tmkim Apps Script 웹앱 URL(/exec). 백엔드 v2 재배포 후에도 URL이 바뀌면 여기만 교체.
+  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
+  var LEAD_KEY = "neoul_lead_v1";
+  var CATS = ["전체","국어","수학","영어","사탐","과탐","한국사","통합사회","통합과학"];
+  var ALL = [], cur = "전체", pending = null;
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function getLead(){ try{ return JSON.parse(localStorage.getItem(LEAD_KEY)||'null'); }catch(e){ return null; } }
+  function saveLead(o){ try{ localStorage.setItem(LEAD_KEY, JSON.stringify(o)); }catch(e){} }
+
+  // 리드/다운로드 로그 전송 (fire-and-forget, PII는 본문에만)
+  function logLead(email, grade, interest, material){
+    try{
+      var body = 'action=lead'
+        + '&email=' + encodeURIComponent(email||'')
+        + '&grade=' + encodeURIComponent(grade||'')
+        + '&interest=' + encodeURIComponent(interest||'')
+        + '&material=' + encodeURIComponent(material||'')
+        + '&consent=Y'
+        + '&ua=' + encodeURIComponent((navigator.userAgent||'').slice(0,180));
+      fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body });
+    }catch(e){}
+  }
+  function startDownload(href){ if(href){ window.open(href, '_blank', 'noopener'); } }
+
+  // 탭
   var tabsEl = document.getElementById('tabs');
   CATS.forEach(function(c){
     var b=document.createElement('button'); b.className='tab'+(c==='전체'?' on':''); b.textContent=c;
@@ -93,16 +157,14 @@
   window.__neoulData = function(res){
     if(!res || !res.ok){ fail(res && res.error); return; }
     ALL = res.items || [];
-    // group by category+subject
     render();
   };
   function fail(msg){
-    document.getElementById('state').innerHTML='⚠️ 자료를 불러오지 못했습니다.<br/><span style="font-size:.82rem">'+(msg||'잠시 후 새로고침해 주세요. (백엔드 URL 설정 필요 시 관리자 문의)')+'</span>';
+    document.getElementById('state').innerHTML='⚠️ 자료를 불러오지 못했습니다.<br/><span style="font-size:.82rem">'+(msg||'잠시 후 새로고침해 주세요.')+'</span>';
   }
   function render(){
     var grid=document.getElementById('grid'), state=document.getElementById('state');
     var items = cur==='전체' ? ALL : ALL.filter(function(x){return x.category===cur;});
-    // group by subject
     var groups={};
     items.forEach(function(x){ var k=x.category+'|'+x.subject+'|'+x.provenance; (groups[k]=groups[k]||[]).push(x); });
     var keys=Object.keys(groups);
@@ -110,19 +172,57 @@
     state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
     keys.forEach(function(k){
       var arr=groups[k], first=arr[0];
-      var isAI = first.provenance.indexOf('AI')>=0;
       var files=arr.map(function(f){
-        return '<a class="dl'+(f.type==='해설편'?' ghost':'')+'" href="'+f.download+'" target="_blank" rel="noopener">⬇ '+f.type+'</a>';
+        var mat=first.category+'_'+first.subject+'_'+f.type;
+        return '<button class="dl'+(f.type==='해설편'?' ghost':'')+'" data-href="'+esc(f.download)+'" data-mat="'+esc(mat)+'" data-cat="'+esc(first.category)+'">⬇ '+esc(f.type)+'</button>';
       }).join('');
       var card=document.createElement('div'); card.className='card';
-      card.innerHTML='<div class="cat">'+first.category+'</div><h3>'+first.subject+'</h3>'+
-        '<span class="badge author">'+first.provenance+'</span>'+
+      card.innerHTML='<div class="cat">'+esc(first.category)+'</div><h3>'+esc(first.subject)+'</h3>'+
+        '<span class="badge author">'+esc(first.provenance)+'</span>'+
         '<div class="files">'+files+'</div>';
       grid.appendChild(card);
     });
   }
+
+  // 다운로드 클릭 → 게이팅
+  document.getElementById('grid').addEventListener('click', function(e){
+    var b = e.target.closest('.dl'); if(!b) return;
+    var href=b.getAttribute('data-href'), mat=b.getAttribute('data-mat'), cat=b.getAttribute('data-cat');
+    var lead=getLead();
+    if(lead && lead.done){ logLead(lead.email, lead.grade, lead.interest, mat); startDownload(href); return; }
+    openModal(href, mat, cat);
+  });
+
+  // 모달
+  var modalBg=document.getElementById('modalBg');
+  function openModal(href, mat, cat){
+    pending={href:href, mat:mat};
+    document.getElementById('fErr').textContent='';
+    var sel=document.getElementById('fInterest');
+    if(cat && cat!=='전체'){ for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===cat){ sel.selectedIndex=i; break; } } }
+    modalBg.classList.add('on');
+    setTimeout(function(){ document.getElementById('fEmail').focus(); }, 60);
+  }
+  function closeModal(){ modalBg.classList.remove('on'); pending=null; }
+  document.getElementById('modalClose').onclick=closeModal;
+  modalBg.addEventListener('click', function(e){ if(e.target===modalBg) closeModal(); });
+
+  document.getElementById('fSubmit').onclick=function(){
+    var email=document.getElementById('fEmail').value.trim();
+    var grade=document.getElementById('fGrade').value;
+    var interest=document.getElementById('fInterest').value;
+    var agree=document.getElementById('fAgree').checked;
+    var err=document.getElementById('fErr');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent='올바른 이메일을 입력해 주세요.'; return; }
+    if(!agree){ err.textContent='개인정보 수집·이용 동의가 필요합니다.'; return; }
+    logLead(email, grade, interest, pending?pending.mat:'');
+    saveLead({email:email, grade:grade, interest:interest, done:1});
+    var href = pending?pending.href:null;
+    closeModal();
+    startDownload(href);
+  };
+
   (function load(){
-    if(APPS_SCRIPT_URL.indexOf('___')===0){ fail('백엔드 URL이 아직 설정되지 않았습니다. Apps Script 배포 후 APPS_SCRIPT_URL을 교체하세요.'); return; }
     var s=document.createElement('script');
     s.src=APPS_SCRIPT_URL+(APPS_SCRIPT_URL.indexOf('?')>=0?'&':'?')+'callback=__neoulData&t='+Date.now();
     s.onerror=function(){fail('백엔드 연결 실패');};

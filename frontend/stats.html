@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>너울 무료배포 · 리드 실시간 대시보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{--deep:#0A3D62;--ocean:#1B6CA8;--sky:#3498DB;--wave:#AED6F1;--mist:#EAF4FB;--line:#D6E9F5;--ink:#12222f;--muted:#5A7890;--serif:"Noto Serif KR",serif;--sans:"Pretendard","Noto Sans KR",system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--ink);background:#f4f8fc;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 18px}
+  header{background:linear-gradient(155deg,#0A3D62,#1B6CA8);color:#fff;padding:26px 0 22px}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  header h1{font-family:var(--serif);font-size:1.2rem;font-weight:700}
+  header .live{font-size:.78rem;color:#d9ecf7;display:flex;align-items:center;gap:7px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#5ef08a;box-shadow:0 0 0 0 rgba(94,240,138,.7);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(94,240,138,.6)}70%{box-shadow:0 0 0 8px rgba(94,240,138,0)}100%{box-shadow:0 0 0 0 rgba(94,240,138,0)}}
+  main{padding:22px 0 60px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .kpi .lab{font-size:.8rem;color:var(--muted);font-weight:700}
+  .kpi .num{font-family:var(--serif);font-size:2rem;color:var(--deep);font-weight:700;margin-top:2px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-size:.92rem;color:var(--deep);font-weight:800;margin-bottom:12px}
+  .row{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:.86rem}
+  .row .k{width:96px;color:var(--muted);flex:none}
+  .bar{flex:1;background:#eef4fa;border-radius:7px;height:16px;overflow:hidden}
+  .bar span{display:block;height:100%;background:linear-gradient(90deg,#2B5F8B,#3498DB);border-radius:7px}
+  .row .v{width:40px;text-align:right;font-weight:700;color:var(--deep);flex:none}
+  .empty{color:var(--muted);font-size:.86rem;text-align:center;padding:22px}
+  .foot{text-align:center;color:var(--muted);font-size:.76rem;margin-top:10px}
+  .gate{max-width:360px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 24px;text-align:center}
+  .gate h2{font-family:var(--serif);color:var(--deep);margin-bottom:6px}
+  .gate p{color:var(--muted);font-size:.85rem;margin-bottom:16px}
+  .gate input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:.95rem;font-family:inherit;margin-bottom:10px}
+  .gate button{width:100%;background:linear-gradient(135deg,#0A3D62,#2B5F8B);color:#fff;border:none;border-radius:10px;padding:12px;font-weight:800;cursor:pointer;font-family:inherit}
+  .gate .err{color:#c0392b;font-size:.78rem;min-height:1em;margin-top:8px}
+  .btn-refresh{background:#fff;color:var(--deep);border:1.5px solid var(--line);border-radius:9px;padding:7px 13px;font-weight:700;font-size:.8rem;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>너울 · 무료배포 리드 대시보드</h1>
+  <span class="live"><span class="dot"></span><span id="liveTxt">실시간 · 20초마다 자동 갱신</span></span>
+</div></header>
+
+<main class="wrap">
+  <div id="gate" class="gate">
+    <h2>운영 대시보드</h2>
+    <p>집계 조회 키를 입력해 주세요. (본사에서 발급)</p>
+    <input type="password" id="gkey" placeholder="조회 키" />
+    <button id="ggo">열기</button>
+    <div class="err" id="gerr"></div>
+  </div>
+
+  <div id="dash" style="display:none">
+    <div class="kpis">
+      <div class="kpi"><div class="lab">오늘 신규 리드</div><div class="num" id="kToday">–</div></div>
+      <div class="kpi"><div class="lab">누적 리드</div><div class="num" id="kTotal">–</div></div>
+      <div class="kpi"><div class="lab">수집 자료 종류</div><div class="num" id="kMats">–</div></div>
+    </div>
+    <div class="panel"><h2>학년 분포</h2><div id="pGrade"></div></div>
+    <div class="panel"><h2>관심 영역 분포</h2><div id="pInterest"></div></div>
+    <div class="panel"><h2>인기 자료 Top 5</h2><div id="pTop"></div></div>
+    <div style="text-align:center"><button class="btn-refresh" id="btnR">↻ 지금 새로고침</button></div>
+    <div class="foot" id="foot">—</div>
+  </div>
+</main>
+
+<script>
+  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
+  var KEY_STORE = "neoul_stats_key";
+  var key = sessionStorage.getItem(KEY_STORE) || "";
+  var timer = null;
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function bars(obj, elId){
+    var el=document.getElementById(elId); el.innerHTML='';
+    var keys=Object.keys(obj||{}); if(!keys.length){ el.innerHTML='<div class="empty">아직 데이터가 없습니다.</div>'; return; }
+    var max=1; keys.forEach(function(k){ if(obj[k]>max) max=obj[k]; });
+    keys.sort(function(a,b){return obj[b]-obj[a];}).forEach(function(k){
+      var pct=Math.round(obj[k]/max*100);
+      el.innerHTML+='<div class="row"><div class="k">'+esc(k)+'</div><div class="bar"><span style="width:'+pct+'%"></span></div><div class="v">'+obj[k]+'</div></div>';
+    });
+  }
+  function topList(obj, elId){
+    var el=document.getElementById(elId);
+    var keys=Object.keys(obj||{}); if(!keys.length){ el.innerHTML='<div class="empty">아직 데이터가 없습니다.</div>'; return; }
+    keys.sort(function(a,b){return obj[b]-obj[a];});
+    el.innerHTML=''; keys.slice(0,5).forEach(function(k,i){
+      el.innerHTML+='<div class="row"><div class="k">#'+(i+1)+'</div><div class="bar" style="background:none;font-size:.84rem;color:var(--ink);height:auto">'+esc(k)+'</div><div class="v">'+obj[k]+'</div></div>';
+    });
+  }
+
+  window.__neoulStats = function(res){
+    if(!res || !res.ok){
+      if(res && res.error==='unauthorized'){ sessionStorage.removeItem(KEY_STORE); showGate('키가 올바르지 않습니다.'); return; }
+      document.getElementById('foot').textContent='집계를 불러오지 못했습니다. 잠시 후 다시 시도됩니다.'; return;
+    }
+    var s=res.stats||{};
+    document.getElementById('kToday').textContent=s.today||0;
+    document.getElementById('kTotal').textContent=s.total||0;
+    document.getElementById('kMats').textContent=Object.keys(s.topMaterials||{}).length;
+    bars(s.byGrade,'pGrade'); bars(s.byInterest,'pInterest'); topList(s.topMaterials,'pTop');
+    document.getElementById('foot').textContent='최근 갱신: '+new Date().toLocaleString('ko-KR');
+  };
+  function fetchStats(){
+    var s=document.createElement('script');
+    s.src=APPS_SCRIPT_URL+'?action=leadstats&key='+encodeURIComponent(key)+'&callback=__neoulStats&t='+Date.now();
+    s.onerror=function(){ document.getElementById('foot').textContent='백엔드 연결 실패(재시도 예정).'; };
+    s.onload=function(){ s.remove(); };
+    document.body.appendChild(s);
+  }
+  function startDash(){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('dash').style.display='block';
+    fetchStats(); if(timer) clearInterval(timer); timer=setInterval(fetchStats, 20000);
+  }
+  function showGate(msg){
+    document.getElementById('dash').style.display='none';
+    document.getElementById('gate').style.display='block';
+    document.getElementById('gerr').textContent=msg||'';
+    if(timer){ clearInterval(timer); timer=null; }
+  }
+  document.getElementById('ggo').onclick=function(){
+    var v=document.getElementById('gkey').value.trim();
+    if(!v){ document.getElementById('gerr').textContent='키를 입력해 주세요.'; return; }
+    key=v; sessionStorage.setItem(KEY_STORE, v); startDash();
+  };
+  document.getElementById('gkey').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('ggo').click(); });
+  document.getElementById('btnR').onclick=fetchStats;
+
+  if(key){ startDash(); } else { showGate(''); }
+</script>
+</body>
+</html>
