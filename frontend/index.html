@@ -1,652 +1,133 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>너울 — 교육자료 배포 시스템 | 김태민</title>
-  <meta name="description" content="너울 수능 학습자료 배포 시스템. 저작권자 김태민이 직접 출제한 사회탐구·과학탐구 문제편·해설편 + 한국사·경제이론 요약집. 상표 출원번호 40-2026-0081306, 40-2026-0081307.">
-  <meta name="author" content="김태민">
-  <meta name="application-name" content="너울">
-  <meta property="og:title" content="너울 — 교육자료 배포 시스템">
-  <meta property="og:description" content="오늘의 한 물결이, 내일의 너울이 된다. © 2026 김태민">
-  <meta property="og:site_name" content="너울">
-
-  <!-- QR Code Library (qrcode.js v1.0.0) - CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
-  <!-- 너울 SSoT Tokens (국문 전용 타이포그래피) -->
-  <style>
-    :root {
-      /* 너울 Color System (SSoT) */
-      --neoul-deep-blue: #0A3D62;
-      --neoul-ocean-blue: #1B6CA8;
-      --neoul-sky-blue: #3498DB;
-      --neoul-light-wave: #AED6F1;
-      --neoul-soft-mist: #EAF4FB;
-      --neoul-white: #FFFFFF;
-      --neoul-text-primary: #0A3D62;
-      --neoul-text-secondary: #5A7890;
-      --neoul-border: #D6E9F5;
-
-      /* Warning / Notice (content-origin, evidence 카드) — 기존 원본 유지 + 신규 추가 */
-      --neoul-warn-bg: #FFF9E6;
-      --neoul-warn-text: #8B6F00;
-      --neoul-warn-border: #F5C518;
-
-      /* Typography — 한글 전용 */
-      --font-serif-ko: 'Noto Serif KR', 'Nanum Myeongjo', serif;
-      --font-sans-ko: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
-
-      /* Spacing */
-      --spacing-xs: 4px;
-      --spacing-sm: 8px;
-      --spacing-md: 16px;
-      --spacing-lg: 24px;
-      --spacing-xl: 48px;
-      --spacing-2xl: 96px;
-
-      /* Radius */
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --radius-lg: 16px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: var(--font-sans-ko);
-      color: var(--neoul-text-primary);
-      background: var(--neoul-white);
-      line-height: 1.7;
-    }
-
-    /* Header - Brand Identity (한글 단독) */
-    .neoul-header {
-      background: linear-gradient(135deg, var(--neoul-deep-blue) 0%, var(--neoul-ocean-blue) 100%);
-      color: var(--neoul-white);
-      padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
-      text-align: center;
-    }
-
-    /* Brand Logo - 공식 수평형 로고 (투명 PNG, SSoT 토큰 기반) */
-    .neoul-brand-logo {
-      max-width: 520px;
-      width: 85%;
-      height: auto;
-      margin: 0 auto var(--spacing-lg);
-      display: block;
-      background: rgba(255, 255, 255, 0.95);
-      padding: var(--spacing-lg) var(--spacing-xl);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    /* Footer Logo 이미지 (정사각 마크 태그라인 버전) */
-    .neoul-footer-logo-img {
-      max-width: 120px;
-      width: 35%;
-      height: auto;
-      margin: 0 auto var(--spacing-md);
-      display: block;
-      background: rgba(255, 255, 255, 0.95);
-      padding: var(--spacing-sm);
-      border-radius: var(--radius-md);
-    }
-
-    .neoul-brand-ko {
-      font-family: var(--font-serif-ko);
-      font-size: 4rem;
-      letter-spacing: 0.5em;
-      font-weight: 700;
-      text-indent: 0.5em;
-    }
-
-    .neoul-tagline {
-      font-family: var(--font-sans-ko);
-      font-size: 1.1rem;
-      color: var(--neoul-light-wave);
-      margin-top: var(--spacing-lg);
-      font-weight: 300;
-    }
-
-    .neoul-tagline-en {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      font-size: 0.95rem;
-      color: var(--neoul-light-wave);
-      margin-top: var(--spacing-sm);
-      font-style: italic;
-      letter-spacing: 0.05em;
-      opacity: 0.85;
-    }
-
-    .neoul-subtitle {
-      margin-top: var(--spacing-lg);
-      padding-top: var(--spacing-lg);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.95rem;
-      color: var(--neoul-light-wave);
-    }
-
-    /* Main Content */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: var(--spacing-xl) var(--spacing-lg);
-    }
-
-    .section-title {
-      font-family: var(--font-serif-ko);
-      font-size: 2rem;
-      color: var(--neoul-deep-blue);
-      margin-bottom: var(--spacing-lg);
-      padding-bottom: var(--spacing-sm);
-      border-bottom: 2px solid var(--neoul-sky-blue);
-    }
-
-    /* Category Tabs */
-    .category-tabs {
-      display: flex;
-      gap: var(--spacing-sm);
-      margin-bottom: var(--spacing-xl);
-      flex-wrap: wrap;
-    }
-
-    .category-tab {
-      padding: var(--spacing-sm) var(--spacing-lg);
-      background: var(--neoul-soft-mist);
-      color: var(--neoul-text-secondary);
-      border: 1px solid var(--neoul-border);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      font-family: var(--font-sans-ko);
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-
-    .category-tab.active {
-      background: var(--neoul-deep-blue);
-      color: var(--neoul-white);
-      border-color: var(--neoul-deep-blue);
-    }
-
-    .category-tab:hover:not(.active) {
-      background: var(--neoul-light-wave);
-      color: var(--neoul-deep-blue);
-    }
-
-    /* Subject Grid */
-    .subject-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: var(--spacing-lg);
-    }
-
-    .subject-card {
-      background: var(--neoul-white);
-      border: 1px solid var(--neoul-border);
-      border-radius: var(--radius-lg);
-      padding: var(--spacing-lg);
-      transition: all 0.2s;
-    }
-
-    .subject-card:hover {
-      border-color: var(--neoul-sky-blue);
-      box-shadow: 0 4px 12px rgba(10, 61, 98, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .subject-title {
-      font-family: var(--font-serif-ko);
-      font-size: 1.5rem;
-      color: var(--neoul-deep-blue);
-      margin-bottom: var(--spacing-md);
-    }
-
-    .subject-counts {
-      display: flex;
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-md);
-      font-size: 0.9rem;
-      color: var(--neoul-text-secondary);
-    }
-
-    .count-badge {
-      background: var(--neoul-soft-mist);
-      padding: var(--spacing-xs) var(--spacing-sm);
-      border-radius: var(--radius-sm);
-      font-weight: 500;
-    }
-
-    /* 단일 통합본(요약집) 전용 배지 — 기타 카테고리 */
-    .count-badge.summary {
-      background: #FFF9E6;
-      color: #8B6F00;
-      border: 1px solid #F5C518;
-    }
-
-    /* 자료 미업로드 카드 — 카드 자체는 표시하되 흐릿하게 처리 */
-    .subject-card.empty {
-      opacity: 0.65;
-      background: var(--neoul-white);
-    }
-    .subject-card.empty .subject-title {
-      color: var(--neoul-text-secondary);
-    }
-
-    /* "자료 준비 중입니다" 메시지 */
-    .empty-msg {
-      color: var(--neoul-text-secondary);
-      font-size: 0.9rem;
-      font-style: italic;
-      text-align: center;
-      padding: var(--spacing-md) 0;
-      margin: 0;
-    }
-
-    /* ⚡ 전역 로딩 인디케이터 (subject-grid 위에 표시) */
-    .loading-indicator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: var(--spacing-xl) var(--spacing-md);
-      margin-bottom: var(--spacing-lg);
-      background: var(--neoul-soft-mist);
-      border: 1px solid var(--neoul-border);
-      border-radius: var(--radius-lg);
-      gap: var(--spacing-md);
-    }
-
-    .loading-indicator.hidden {
-      display: none;
-    }
-
-    .loading-wave {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .loading-wave span {
-      display: inline-block;
-      width: 6px;
-      height: 24px;
-      background: var(--neoul-sky-blue);
-      border-radius: 3px;
-      animation: wave-bounce 1.2s ease-in-out infinite;
-    }
-
-    .loading-wave span:nth-child(1) { animation-delay: -0.4s; }
-    .loading-wave span:nth-child(2) { animation-delay: -0.3s; }
-    .loading-wave span:nth-child(3) { animation-delay: -0.2s; }
-    .loading-wave span:nth-child(4) { animation-delay: -0.1s; }
-    .loading-wave span:nth-child(5) { animation-delay: 0s; }
-
-    @keyframes wave-bounce {
-      0%, 80%, 100% { transform: scaleY(0.4); opacity: 0.5; }
-      40% { transform: scaleY(1.2); opacity: 1; }
-    }
-
-    .loading-text {
-      font-family: var(--font-serif-ko);
-      font-size: 1rem;
-      color: var(--neoul-deep-blue);
-      font-weight: 500;
-    }
-
-    .loading-subtext {
-      font-size: 0.85rem;
-      color: var(--neoul-text-secondary);
-      margin-top: -8px;
-    }
-
-    .file-list {
-      max-height: 200px;
-      overflow-y: auto;
-      padding: var(--spacing-sm);
-      background: var(--neoul-soft-mist);
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-    }
-
-    .file-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--spacing-xs) 0;
-      border-bottom: 1px solid var(--neoul-border);
-    }
-
-    .file-item:last-child { border-bottom: none; }
-
-    .download-btn {
-      background: var(--neoul-sky-blue);
-      color: var(--neoul-white);
-      border: none;
-      padding: var(--spacing-xs) var(--spacing-sm);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background 0.2s;
-    }
-
-    .download-btn:hover { background: var(--neoul-ocean-blue); }
-
-    /* QR Code Access Section */
-    .qr-access {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: var(--spacing-xl);
-      align-items: center;
-      background: linear-gradient(135deg, var(--neoul-soft-mist) 0%, #FFFFFF 100%);
-      padding: var(--spacing-xl);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--neoul-border);
-      border-left: 4px solid var(--neoul-deep-blue);
-      margin: var(--spacing-xl) 0;
-    }
-
-    .qr-code-box {
-      background: var(--neoul-white);
-      padding: var(--spacing-md);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--neoul-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 220px;
-      height: 220px;
-      box-shadow: 0 4px 12px rgba(10, 61, 98, 0.08);
-    }
-
-    .qr-code-box img,
-    .qr-code-box canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      max-width: 196px;
-      max-height: 196px;
-    }
-
-    .qr-info-title {
-      font-family: var(--font-serif-ko);
-      font-size: 1.4rem;
-      color: var(--neoul-deep-blue);
-      margin-bottom: var(--spacing-sm);
-      font-weight: 700;
-    }
-
-    .qr-info-desc {
-      font-size: 0.95rem;
-      color: var(--neoul-text-secondary);
-      line-height: 1.7;
-      margin-bottom: var(--spacing-md);
-    }
-
-    .qr-info-url {
-      display: inline-block;
-      background: var(--neoul-deep-blue);
-      color: var(--neoul-white);
-      padding: var(--spacing-xs) var(--spacing-md);
-      border-radius: var(--radius-sm);
-      font-family: 'Consolas', 'Monaco', monospace;
-      font-size: 0.9rem;
-      letter-spacing: 0.02em;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-
-    .qr-info-url:hover {
-      background: var(--neoul-ocean-blue);
-    }
-
-    .qr-info-steps {
-      margin-top: var(--spacing-md);
-      padding-top: var(--spacing-md);
-      border-top: 1px dashed var(--neoul-border);
-      font-size: 0.85rem;
-      color: var(--neoul-text-secondary);
-      line-height: 1.8;
-    }
-
-    @media (max-width: 768px) {
-      .qr-access {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .qr-code-box {
-        margin: 0 auto;
-      }
-    }
-
-    /* Brand Story Section */
-    .brand-story {
-      background: var(--neoul-soft-mist);
-      padding: var(--spacing-xl);
-      border-radius: var(--radius-lg);
-      margin: var(--spacing-xl) 0;
-      border-left: 4px solid var(--neoul-deep-blue);
-    }
-
-    .brand-story blockquote {
-      font-family: var(--font-serif-ko);
-      font-size: 1.15rem;
-      font-style: italic;
-      color: var(--neoul-deep-blue);
-      line-height: 1.9;
-    }
-
-    .brand-story cite {
-      display: block;
-      margin-top: var(--spacing-md);
-      font-size: 0.9rem;
-      color: var(--neoul-text-secondary);
-      font-style: normal;
-    }
-
-    /* Content origin notice (김태민 본인 출제 강조) */
-    .content-origin {
-      background: #FFF9E6;
-      border: 1px solid #F5C518;
-      border-radius: var(--radius-lg);
-      padding: var(--spacing-lg);
-      margin: var(--spacing-lg) 0;
-      font-size: 0.95rem;
-    }
-
-    .content-origin strong { color: #8B6F00; }
-
-    /* Footer - Copyright & Trademark */
-    .neoul-footer {
-      background: var(--neoul-deep-blue);
-      color: var(--neoul-white);
-      padding: var(--spacing-xl) var(--spacing-lg);
-      margin-top: var(--spacing-2xl);
-      text-align: center;
-    }
-
-    .footer-content { max-width: 800px; margin: 0 auto; }
-
-    .footer-logo {
-      font-family: var(--font-serif-ko);
-      font-size: 2rem;
-      letter-spacing: 0.5em;
-      font-weight: 700;
-      margin-bottom: var(--spacing-md);
-      text-indent: 0.5em;
-    }
-
-    .footer-info {
-      font-size: 0.9rem;
-      color: var(--neoul-light-wave);
-      line-height: 1.8;
-    }
-
-    .footer-trademark {
-      margin-top: var(--spacing-lg);
-      padding-top: var(--spacing-lg);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.85rem;
-    }
-
-    .footer-trademark strong {
-      color: var(--neoul-white);
-      font-weight: 600;
-    }
-
-    /* Evidence banner (상표 증거용 고정 배너) */
-    .evidence-banner {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(10, 61, 98, 0.95);
-      color: var(--neoul-white);
-      padding: var(--spacing-sm) var(--spacing-lg);
-      font-size: 0.85rem;
-      text-align: center;
-      z-index: 100;
-      backdrop-filter: blur(8px);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .neoul-brand-ko { font-size: 2.5rem; }
-      .section-title { font-size: 1.5rem; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>너울(NEOUL) — 교육자료 배포 시스템 | 무료 학습자료</title>
+<meta name="description" content="너울 수능·내신 무료 학습자료 배포. 국어·수학·영어·사탐·과탐·한국사·통합사회·통합과학. SKY 출신 교과 멘토와 AI가 협업해 출제한 자료. 상표 출원 40-2026-0081306·0081307." />
+<meta name="theme-color" content="#0A3D62" />
+<meta property="og:title" content="너울 — 교육자료 배포 시스템" />
+<meta property="og:description" content="오늘의 한 물결이, 내일의 너울이 된다. 수능·내신 무료 학습자료 원클릭 다운로드." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M2 13c4 0 4-6 8-6s4 6 8 6 4-6 8-6' stroke='%230A3D62' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M2 21c4 0 4-5 8-5s4 5 8 5 4-5 8-5' stroke='%233498DB' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{--deep:#0A3D62;--ocean:#1B6CA8;--sky:#3498DB;--wave:#AED6F1;--mist:#EAF4FB;--line:#D6E9F5;--ink:#12222f;--muted:#5A7890;--serif:"Noto Serif KR",serif;--sans:"Pretendard","Noto Sans KR",system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  a{color:inherit;text-decoration:none}
+  .hero{background:linear-gradient(155deg,#0A3D62,#1B6CA8);color:#fff;padding:48px 0 40px;text-align:center}
+  .hero .logo{display:inline-flex;align-items:center;gap:9px;font-family:var(--serif);font-weight:700;font-size:1.5rem}
+  .hero .logo svg{width:34px;height:34px}
+  .hero h1{font-family:var(--serif);font-size:1.4rem;margin:14px 0 6px;font-weight:700}
+  .hero p{color:#d9ecf7;font-size:.94rem}
+  .hero .tag{font-family:var(--serif);color:var(--wave);font-size:.9rem;margin-top:12px}
+  .notice{background:var(--mist);border-bottom:1px solid var(--line)}
+  .notice .wrap{padding:14px 20px;font-size:.86rem;color:var(--muted)}
+  .notice b{color:var(--deep)}
+  .tabs{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .tabs .wrap{display:flex;gap:7px;overflow-x:auto;padding:12px 20px}
+  .tab{white-space:nowrap;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:20px;padding:7px 15px;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+  .tab.on{background:var(--deep);color:#fff;border-color:var(--deep)}
+  main{padding:28px 0 60px;min-height:40vh}
+  .state{text-align:center;color:var(--muted);padding:60px 20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .card{border:1px solid var(--line);border-radius:14px;padding:20px;background:#fff;transition:.2s}
+  .card:hover{box-shadow:0 14px 34px -20px rgba(10,61,98,.4);transform:translateY(-2px)}
+  .card .cat{font-size:.74rem;font-weight:800;color:var(--ocean);letter-spacing:.04em}
+  .card h3{font-family:var(--serif);font-size:1.12rem;color:var(--deep);margin:5px 0 4px}
+  .badge{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:12px;margin-bottom:10px}
+  .badge.author{background:#eaf4fb;color:#1B6CA8}
+  .badge.ai{background:#fff4e5;color:#9a5b00}
+  .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .dl{display:inline-flex;align-items:center;gap:6px;background:var(--sky);color:#fff;border-radius:9px;padding:9px 14px;font-weight:700;font-size:.85rem;cursor:pointer;border:none;font-family:inherit}
+  .dl:hover{background:#2980B9}
+  .dl.ghost{background:#fff;color:var(--deep);border:1.5px solid var(--line)}
+  footer{background:#06283d;color:#93aabd;padding:34px 0;font-size:.82rem}
+  footer .wrap{text-align:center}footer b{color:#fff}
+  footer .cr{margin-top:8px;font-size:.76rem;color:#6d8ba3}
+</style>
 </head>
 <body>
-
-  <!-- ============================================= -->
-  <!-- HEADER: 너울 브랜드 아이덴티티 (국문 단독 + 공식 로고) -->
-  <!-- ============================================= -->
-  <header class="neoul-header">
-    <picture>
-      <source type="image/svg+xml" srcset="./assets/neoul-logo-horizontal-tagline.svg">
-      <img src="./assets/neoul-logo-horizontal-tagline.png"
-           alt="너울 공식 로고 — 오늘의 한 물결이, 내일의 너울이 된다"
-           class="neoul-brand-logo">
-    </picture>
-    <div class="neoul-subtitle">
-      교육자료 배포 시스템<br>
-      수능 학습자료 19개 과목 · 문제집·정답지 원클릭 다운로드
-    </div>
-  </header>
-
-  <!-- ============================================= -->
-  <!-- MAIN CONTENT -->
-  <!-- ============================================= -->
-  <main class="container">
-
-    <!-- 학습자료 출처 고지 (증거력 핵심) -->
-    <div class="content-origin">
-      <strong>📚 학습자료 출처 안내</strong><br>
-      본 시스템이 배포하는 모든 문제집·해설·요약집은 <strong>저작권자 김태민이 직접 출제·집필한 교육 저작물</strong>입니다. 외부 기관의 자료를 재가공한 것이 아닌, 수능 대비 지도 경험을 바탕으로 작성한 단독 창작물입니다.
-      <br><br>
-      <small>
-        ▸ <strong>사회탐구·과학탐구</strong>: 회차별 문제편 + 해설편 (2파일 1세트, O/X 선택형)<br>
-        ▸ <strong>한국사</strong>: 핵심용어 및 사건정리 단일 통합본<br>
-        ▸ <strong>경제이론요약집</strong>: 요약집 단일 통합본
-      </small>
-    </div>
-
-    <!-- QR 코드 모바일 접속 -->
-    <section>
-      <h2 class="section-title">📱 모바일에서 바로 접속하기</h2>
-      <div class="qr-access">
-        <div class="qr-code-box" id="qr-code-box" aria-label="너울 학습자료 다운로드 사이트 QR코드"></div>
-        <div class="qr-info">
-          <div class="qr-info-title">QR코드 스캔으로 즉시 다운로드</div>
-          <p class="qr-info-desc">
-            스마트폰 카메라로 좌측 QR코드를 스캔하면 너울 학습자료 배포 페이지로 바로 이동합니다.
-            모바일 환경에서도 19개 과목의 문제집·해설편·요약집을 동일하게 내려받을 수 있습니다.
-          </p>
-          <a href="https://neoul-download.vercel.app/" target="_blank" rel="noopener" class="qr-info-url">
-            🔗 https://neoul-download.vercel.app/
-          </a>
-          <div class="qr-info-steps">
-            ① 스마트폰 카메라 앱 실행 → ② QR코드 비추기 → ③ 알림 탭으로 사이트 접속 → ④ 원하는 과목 다운로드
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 과목별 자료 -->
-    <section>
-      <h2 class="section-title">📚 너울 학습자료 (김태민 본인 출제)</h2>
-      <div class="category-tabs">
-        <button class="category-tab active" data-category="all">전체</button>
-        <button class="category-tab" data-category="사회탐구">사회탐구</button>
-        <button class="category-tab" data-category="과학탐구">과학탐구</button>
-        <button class="category-tab" data-category="기타">기타</button>
-      </div>
-
-      <!-- ⚡ 로딩 인디케이터 — 첫 데이터 도착 시 자동 숨김, 10초 타임아웃 시 안내 메시지 노출 -->
-      <div class="loading-indicator" id="loading-indicator">
-        <div class="loading-wave">
-          <span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="loading-text">너울 학습자료를 불러오는 중입니다</div>
-        <div class="loading-subtext">최초 접속 시 5~10초 정도 소요될 수 있습니다</div>
-        <div class="loading-subtext" id="loading-timeout-msg" style="display:none; color:var(--neoul-warn-text); margin-top:8px;">
-          ⚠️ 응답이 지연되고 있습니다. 페이지를 새로고침하거나 잠시 후 다시 시도해 주세요.
-        </div>
-      </div>
-
-      <div class="subject-grid" id="subject-grid"></div>
-    </section>
-
-    <!-- 브랜드 스토리 -->
-    <section class="brand-story">
-      <blockquote>
-        '너울'은 바다의 크고 넓은 파도, 거대한 흐름을 뜻하는 순우리말입니다.<br><br>
-        잔잔한 물결 하나로는 아무것도 바꾸지 못합니다. 그러나 그 물결이 쌓이고 쌓여 너울이 될 때, 누구도 막을 수 없는 변화가 시작됩니다.<br><br>
-        영문으로는 너울을 NEO와 UL의 합성어로 해석합니다. NEO는 새로움을, UL은 All, 모든 것을 뜻합니다. 모든 것을 새롭게. Everything, new again.<br><br>
-        그리고 너울의 철학적 뿌리는 조선 교육이념에 있습니다. 주자학의 활연관통(豁然貫通) — 작은 배움이 쌓이다 어느 순간 막혔던 이치가 뚫려 큰 흐름이 된다는 통찰. 율곡 이이 선생의 격몽요결(擊蒙要訣) — 어리석음을 깨는 첫걸음. 이 전통적 지혜에 현대 인지과학의 에빙하우스 망각곡선 이론이 만나는 지점에 너울이 자리합니다.<br><br>
-        잔물결 하나는 미약합니다. 그러나 매일의 잔물결이 쌓이면, 어느 날 학생의 머릿속에 거대한 이해의 너울이 일어납니다.
-        <cite>— 너울 브랜드 서사 (저작권자 김태민)</cite>
-      </blockquote>
-    </section>
-
-  </main>
-
-  <!-- ============================================= -->
-  <!-- FOOTER: 저작권 · 상표 · 학습자료 출처 -->
-  <!-- ============================================= -->
-  <footer class="neoul-footer">
-    <div class="footer-content">
-      <picture>
-        <source type="image/svg+xml" srcset="./assets/neoul-mark-square-tagline.svg">
-        <img src="./assets/neoul-mark-square-tagline.png"
-             alt="너울 마크 — 오늘의 한 물결이, 내일의 너울이 된다"
-             class="neoul-footer-logo-img"
-             onerror="this.style.display='none'">
-      </picture>
-      <div class="footer-logo">너울</div>
-      <div class="footer-info">
-        교육자료 배포 시스템<br>
-        오늘의 한 물결이, 내일의 너울이 된다<br>
-        Today's ripple, tomorrow's wave.
-      </div>
-      <div class="footer-trademark">
-        <strong>저작권자</strong>: 김태민 (Kim Taemin)<br>
-        <strong>상표 출원번호</strong>: 40-2026-0081306, 40-2026-0081307<br>
-        <strong>학습자료</strong>: 김태민 본인 출제 교육 저작물<br>
-        © 2026 김태민. All rights reserved.
-      </div>
-    </div>
-  </footer>
-
-  <!-- 상표 증거용 고정 배너 -->
-  <div class="evidence-banner">
-    🏷️ 너울 (NEOUL) · 저작권자 김태민 · 상표 출원번호 40-2026-0081306, 40-2026-0081307 · © 2026
+<header class="hero">
+  <div class="wrap">
+    <span class="logo"><svg viewBox="0 0 32 32"><path d="M2 13c4 0 4-6 8-6s4 6 8 6 4-6 8-6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M2 21c4 0 4-5 8-5s4 5 8 5 4-5 8-5" stroke="#AED6F1" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>너울 NEOUL</span>
+    <h1>교육자료 배포 시스템</h1>
+    <p>수능·내신 무료 학습자료 · 원클릭 다운로드</p>
+    <p class="tag">"오늘의 한 물결이, 내일의 너울이 된다."</p>
   </div>
+</header>
 
-  <!-- ============================================= -->
-  <!-- SCRIPT — 이 태그가 누락되면 모든 동적 기능 마비 -->
-  <!-- ============================================= -->
-  <script src="./app.js"></script>
+<div class="notice"><div class="wrap">
+  📚 <b>자료 출처 안내</b> — 본 자료는 <b>SKY 출신 교과 멘토와 AI의 협업</b>으로 출제·정리한 너울의 자체 제작 자료입니다. 외부 기관의 강의·모의고사 자료를 무단으로 재가공하지 않습니다.
+</div></div>
 
+<nav class="tabs"><div class="wrap" id="tabs"></div></nav>
+
+<main><div class="wrap">
+  <div id="state" class="state">너울 학습자료를 불러오는 중입니다…<br/><span style="font-size:.82rem">최초 접속 시 5~10초 정도 소요될 수 있습니다.</span></div>
+  <div id="grid" class="grid" style="display:none"></div>
+</div></main>
+
+<footer><div class="wrap">
+  <b>너울 NEOUL</b> · 교육자료 배포 시스템<br/>
+  상표 출원번호 40-2026-0081306 · 40-2026-0081307
+  <div class="cr">© 2026 NEOUL. All rights reserved. · 자료는 학습 목적 제공이며 무단 상업적 재배포를 금합니다.</div>
+</div></footer>
+
+<script>
+  // ★배포 후 tmkim Apps Script 웹앱 URL(/exec)로 교체하세요.
+  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
+  var CATS = ["전체","국어","수학","영어","사탐","과탐","한국사","통합사회","통합과학"];
+  var ALL = [], cur = "전체";
+
+  var tabsEl = document.getElementById('tabs');
+  CATS.forEach(function(c){
+    var b=document.createElement('button'); b.className='tab'+(c==='전체'?' on':''); b.textContent=c;
+    b.onclick=function(){cur=c;[].forEach.call(tabsEl.children,function(x){x.classList.remove('on')});b.classList.add('on');render();};
+    tabsEl.appendChild(b);
+  });
+
+  window.__neoulData = function(res){
+    if(!res || !res.ok){ fail(res && res.error); return; }
+    ALL = res.items || [];
+    // group by category+subject
+    render();
+  };
+  function fail(msg){
+    document.getElementById('state').innerHTML='⚠️ 자료를 불러오지 못했습니다.<br/><span style="font-size:.82rem">'+(msg||'잠시 후 새로고침해 주세요. (백엔드 URL 설정 필요 시 관리자 문의)')+'</span>';
+  }
+  function render(){
+    var grid=document.getElementById('grid'), state=document.getElementById('state');
+    var items = cur==='전체' ? ALL : ALL.filter(function(x){return x.category===cur;});
+    // group by subject
+    var groups={};
+    items.forEach(function(x){ var k=x.category+'|'+x.subject+'|'+x.provenance; (groups[k]=groups[k]||[]).push(x); });
+    var keys=Object.keys(groups);
+    if(keys.length===0){ state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
+    state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
+    keys.forEach(function(k){
+      var arr=groups[k], first=arr[0];
+      var isAI = first.provenance.indexOf('AI')>=0;
+      var files=arr.map(function(f){
+        return '<a class="dl'+(f.type==='해설편'?' ghost':'')+'" href="'+f.download+'" target="_blank" rel="noopener">⬇ '+f.type+'</a>';
+      }).join('');
+      var card=document.createElement('div'); card.className='card';
+      card.innerHTML='<div class="cat">'+first.category+'</div><h3>'+first.subject+'</h3>'+
+        '<span class="badge author">'+first.provenance+'</span>'+
+        '<div class="files">'+files+'</div>';
+      grid.appendChild(card);
+    });
+  }
+  (function load(){
+    if(APPS_SCRIPT_URL.indexOf('___')===0){ fail('백엔드 URL이 아직 설정되지 않았습니다. Apps Script 배포 후 APPS_SCRIPT_URL을 교체하세요.'); return; }
+    var s=document.createElement('script');
+    s.src=APPS_SCRIPT_URL+(APPS_SCRIPT_URL.indexOf('?')>=0?'&':'?')+'callback=__neoulData&t='+Date.now();
+    s.onerror=function(){fail('백엔드 연결 실패');};
+    document.body.appendChild(s);
+  })();
+</script>
 </body>
 </html>
