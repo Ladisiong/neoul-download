@@ -6,631 +6,541 @@
       "category": "국어",
       "subject": "독서",
       "type": "개념요약",
-      "file": "국어_독서_개념요약.pdf",
-      "provider": "openai"
+      "file": "국어_독서_개념요약.pdf"
     },
     {
       "category": "국어",
       "subject": "독서",
       "type": "문제편",
-      "file": "국어_독서_문제편.pdf",
-      "provider": "openai"
+      "file": "국어_독서_문제편.pdf"
     },
     {
       "category": "국어",
       "subject": "독서",
       "type": "해설편",
-      "file": "국어_독서_해설편.pdf",
-      "provider": "openai"
+      "file": "국어_독서_해설편.pdf"
     },
     {
       "category": "국어",
       "subject": "문학",
       "type": "개념요약",
-      "file": "국어_문학_개념요약.pdf",
-      "provider": "openai"
+      "file": "국어_문학_개념요약.pdf"
     },
     {
       "category": "국어",
       "subject": "문학",
       "type": "문제편",
-      "file": "국어_문학_문제편.pdf",
-      "provider": "openai"
+      "file": "국어_문학_문제편.pdf"
     },
     {
       "category": "국어",
       "subject": "문학",
       "type": "해설편",
-      "file": "국어_문학_해설편.pdf",
-      "provider": "openai"
+      "file": "국어_문학_해설편.pdf"
     },
     {
       "category": "국어",
       "subject": "화법과작문",
       "type": "개념요약",
-      "file": "국어_화법과작문_개념요약.pdf",
-      "provider": "openai"
+      "file": "국어_화법과작문_개념요약.pdf"
     },
     {
       "category": "국어",
       "subject": "화법과작문",
       "type": "문제편",
-      "file": "국어_화법과작문_문제편.pdf",
-      "provider": "openai"
+      "file": "국어_화법과작문_문제편.pdf"
     },
     {
       "category": "국어",
       "subject": "화법과작문",
       "type": "해설편",
-      "file": "국어_화법과작문_해설편.pdf",
-      "provider": "openai"
+      "file": "국어_화법과작문_해설편.pdf"
     },
     {
       "category": "국어",
       "subject": "언어와매체",
       "type": "개념요약",
-      "file": "국어_언어와매체_개념요약.pdf",
-      "provider": "openai"
+      "file": "국어_언어와매체_개념요약.pdf"
     },
     {
       "category": "국어",
       "subject": "언어와매체",
       "type": "문제편",
-      "file": "국어_언어와매체_문제편.pdf",
-      "provider": "openai"
+      "file": "국어_언어와매체_문제편.pdf"
     },
     {
       "category": "국어",
       "subject": "언어와매체",
       "type": "해설편",
-      "file": "국어_언어와매체_해설편.pdf",
-      "provider": "openai"
+      "file": "국어_언어와매체_해설편.pdf"
     },
     {
       "category": "영어",
       "subject": "독해",
       "type": "개념요약",
-      "file": "영어_독해_개념요약.pdf",
-      "provider": "openai"
+      "file": "영어_독해_개념요약.pdf"
     },
     {
       "category": "영어",
       "subject": "독해",
       "type": "문제편",
-      "file": "영어_독해_문제편.pdf",
-      "provider": "openai"
+      "file": "영어_독해_문제편.pdf"
     },
     {
       "category": "영어",
       "subject": "독해",
       "type": "해설편",
-      "file": "영어_독해_해설편.pdf",
-      "provider": "openai"
+      "file": "영어_독해_해설편.pdf"
     },
     {
       "category": "한국사",
       "subject": "한국사",
       "type": "개념요약",
-      "file": "한국사_한국사_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "한국사_한국사_개념요약.pdf"
     },
     {
       "category": "한국사",
       "subject": "한국사",
       "type": "문제편",
-      "file": "한국사_한국사_문제편.pdf",
-      "provider": "anthropic"
+      "file": "한국사_한국사_문제편.pdf"
     },
     {
       "category": "한국사",
       "subject": "한국사",
       "type": "해설편",
-      "file": "한국사_한국사_해설편.pdf",
-      "provider": "anthropic"
+      "file": "한국사_한국사_해설편.pdf"
     },
     {
       "category": "수학",
       "subject": "수학1",
       "type": "개념요약",
-      "file": "수학_수학1_개념요약.pdf",
-      "provider": "gemini"
+      "file": "수학_수학1_개념요약.pdf"
     },
     {
       "category": "수학",
       "subject": "수학1",
       "type": "문제편",
-      "file": "수학_수학1_문제편.pdf",
-      "provider": "gemini"
+      "file": "수학_수학1_문제편.pdf"
     },
     {
       "category": "수학",
       "subject": "수학1",
       "type": "해설편",
-      "file": "수학_수학1_해설편.pdf",
-      "provider": "gemini"
+      "file": "수학_수학1_해설편.pdf"
     },
     {
       "category": "수학",
       "subject": "수학2",
       "type": "개념요약",
-      "file": "수학_수학2_개념요약.pdf",
-      "provider": "gemini"
+      "file": "수학_수학2_개념요약.pdf"
     },
     {
       "category": "수학",
       "subject": "수학2",
       "type": "문제편",
-      "file": "수학_수학2_문제편.pdf",
-      "provider": "gemini"
+      "file": "수학_수학2_문제편.pdf"
     },
     {
       "category": "수학",
       "subject": "수학2",
       "type": "해설편",
-      "file": "수학_수학2_해설편.pdf",
-      "provider": "gemini"
+      "file": "수학_수학2_해설편.pdf"
     },
     {
       "category": "수학",
       "subject": "확률과통계",
       "type": "개념요약",
-      "file": "수학_확률과통계_개념요약.pdf",
-      "provider": "gemini"
+      "file": "수학_확률과통계_개념요약.pdf"
     },
     {
       "category": "수학",
       "subject": "확률과통계",
       "type": "문제편",
-      "file": "수학_확률과통계_문제편.pdf",
-      "provider": "gemini"
+      "file": "수학_확률과통계_문제편.pdf"
     },
     {
       "category": "수학",
       "subject": "확률과통계",
       "type": "해설편",
-      "file": "수학_확률과통계_해설편.pdf",
-      "provider": "gemini"
+      "file": "수학_확률과통계_해설편.pdf"
     },
     {
       "category": "수학",
       "subject": "미적분",
       "type": "개념요약",
-      "file": "수학_미적분_개념요약.pdf",
-      "provider": "gemini"
+      "file": "수학_미적분_개념요약.pdf"
     },
     {
       "category": "수학",
       "subject": "미적분",
       "type": "문제편",
-      "file": "수학_미적분_문제편.pdf",
-      "provider": "gemini"
+      "file": "수학_미적분_문제편.pdf"
     },
     {
       "category": "수학",
       "subject": "미적분",
       "type": "해설편",
-      "file": "수학_미적분_해설편.pdf",
-      "provider": "gemini"
+      "file": "수학_미적분_해설편.pdf"
     },
     {
       "category": "수학",
       "subject": "기하",
       "type": "개념요약",
-      "file": "수학_기하_개념요약.pdf",
-      "provider": "gemini"
+      "file": "수학_기하_개념요약.pdf"
     },
     {
       "category": "수학",
       "subject": "기하",
       "type": "문제편",
-      "file": "수학_기하_문제편.pdf",
-      "provider": "gemini"
+      "file": "수학_기하_문제편.pdf"
     },
     {
       "category": "수학",
       "subject": "기하",
       "type": "해설편",
-      "file": "수학_기하_해설편.pdf",
-      "provider": "gemini"
+      "file": "수학_기하_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "생활과윤리",
       "type": "개념요약",
-      "file": "사탐_생활과윤리_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "사탐_생활과윤리_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "생활과윤리",
       "type": "문제편",
-      "file": "사탐_생활과윤리_문제편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_생활과윤리_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "생활과윤리",
       "type": "해설편",
-      "file": "사탐_생활과윤리_해설편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_생활과윤리_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "윤리와사상",
       "type": "개념요약",
-      "file": "사탐_윤리와사상_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "사탐_윤리와사상_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "윤리와사상",
       "type": "문제편",
-      "file": "사탐_윤리와사상_문제편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_윤리와사상_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "윤리와사상",
       "type": "해설편",
-      "file": "사탐_윤리와사상_해설편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_윤리와사상_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "한국지리",
       "type": "개념요약",
-      "file": "사탐_한국지리_개념요약.pdf",
-      "provider": "openai"
+      "file": "사탐_한국지리_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "한국지리",
       "type": "문제편",
-      "file": "사탐_한국지리_문제편.pdf",
-      "provider": "openai"
+      "file": "사탐_한국지리_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "한국지리",
       "type": "해설편",
-      "file": "사탐_한국지리_해설편.pdf",
-      "provider": "openai"
+      "file": "사탐_한국지리_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "세계지리",
       "type": "개념요약",
-      "file": "사탐_세계지리_개념요약.pdf",
-      "provider": "openai"
+      "file": "사탐_세계지리_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "세계지리",
       "type": "문제편",
-      "file": "사탐_세계지리_문제편.pdf",
-      "provider": "openai"
+      "file": "사탐_세계지리_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "세계지리",
       "type": "해설편",
-      "file": "사탐_세계지리_해설편.pdf",
-      "provider": "openai"
+      "file": "사탐_세계지리_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "정치와법",
       "type": "개념요약",
-      "file": "사탐_정치와법_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "사탐_정치와법_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "정치와법",
       "type": "문제편",
-      "file": "사탐_정치와법_문제편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_정치와법_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "정치와법",
       "type": "해설편",
-      "file": "사탐_정치와법_해설편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_정치와법_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "경제",
       "type": "개념요약",
-      "file": "사탐_경제_개념요약.pdf",
-      "provider": "openai"
+      "file": "사탐_경제_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "경제",
       "type": "문제편",
-      "file": "사탐_경제_문제편.pdf",
-      "provider": "openai"
+      "file": "사탐_경제_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "경제",
       "type": "해설편",
-      "file": "사탐_경제_해설편.pdf",
-      "provider": "openai"
+      "file": "사탐_경제_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "사회문화",
       "type": "개념요약",
-      "file": "사탐_사회문화_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "사탐_사회문화_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "사회문화",
       "type": "문제편",
-      "file": "사탐_사회문화_문제편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_사회문화_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "사회문화",
       "type": "해설편",
-      "file": "사탐_사회문화_해설편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_사회문화_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "동아시아사",
       "type": "개념요약",
-      "file": "사탐_동아시아사_개념요약.pdf",
-      "provider": "openai"
+      "file": "사탐_동아시아사_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "동아시아사",
       "type": "문제편",
-      "file": "사탐_동아시아사_문제편.pdf",
-      "provider": "openai"
+      "file": "사탐_동아시아사_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "동아시아사",
       "type": "해설편",
-      "file": "사탐_동아시아사_해설편.pdf",
-      "provider": "openai"
+      "file": "사탐_동아시아사_해설편.pdf"
     },
     {
       "category": "사탐",
       "subject": "세계사",
       "type": "개념요약",
-      "file": "사탐_세계사_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "사탐_세계사_개념요약.pdf"
     },
     {
       "category": "사탐",
       "subject": "세계사",
       "type": "문제편",
-      "file": "사탐_세계사_문제편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_세계사_문제편.pdf"
     },
     {
       "category": "사탐",
       "subject": "세계사",
       "type": "해설편",
-      "file": "사탐_세계사_해설편.pdf",
-      "provider": "anthropic"
+      "file": "사탐_세계사_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "물리학1",
       "type": "개념요약",
-      "file": "과탐_물리학1_개념요약.pdf",
-      "provider": "gemini"
+      "file": "과탐_물리학1_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "물리학1",
       "type": "문제편",
-      "file": "과탐_물리학1_문제편.pdf",
-      "provider": "gemini"
+      "file": "과탐_물리학1_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "물리학1",
       "type": "해설편",
-      "file": "과탐_물리학1_해설편.pdf",
-      "provider": "gemini"
+      "file": "과탐_물리학1_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "물리학2",
       "type": "개념요약",
-      "file": "과탐_물리학2_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "과탐_물리학2_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "물리학2",
       "type": "문제편",
-      "file": "과탐_물리학2_문제편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_물리학2_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "물리학2",
       "type": "해설편",
-      "file": "과탐_물리학2_해설편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_물리학2_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "화학1",
       "type": "개념요약",
-      "file": "과탐_화학1_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "과탐_화학1_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "화학1",
       "type": "문제편",
-      "file": "과탐_화학1_문제편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_화학1_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "화학1",
       "type": "해설편",
-      "file": "과탐_화학1_해설편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_화학1_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "화학2",
       "type": "개념요약",
-      "file": "과탐_화학2_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "과탐_화학2_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "화학2",
       "type": "문제편",
-      "file": "과탐_화학2_문제편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_화학2_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "화학2",
       "type": "해설편",
-      "file": "과탐_화학2_해설편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_화학2_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "생명과학1",
       "type": "개념요약",
-      "file": "과탐_생명과학1_개념요약.pdf",
-      "provider": "gemini"
+      "file": "과탐_생명과학1_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "생명과학1",
       "type": "문제편",
-      "file": "과탐_생명과학1_문제편.pdf",
-      "provider": "gemini"
+      "file": "과탐_생명과학1_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "생명과학1",
       "type": "해설편",
-      "file": "과탐_생명과학1_해설편.pdf",
-      "provider": "gemini"
+      "file": "과탐_생명과학1_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "생명과학2",
       "type": "개념요약",
-      "file": "과탐_생명과학2_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "과탐_생명과학2_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "생명과학2",
       "type": "문제편",
-      "file": "과탐_생명과학2_문제편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_생명과학2_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "생명과학2",
       "type": "해설편",
-      "file": "과탐_생명과학2_해설편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_생명과학2_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "지구과학1",
       "type": "개념요약",
-      "file": "과탐_지구과학1_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "과탐_지구과학1_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "지구과학1",
       "type": "문제편",
-      "file": "과탐_지구과학1_문제편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_지구과학1_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "지구과학1",
       "type": "해설편",
-      "file": "과탐_지구과학1_해설편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_지구과학1_해설편.pdf"
     },
     {
       "category": "과탐",
       "subject": "지구과학2",
       "type": "개념요약",
-      "file": "과탐_지구과학2_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "과탐_지구과학2_개념요약.pdf"
     },
     {
       "category": "과탐",
       "subject": "지구과학2",
       "type": "문제편",
-      "file": "과탐_지구과학2_문제편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_지구과학2_문제편.pdf"
     },
     {
       "category": "과탐",
       "subject": "지구과학2",
       "type": "해설편",
-      "file": "과탐_지구과학2_해설편.pdf",
-      "provider": "anthropic"
+      "file": "과탐_지구과학2_해설편.pdf"
     },
     {
       "category": "통합사회",
       "subject": "통합사회",
       "type": "개념요약",
-      "file": "통합사회_통합사회_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "통합사회_통합사회_개념요약.pdf"
     },
     {
       "category": "통합사회",
       "subject": "통합사회",
       "type": "문제편",
-      "file": "통합사회_통합사회_문제편.pdf",
-      "provider": "anthropic"
+      "file": "통합사회_통합사회_문제편.pdf"
     },
     {
       "category": "통합사회",
       "subject": "통합사회",
       "type": "해설편",
-      "file": "통합사회_통합사회_해설편.pdf",
-      "provider": "anthropic"
+      "file": "통합사회_통합사회_해설편.pdf"
     },
     {
       "category": "통합과학",
       "subject": "통합과학",
       "type": "개념요약",
-      "file": "통합과학_통합과학_개념요약.pdf",
-      "provider": "anthropic"
+      "file": "통합과학_통합과학_개념요약.pdf"
     },
     {
       "category": "통합과학",
       "subject": "통합과학",
       "type": "문제편",
-      "file": "통합과학_통합과학_문제편.pdf",
-      "provider": "anthropic"
+      "file": "통합과학_통합과학_문제편.pdf"
     },
     {
       "category": "통합과학",
       "subject": "통합과학",
       "type": "해설편",
-      "file": "통합과학_통합과학_해설편.pdf",
-      "provider": "anthropic"
+      "file": "통합과학_통합과학_해설편.pdf"
     }
   ]
 }
