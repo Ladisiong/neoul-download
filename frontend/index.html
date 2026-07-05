@@ -48,6 +48,17 @@
   footer{background:#06283d;color:#93aabd;padding:34px 0;font-size:.82rem}
   footer .wrap{text-align:center}footer b{color:#fff}
   footer .cr{margin-top:8px;font-size:.76rem;color:#6d8ba3}
+  /* ── 단원/주제/무료샘플/후킹 ── */
+  .card.free{border:2px solid #27ae60;box-shadow:0 12px 32px -18px rgba(39,174,96,.55)}
+  .card .subj{font-size:.72rem;color:var(--muted);font-weight:700}
+  .card .unit{font-family:var(--serif);font-size:1.12rem;color:var(--deep);margin:4px 0 2px}
+  .card .topic{font-size:.85rem;color:var(--muted);margin-bottom:9px}
+  .badge.free{background:#e9f9ef;color:#1e8449}
+  .badge.lock{background:#fef3f2;color:#b23b3b}
+  .hook{background:linear-gradient(135deg,#0A3D62,#2B5F8B);color:#fff;border-radius:14px;padding:15px 18px;margin:0 0 20px;display:flex;gap:12px 16px;align-items:center;flex-wrap:wrap;font-size:.9rem}
+  .hook b{color:#AED6F1}
+  .hook .cta{margin-left:auto;background:#fff;color:var(--deep);border-radius:10px;padding:10px 17px;font-weight:800;font-size:.86rem;border:none;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .hook .cta:hover{filter:brightness(.96)}
   /* ── 게이티드 퍼널 모달 ── */
   .modal-bg{position:fixed;inset:0;background:rgba(6,40,61,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
   .modal-bg.on{display:flex}
@@ -72,7 +83,7 @@
   <div class="wrap">
     <span class="logo"><svg viewBox="0 0 32 32"><path d="M2 13c4 0 4-6 8-6s4 6 8 6 4-6 8-6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M2 21c4 0 4-5 8-5s4 5 8 5 4-5 8-5" stroke="#AED6F1" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>너울 NEOUL</span>
     <h1>교육자료 배포 시스템</h1>
-    <p>수능·내신 무료 학습자료 · 원클릭 다운로드</p>
+    <p>수능·내신 무료 학습자료 · 원클릭 다운로드 · 매주 새 단원 업데이트</p>
     <p class="tag">"오늘의 한 물결이, 내일의 너울이 된다."</p>
   </div>
 </header>
@@ -84,6 +95,10 @@
 <nav class="tabs"><div class="wrap" id="tabs"></div></nav>
 
 <main><div class="wrap">
+  <div id="hook" class="hook" style="display:none">
+    <div>🎁 <b>이번 주 무료 단원</b>은 회원가입 없이 바로 받으세요 — 나머지 <b>전 과목·전 단원</b>도 이메일 하나면 <b>100% 무료</b>. 매주 <b>새 단원</b>이 차곡차곡 쌓입니다.</div>
+    <button class="cta" id="hookCta">무료로 전체 열기 →</button>
+  </div>
   <div id="state" class="state">너울 학습자료를 불러오는 중입니다…<br/><span style="font-size:.82rem">최초 접속 시 5~10초 정도 소요될 수 있습니다.</span></div>
   <div id="grid" class="grid" style="display:none"></div>
 </div></main>
@@ -98,8 +113,8 @@
 <div class="modal-bg" id="modalBg">
   <div class="modal" role="dialog" aria-modal="true">
     <button class="x" id="modalClose" aria-label="닫기">×</button>
-    <h2>무료 학습자료 받기</h2>
-    <p class="sub">이 자료는 <b>무료</b>입니다. 이메일과 간단한 2가지만 알려주시면 바로 받으실 수 있어요.</p>
+    <h2>무료 회원가입하고 전체 받기</h2>
+    <p class="sub">이메일과 간단한 2가지만 남기면 <b>전 과목·전 단원 자료를 100% 무료</b>로 받으실 수 있어요. 매주 새 단원도 계속 열립니다.</p>
     <label for="fEmail">이메일</label>
     <input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email" />
     <label for="fGrade">학년</label>
@@ -114,13 +129,13 @@
     </select>
     <label class="agree"><input type="checkbox" id="fAgree" /><span>개인정보(이메일·학년·관심영역) 수집·이용에 동의합니다. 수집 정보는 <b>자료 제공·학습 안내 목적</b>으로만 사용되며 제3자에게 제공하지 않습니다.</span></label>
     <div class="err" id="fErr"></div>
-    <button class="submit" id="fSubmit">자료 받기 →</button>
+    <button class="submit" id="fSubmit">무료로 전체 받기 →</button>
     <div class="fine">신청 즉시 자료가 새 창으로 열립니다. 언제든 수신거부하실 수 있습니다.</div>
   </div>
 </div>
 
 <script>
-  // tmkim Apps Script 웹앱 URL(/exec). 백엔드 v2 재배포 후에도 URL이 바뀌면 여기만 교체.
+  // tmkim Apps Script 웹앱 URL(/exec). 백엔드 재배포로 URL이 바뀌면 여기만 교체.
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
   var LEAD_KEY = "neoul_lead_v1";
   var CATS = ["전체","국어","수학","영어","사탐","과탐","한국사","통합사회","통합과학"];
@@ -154,41 +169,45 @@
     tabsEl.appendChild(b);
   });
 
-  window.__neoulData = function(res){
-    if(!res || !res.ok){ fail(res && res.error); return; }
-    ALL = res.items || [];
-    render();
-  };
   function fail(msg){
     document.getElementById('state').innerHTML='⚠️ 자료를 불러오지 못했습니다.<br/><span style="font-size:.82rem">'+(msg||'잠시 후 새로고침해 주세요.')+'</span>';
   }
+
+  function catIdx(c){ var i=CATS.indexOf(c); return i<0?99:i; }
   function render(){
-    var grid=document.getElementById('grid'), state=document.getElementById('state');
+    var grid=document.getElementById('grid'), state=document.getElementById('state'), hook=document.getElementById('hook');
     var items = cur==='전체' ? ALL : ALL.filter(function(x){return x.category===cur;});
     var groups={};
-    items.forEach(function(x){ var k=x.category+'|'+x.subject+'|'+x.provenance; (groups[k]=groups[k]||[]).push(x); });
-    var keys=Object.keys(groups);
-    if(keys.length===0){ state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
-    state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
+    items.forEach(function(x){ var k=x.category+'|'+x.subject+'|'+(x.unit||''); (groups[k]=groups[k]||[]).push(x); });
+    var keys=Object.keys(groups).sort(function(a,b){ var ga=groups[a][0], gb=groups[b][0];
+      return catIdx(ga.category)-catIdx(gb.category) || String(ga.subject).localeCompare(String(gb.subject),'ko') || String(ga.unit||'').localeCompare(String(gb.unit||''),'ko'); });
+    if(keys.length===0){ hook.style.display='none'; state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
+    hook.style.display='flex'; state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
+    var order={'개념요약':0,'문제편':1,'해설편':2};
     keys.forEach(function(k){
-      var arr=groups[k], first=arr[0];
+      var arr=groups[k].slice().sort(function(x,y){return (order[x.type]||9)-(order[y.type]||9);});
+      var first=arr[0], free=!!first.sample;
       var files=arr.map(function(f){
-        var mat=first.category+'_'+first.subject+'_'+f.type;
-        return '<button class="dl'+(f.type==='해설편'?' ghost':'')+'" data-href="'+esc(f.download)+'" data-mat="'+esc(mat)+'" data-cat="'+esc(first.category)+'">⬇ '+esc(f.type)+'</button>';
+        var mat=first.category+'_'+first.subject+'_'+(first.unit||'')+'_'+f.type;
+        return '<button class="dl'+(f.type==='해설편'?' ghost':'')+'" data-href="'+esc(f.download)+'" data-mat="'+esc(mat)+'" data-cat="'+esc(first.category)+'" data-free="'+(free?'1':'')+'">⬇ '+esc(f.type)+'</button>';
       }).join('');
-      var card=document.createElement('div'); card.className='card';
-      card.innerHTML='<div class="cat">'+esc(first.category)+'</div><h3>'+esc(first.subject)+'</h3>'+
-        '<span class="badge author">'+esc(first.provenance)+'</span>'+
+      var badge = free ? '<span class="badge free">🎁 이번 주 무료 단원</span>' : '<span class="badge lock">🔒 무료 회원 전용</span>';
+      var card=document.createElement('div'); card.className='card'+(free?' free':'');
+      card.innerHTML='<div class="subj">'+esc(first.category)+' · '+esc(first.subject)+'</div>'+
+        '<div class="unit">'+esc(first.unit||first.subject)+'</div>'+
+        (first.topic?'<div class="topic">'+esc(first.topic)+'</div>':'')+
+        badge+
         '<div class="files">'+files+'</div>';
       grid.appendChild(card);
     });
   }
 
-  // 다운로드 클릭 → 게이팅
+  // 다운로드 클릭 → (무료 샘플=바로 / 그 외=무료 회원가입 게이팅)
   document.getElementById('grid').addEventListener('click', function(e){
     var b = e.target.closest('.dl'); if(!b) return;
-    var href=b.getAttribute('data-href'), mat=b.getAttribute('data-mat'), cat=b.getAttribute('data-cat');
+    var href=b.getAttribute('data-href'), mat=b.getAttribute('data-mat'), cat=b.getAttribute('data-cat'), free=b.getAttribute('data-free')==='1';
     var lead=getLead();
+    if(free){ if(lead&&lead.done) logLead(lead.email,lead.grade,lead.interest,mat+'#sample'); startDownload(href); return; }
     if(lead && lead.done){ logLead(lead.email, lead.grade, lead.interest, mat); startDownload(href); return; }
     openModal(href, mat, cat);
   });
@@ -222,8 +241,11 @@
     startDownload(href);
   };
 
+  var hookCtaEl=document.getElementById('hookCta');
+  if(hookCtaEl){ hookCtaEl.onclick=function(){ openModal(null, 'hook_cta', cur==='전체'?'':cur); }; }
+
   (function load(){
-    // 자료 목록 = Vercel 호스팅 매니페스트(same-origin). Drive/Apps Script 의존 제거.
+    // 자료 목록 = Vercel 호스팅 매니페스트(same-origin).
     fetch('materials.json?t='+Date.now(),{cache:'no-store'})
       .then(function(r){ if(!r.ok) throw 0; return r.json(); })
       .then(function(res){
