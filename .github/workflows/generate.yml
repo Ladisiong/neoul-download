@@ -1,8 +1,13 @@
-name: NEOUL auto-generate (2day all-subject 3axis)
+name: NEOUL auto-generate (all-subject, Opus primary)
 on:
   schedule:
     - cron: '0 21 * * 0'   # 매주 월요일 06:00 KST (일 21:00 UTC)
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'pilot subjects (comma, e.g. 미적분,물리학1). blank=all'
+        required: false
+        default: ''
 permissions:
   contents: write
 concurrency:
@@ -13,14 +18,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install LibreOffice Korean fonts ghostscript
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libreoffice-writer fonts-noto-cjk ghostscript
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Generate 3-axis Claude OpenAI Gemini
+      - name: Install Chromium (Playwright) + Korean fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk fonts-noto-cjk-extra
+          npm init -y >/dev/null 2>&1 || true
+          npm i playwright@1.47.2
+          npx playwright install --with-deps chromium
+      - name: Generate all subjects (Opus 4.8 primary, KaTeX + inline SVG)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -28,6 +36,7 @@ jobs:
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          ONLY_SUBJECTS: ${{ github.event.inputs.only }}
         run: node scripts/generate.mjs
       - name: Commit and push (Vercel auto-deploy)
         run: |
