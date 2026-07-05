@@ -185,7 +185,7 @@
     hook.style.display='flex'; state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
     var order={'개념요약':0,'문제편':1,'해설편':2};
     keys.forEach(function(k){
-      var arr=groups[k].slice().sort(function(x,y){return (order[x.type]||9)-(order[y.type]||9);});
+      var arr=groups[k].slice().sort(function(x,y){return (order[x.type]!=null?order[x.type]:9)-(order[y.type]!=null?order[y.type]:9);});
       var first=arr[0], free=!!first.sample;
       var files=arr.map(function(f){
         var mat=first.category+'_'+first.subject+'_'+(first.unit||'')+'_'+f.type;
