@@ -7,7 +7,7 @@
  *  4) 라우팅 품질    — 전 과목 주력 = Opus 4.8(anthropic). 타 모델은 폴백만. (수학=flash 자의배정 폐기)
  *  + 레이아웃        — 문항 카드/여백/줄바꿈(overflow-wrap) 정비로 글자 잘림 제거.
  */
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { chromium } from 'playwright';
 
 const OUT = 'frontend/materials';
@@ -135,34 +135,71 @@ async function htmlToPdf(html, outPdf){
   } finally { await pg.close(); }
 }
 
-const items = [];
+// ---- QC (자가치유) ----
+const CRIT = ['rawLatex','modelName','brand','figMissing'];
+function qcStatic(d){
+  const html=[d.concept_html,d.problems_html,d.solutions_html].join(' ');
+  const pr=d.problems_html||'';
+  const flags=[];
+  if(/\\\(|\\\[/.test(html)) flags.push('rawLatex');
+  if(/gemini|openai|anthropic|claude|gpt-/i.test(html)) flags.push('modelName');
+  if(/메가스터디|대성마이맥|시대인재|이투스|김태민/.test(html)) flags.push('brand');
+  if(/그림|그래프|좌표|아래 그림|그림과 같이|다음 그림/.test(pr) && !/<svg/i.test(pr)) flags.push('figMissing');
+  if(pr.replace(/<[^>]+>/g,'').replace(/\s/g,'').length < 120) flags.push('problemsShort');
+  return flags;
+}
+const RETRY_NOTE='\n\n[재요청] 직전 출력에 결함이 있었다. 규칙 100% 준수: 모든 수식은 $ … $ / $$ … $$, 도형·그래프는 반드시 인라인 <svg>, 특정 AI 모델명·타사 브랜드·개인명 금지. 다시 출력하라.';
+async function genData(s, extra){
+  for(const pv of FALLBACK){ if(!KEYS[pv]) continue;
+    try{ return { data: extractJSON(await CALL[pv](PROMPT(s)+(extra||''))), used:pv }; }
+    catch(e){ console.log(` [${s.cat}] ${s.sub} ${pv} 실패: ${String(e).slice(0,100)}`); }
+  }
+  return null;
+}
+async function answerAudit(s, data){
+  if(!KEYS.anthropic) return null;
+  const strip=(h)=>String(h||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').slice(0,3500);
+  const prompt=`다음은 수능 ${s.cat}(${s.sub}) 문제편과 해설편이다. 각 문항의 정답과 풀이가 문제와 논리적으로 일치하고 계산이 정확한지 점검하라. 오류가 있는 문항 번호와 한줄 사유만 JSON으로: {"issues":[{"no":정수,"why":"..."}]}. 문제 없으면 {"issues":[]}. 오직 JSON만 출력.\n\n[문제편]\n${strip(data.problems_html)}\n\n[해설편]\n${strip(data.solutions_html)}`;
+  try{ const j=extractJSON(await callAnthropic(prompt)); return Array.isArray(j.issues)? j.issues : []; }catch(e){ return null; }
+}
+
+// 표본 정답점검 대상(수학·과탐 최대 4개; 파일럿이면 실행 과목 전부)
+const AUDIT = ONLY.length
+  ? new Set(RUN.map(s=>s.cat+'|'+s.sub))
+  : (()=>{ const pool=SUBJECTS.filter(s=>s.cat==='수학'||s.cat==='과탐'); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} return new Set(pool.slice(0,4).map(s=>s.cat+'|'+s.sub)); })();
+
+const items=[]; const qc=[];
 for (const s of RUN) {
-  let data=null, used=null;
-  for (const p of FALLBACK) {
-    if (!KEYS[p]) continue;
-    try { data = extractJSON(await CALL[p](PROMPT(s))); used=p; break; }
-    catch(e){ console.log(` [${s.cat}] ${s.sub} ${p} 실패: ${String(e).slice(0,120)}`); }
+  let r = await genData(s);
+  if(!r){ console.log(` [${s.cat}] ${s.sub} 전 provider 실패 — 스킵`); qc.push({subject:s.sub,category:s.cat,status:'fail',flags:['noData']}); continue; }
+  let flags = qcStatic(r.data);
+  if(flags.some(f=>CRIT.includes(f))){
+    console.log(` [${s.cat}] ${s.sub} QC 결함 ${JSON.stringify(flags)} → 1회 재생성`);
+    const r2 = await genData(s, RETRY_NOTE);
+    if(r2){ const f2=qcStatic(r2.data); if(f2.filter(f=>CRIT.includes(f)).length <= flags.filter(f=>CRIT.includes(f)).length){ r=r2; flags=f2; } }
   }
-  if (!data) { console.log(` [${s.cat}] ${s.sub} 전 provider 실패 — 스킵`); continue; }
+  const data=r.data;
   const tag = `${s.cat} · ${s.sub} · SKY 멘토 × AI 협업 출제`;
-  const set = [
-    { type:'개념요약', body:data.concept_html },
-    { type:'문제편', body:data.problems_html },
-    { type:'해설편', body:data.solutions_html },
-  ];
-  for (const d of set) {
-    if (!d.body) continue;
-    const file = `${s.cat}_${s.sub}_${d.type}.pdf`;
-    try {
-      await htmlToPdf(page(`${s.cat} ${s.sub} · ${d.type}`, tag, d.body), `${OUT}/${file}`);
-      items.push({ category:s.cat, subject:s.sub, type:d.type, file });
-      console.log(` [${s.cat}] ${s.sub} ${d.type} PDF OK`);
-    } catch(e){ console.log(` [${s.cat}] ${s.sub} ${d.type} PDF 실패: ${String(e).slice(0,120)}`); }
+  const set=[{type:'개념요약',body:data.concept_html},{type:'문제편',body:data.problems_html},{type:'해설편',body:data.solutions_html}];
+  for (const d of set){ if(!d.body) continue; const file=`${s.cat}_${s.sub}_${d.type}.pdf`;
+    try{ await htmlToPdf(page(`${s.cat} ${s.sub} · ${d.type}`, tag, d.body), `${OUT}/${file}`); items.push({category:s.cat,subject:s.sub,type:d.type,file}); console.log(` [${s.cat}] ${s.sub} ${d.type} PDF OK`);}catch(e){console.log(` [${s.cat}] ${s.sub} ${d.type} PDF 실패: ${String(e).slice(0,100)}`);}
   }
+  const entry={subject:s.sub,category:s.cat,status: flags.length?'flagged':'ok', flags};
+  if(AUDIT.has(s.cat+'|'+s.sub)){ const iss=await answerAudit(s,data); if(iss!==null) entry.answerIssues=iss; }
+  qc.push(entry);
 }
 if (BROWSER) await BROWSER.close();
 
-const manifest = { updated:new Date().toISOString().slice(0,10), provenance:'SKY 멘토 × AI 협업 출제', items };
-writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2));
-console.log(`\n완료: PDF ${items.length}개 / materials.json 갱신`);
+// ---- manifest (부분런은 기존과 병합해 나머지 과목 보존) ----
+let allItems = items;
+if (ONLY.length) {
+  try { const prev=(JSON.parse(readFileSync(MANIFEST,'utf-8')).items)||[]; const runSet=new Set(RUN.map(s=>s.cat+'|'+s.sub)); allItems = prev.filter(it=>!runSet.has(it.category+'|'+it.subject)).concat(items); } catch(e){ console.log('manifest merge skip: '+String(e).slice(0,80)); }
+}
+writeFileSync(MANIFEST, JSON.stringify({ updated:new Date().toISOString().slice(0,10), provenance:'SKY 멘토 × AI 협업 출제', items: allItems }, null, 2));
+
+// ---- QC 리포트 ----
+const critCount = qc.filter(q=>(q.flags||[]).some(f=>CRIT.includes(f))).length;
+const answerFlagged = qc.filter(q=>Array.isArray(q.answerIssues)&&q.answerIssues.length>0).map(q=>q.subject);
+writeFileSync('frontend/qc_report.json', JSON.stringify({ generated:new Date().toISOString(), run: ONLY.length?('pilot:'+ONLY.join(',')):'full', subjects_checked:qc.length, critical_flagged:critCount, answer_flagged:answerFlagged, subjects:qc }, null, 2));
+console.log(`\n완료: PDF ${items.length}개 / QC ${qc.length}과목 (critical ${critCount} · 정답점검이슈 ${answerFlagged.length})`);
 if (items.length === 0) { console.error('생성 0개 — 실패로 종료'); process.exit(1); }
