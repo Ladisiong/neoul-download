@@ -1,0 +1,293 @@
+{
+  "generated": "2026-07-05T23:00:12.527Z",
+  "run": "full",
+  "sample": "수학|수학1|지수와 로그",
+  "subjects_checked": 30,
+  "critical_flagged": 1,
+  "answer_flagged": [
+    "수학1/지수와 로그",
+    "기하/이차곡선",
+    "화학2/기체",
+    "생명과학1/생명 현상의 특성"
+  ],
+  "subjects": [
+    {
+      "subject": "독서",
+      "category": "국어",
+      "unit": "인문·예술 독서",
+      "topic": "미학과 해석의 기준",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "문학",
+      "category": "국어",
+      "unit": "현대시",
+      "topic": "현대시의 화자·정서·표현",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "화법과작문",
+      "category": "국어",
+      "unit": "화법: 발표·토론·협상",
+      "topic": "발표·토론·협상의 소통 전략",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "언어와매체",
+      "category": "국어",
+      "unit": "음운과 단어",
+      "topic": "음운 변동과 단어의 형성",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "독해",
+      "category": "영어",
+      "unit": "대의 파악: 주제·요지·제목",
+      "topic": "대의 파악: 주제·요지·제목",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "한국사",
+      "category": "한국사",
+      "unit": "전근대(고대~조선)",
+      "topic": "고대~조선의 국가 체제와 변천",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "수학1",
+      "category": "수학",
+      "unit": "지수와 로그",
+      "topic": "지수와 로그의 계산과 성질",
+      "status": "ok",
+      "flags": [],
+      "answerIssues": [
+        {
+          "no": 6,
+          "why": "조건 1<x<100(0<t<2)에서 t=n/3의 값은 1/3,2/3,1,4/3,5/3만이 아니라 실제 가수 일치 여부를 다시 따져야 하며, 특히 t=1은 두 가수가 모두 0으로 유효하나 t가 정수(가수0)와 비정수 경우 가수 일치 조건 검증이 부실하고 최종답 5의 정당화가 논리적으로 불완전"
+        },
+        {
+          "no": 7,
+          "why": "최종 정답표는 √2이나 문제 상단 [킬러]7의 표기 정답 3√2와 불일치하며 정답근거 서술이 혼란스럽게 자기수정하는 구조"
+        }
+      ]
+    },
+    {
+      "subject": "수학2",
+      "category": "수학",
+      "unit": "함수의 극한과 연속",
+      "topic": "함수의 극한값 계산과 연속의 판정",
+      "status": "flagged",
+      "flags": [
+        "rawLatex"
+      ]
+    },
+    {
+      "subject": "확률과통계",
+      "category": "수학",
+      "unit": "경우의 수·순열과 조합",
+      "topic": "경우의 수·순열과 조합",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "미적분",
+      "category": "수학",
+      "unit": "수열의 극한",
+      "topic": "수열의 극한과 급수의 수렴",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "기하",
+      "category": "수학",
+      "unit": "이차곡선",
+      "topic": "이차곡선(포물선·타원·쌍곡선)",
+      "status": "ok",
+      "flags": [],
+      "answerIssues": [
+        {
+          "no": 6,
+          "why": "PF=4는 a=2에서 근점거리 c-a=1보다 크므로 가능하나, PF'=8,PF=4,FF'=6은 삼각형 성립하지만 실제 P가 쌍곡선 위 존재 확인시 문제없음—오히려 헤론 계산 √135=3√15는 정확, 오류는 없음"
+        }
+      ]
+    },
+    {
+      "subject": "생활과윤리",
+      "category": "사탐",
+      "unit": "현대의 삶과 윤리 문제 접근",
+      "topic": "현대 윤리 문제와 윤리학의 접근",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "윤리와사상",
+      "category": "사탐",
+      "unit": "동양의 윤리 사상",
+      "topic": "동양의 윤리 사상: 유·불·도",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "한국지리",
+      "category": "사탐",
+      "unit": "국토 인식과 지도",
+      "topic": "국토 인식과 다양한 지도",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "세계지리",
+      "category": "사탐",
+      "unit": "세계화와 지역화",
+      "topic": "세계화와 지역화의 이해",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "정치와법",
+      "category": "사탐",
+      "unit": "민주정치와 헌법",
+      "topic": "민주정치의 발전과 헌법의 이념",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "경제",
+      "category": "사탐",
+      "unit": "경제생활과 합리적 선택",
+      "topic": "기회비용과 합리적 선택",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "사회문화",
+      "category": "사탐",
+      "unit": "사회문화 현상과 연구방법",
+      "topic": "사회문화 현상의 특징과 연구방법",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "동아시아사",
+      "category": "사탐",
+      "unit": "동아시아 세계의 형성",
+      "topic": "동아시아 세계의 형성과 교류",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "세계사",
+      "category": "사탐",
+      "unit": "문명의 발생과 고대 세계",
+      "topic": "문명의 발생과 고대 세계",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "물리학1",
+      "category": "과탐",
+      "unit": "역학: 운동·힘·에너지",
+      "topic": "등가속도 운동과 운동량·에너지 보존",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "물리학2",
+      "category": "과탐",
+      "unit": "평면 운동과 원운동",
+      "topic": "평면 운동과 원운동의 분석",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "화학1",
+      "category": "과탐",
+      "unit": "화학의 언어: 몰과 화학식",
+      "topic": "몰과 화학식량, 아보가드로수",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "화학2",
+      "category": "과탐",
+      "unit": "기체",
+      "topic": "기체 법칙과 부분 압력",
+      "status": "ok",
+      "flags": [],
+      "answerIssues": [
+        {
+          "no": 4,
+          "why": "정답표는 ①로 표기했으나 계산상 5/3이 맞으므로 정답표 표기와 실제 정답 불일치는 없으나 정답표에 '재계산' 혼란 표기; 실제 정답 ①(5/3) 정확"
+        },
+        {
+          "no": 5,
+          "why": "정답표 ③이나 실제 정답은 2:1(②)로 해설 스스로 정정함, 정답표 오류"
+        },
+        {
+          "no": 6,
+          "why": "정답표 ③(1또는9)이나 해설 계산은 x=3또는12; 그러나 O2 남는 경우 소모O2=6이 아니라 12L(atm·L)기준 계산오류-실제로는 3또는9가 정답"
+        }
+      ]
+    },
+    {
+      "subject": "생명과학1",
+      "category": "과탐",
+      "unit": "생명 현상의 특성",
+      "topic": "생명 현상의 특성과 생물 검증",
+      "status": "ok",
+      "flags": [],
+      "answerIssues": [
+        {
+          "no": 7,
+          "why": "ⓒ가 ×인 (가)와 표에서 (다)가 모두 × 인데, ㄴ의 ⓑ='핵산 가짐' 판정은 맞으나 정답을 ③(ㄱ,ㄴ)으로 하면서 ㄷ을 오답 처리한 해설 논리는 타당하나, 실제 (가)의 ⓑ○·ⓒ×로 바이러스 확정 및 ㄱ,ㄴ 정답은 일관됨—문제없음이나 ㄷ 배제 근거 설명이 표 근거와 혼동"
+        }
+      ]
+    },
+    {
+      "subject": "생명과학2",
+      "category": "과탐",
+      "unit": "세포의 특성과 물질대사",
+      "topic": "세포 소기관과 효소·물질대사",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "지구과학1",
+      "category": "과탐",
+      "unit": "고체지구: 판구조와 지질",
+      "topic": "판구조론과 지질 구조·해양 지각",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "지구과학2",
+      "category": "과탐",
+      "unit": "지구의 형성과 지질조사",
+      "topic": "지구 형성·지질조사",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "통합사회",
+      "category": "통합사회",
+      "unit": "행복과 삶의 질",
+      "topic": "진정한 행복의 조건과 삶의 질",
+      "status": "ok",
+      "flags": []
+    },
+    {
+      "subject": "통합과학",
+      "category": "통합과학",
+      "unit": "물질의 규칙성과 결합",
+      "topic": "원소의 규칙성과 화학 결합",
+      "status": "ok",
+      "flags": []
+    }
+  ]
+}
