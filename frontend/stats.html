@@ -63,9 +63,11 @@
       <div class="kpi"><div class="lab">누적 리드</div><div class="num" id="kTotal">–</div></div>
       <div class="kpi"><div class="lab">수집 자료 종류</div><div class="num" id="kMats">–</div></div>
     </div>
+    <div class="panel"><h2>현재 배포 중 자료 <span style="font-weight:400;color:var(--muted);font-size:.78rem">· GitHub Actions 무인 생성 · 매주 월 06:00 갱신</span></h2><div id="pMaterials"><div class="empty">불러오는 중…</div></div></div>
     <div class="panel"><h2>학년 분포</h2><div id="pGrade"></div></div>
     <div class="panel"><h2>관심 영역 분포</h2><div id="pInterest"></div></div>
     <div class="panel"><h2>인기 자료 Top 5</h2><div id="pTop"></div></div>
+    <div class="panel"><h2>API 토큰·사용량 모니터링 <span style="font-weight:400;color:var(--muted);font-size:.78rem">· 실시간 콘솔</span></h2><div style="font-size:.85rem;line-height:2"><div>· <b>Anthropic</b> <span style="color:var(--muted)">(개인)</span> — <a href="https://console.anthropic.com/settings/usage" target="_blank" rel="noopener">Console 사용량 ↗</a></div><div>· <b>OpenAI</b> <span style="color:var(--muted)">(회사)</span> — <a href="https://platform.openai.com/usage" target="_blank" rel="noopener">Usage ↗</a></div><div>· <b>Gemini</b> <span style="color:var(--muted)">(회사)</span> — <a href="https://aistudio.google.com/app/usage" target="_blank" rel="noopener">AI Studio 사용량 ↗</a></div></div><div class="empty" style="text-align:left;padding:6px 0 0;font-size:.78rem">OS 임베드 실시간 수치 = 관리자키 프록시(/api/usage-*) 연동 예정</div></div>
     <div style="text-align:center"><button class="btn-refresh" id="btnR">↻ 지금 새로고침</button></div>
     <div class="foot" id="foot">—</div>
   </div>
@@ -108,6 +110,21 @@
     bars(s.byGrade,'pGrade'); bars(s.byInterest,'pInterest'); topList(s.topMaterials,'pTop');
     document.getElementById('foot').textContent='최근 갱신: '+new Date().toLocaleString('ko-KR');
   };
+  function fetchMaterials(){
+    fetch('/materials.json?t='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.json();})
+      .then(function(m){
+        var el=document.getElementById('pMaterials'); var items=(m&&m.items)||[];
+        if(!items.length){ el.innerHTML='<div class="empty">배포 자료가 아직 없습니다.</div>'; return; }
+        var by={}; items.forEach(function(i){ (by[i.category]=by[i.category]||[]).push(i.subject); });
+        var html='<div style="font-size:.8rem;color:var(--muted);margin-bottom:8px">갱신 '+(m.updated||'')+' · 총 '+items.length+'종</div>';
+        Object.keys(by).forEach(function(c){
+          var subs=by[c].filter(function(v,i,a){return a.indexOf(v)===i;});
+          html+='<div class="row"><div class="k">'+esc(c)+'</div><div class="bar" style="background:none;height:auto;color:var(--ink);font-size:.82rem">'+subs.map(esc).join(', ')+'</div><div class="v">'+by[c].length+'</div></div>';
+        });
+        el.innerHTML=html;
+      }).catch(function(){ document.getElementById('pMaterials').innerHTML='<div class="empty">자료 목록 로드 실패.</div>'; });
+  }
   function fetchStats(){
     // 서버리스 프록시(same-origin) — 다계정 /u/N/ 리다이렉트 우회.
     fetch('/api/leadstats?key='+encodeURIComponent(key)+'&t='+Date.now(),{cache:'no-store'})
@@ -118,7 +135,7 @@
   function startDash(){
     document.getElementById('gate').style.display='none';
     document.getElementById('dash').style.display='block';
-    fetchStats(); if(timer) clearInterval(timer); timer=setInterval(fetchStats, 20000);
+    fetchStats(); fetchMaterials(); if(timer) clearInterval(timer); timer=setInterval(function(){fetchStats();fetchMaterials();}, 20000);
   }
   function showGate(msg){
     document.getElementById('dash').style.display='none';

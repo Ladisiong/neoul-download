@@ -13,7 +13,7 @@ mkdirSync(OUT, { recursive: true });
 const MODELS = {
   anthropic: process.env.ANTHROPIC_MODEL || 'claude-opus-4-8',
   openai:    process.env.OPENAI_MODEL    || 'gpt-5.5',
-  gemini:    process.env.GEMINI_MODEL    || 'gemini-3.1-pro',
+  gemini:    process.env.GEMINI_MODEL    || 'gemini-3.5-flash',
 };
 const KEYS = {
   anthropic: process.env.ANTHROPIC_API_KEY || '',
@@ -23,14 +23,43 @@ const KEYS = {
 
 // 8과목 → 강점별 3축 배정 (국·영=OpenAI 창작 / 수·과탐=Gemini 추론 / 나머지=Claude 종합)
 const SUBJECTS = [
-  { cat:'국어',     sub:'독서',        provider:'openai'    },
-  { cat:'영어',     sub:'독해',        provider:'openai'    },
-  { cat:'수학',     sub:'수학1',       provider:'gemini'    },
-  { cat:'과탐',     sub:'생명과학1',   provider:'gemini'    },
-  { cat:'사탐',     sub:'생활과윤리',  provider:'anthropic' },
-  { cat:'한국사',   sub:'한국사',      provider:'anthropic' },
-  { cat:'통합사회', sub:'통합사회',    provider:'anthropic' },
-  { cat:'통합과학', sub:'통합과학',    provider:'anthropic' },
+  // 국어(공통·선택) 4
+  { cat:'국어', sub:'독서', provider:'openai' },
+  { cat:'국어', sub:'문학', provider:'openai' },
+  { cat:'국어', sub:'화법과작문', provider:'openai' },
+  { cat:'국어', sub:'언어와매체', provider:'openai' },
+  // 영어 1
+  { cat:'영어', sub:'독해', provider:'openai' },
+  // 한국사 1
+  { cat:'한국사', sub:'한국사', provider:'anthropic' },
+  // 수학(공통·선택) 5
+  { cat:'수학', sub:'수학1', provider:'gemini' },
+  { cat:'수학', sub:'수학2', provider:'gemini' },
+  { cat:'수학', sub:'확률과통계', provider:'gemini' },
+  { cat:'수학', sub:'미적분', provider:'gemini' },
+  { cat:'수학', sub:'기하', provider:'gemini' },
+  // 사회탐구 9
+  { cat:'사탐', sub:'생활과윤리', provider:'anthropic' },
+  { cat:'사탐', sub:'윤리와사상', provider:'anthropic' },
+  { cat:'사탐', sub:'한국지리', provider:'openai' },
+  { cat:'사탐', sub:'세계지리', provider:'openai' },
+  { cat:'사탐', sub:'정치와법', provider:'anthropic' },
+  { cat:'사탐', sub:'경제', provider:'openai' },
+  { cat:'사탐', sub:'사회문화', provider:'anthropic' },
+  { cat:'사탐', sub:'동아시아사', provider:'openai' },
+  { cat:'사탐', sub:'세계사', provider:'anthropic' },
+  // 과학탐구 8
+  { cat:'과탐', sub:'물리학1', provider:'gemini' },
+  { cat:'과탐', sub:'물리학2', provider:'anthropic' },
+  { cat:'과탐', sub:'화학1', provider:'gemini' },
+  { cat:'과탐', sub:'화학2', provider:'anthropic' },
+  { cat:'과탐', sub:'생명과학1', provider:'gemini' },
+  { cat:'과탐', sub:'생명과학2', provider:'anthropic' },
+  { cat:'과탐', sub:'지구과학1', provider:'gemini' },
+  { cat:'과탐', sub:'지구과학2', provider:'anthropic' },
+  // 2028 통합 2
+  { cat:'통합사회', sub:'통합사회', provider:'anthropic' },
+  { cat:'통합과학', sub:'통합과학', provider:'gemini' },
 ];
 
 const PROMPT = (s) => `당신은 대한민국 수능 ${s.cat} 최고 출제 전문가입니다. 무료 배포용 학습자료 1세트를 만드세요.
@@ -57,7 +86,7 @@ async function callOpenAI(prompt) {
   const r = await fetch('https://api.openai.com/v1/chat/completions', {
     method:'POST',
     headers:{ 'authorization':'Bearer '+KEYS.openai, 'content-type':'application/json' },
-    body: JSON.stringify({ model:MODELS.openai, messages:[{role:'user',content:prompt}], max_completion_tokens:8000 })
+    body: JSON.stringify({ model:MODELS.openai, messages:[{role:'user',content:prompt}], max_completion_tokens:24000, reasoning_effort:'low' })
   });
   const j = await r.json();
   if (!r.ok) throw new Error('openai '+r.status+' '+JSON.stringify(j).slice(0,200));

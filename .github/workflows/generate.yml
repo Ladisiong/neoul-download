@@ -1,7 +1,7 @@
 name: NEOUL auto-generate (2day all-subject 3axis)
 on:
   schedule:
-    - cron: '0 21 */2 * *'
+    - cron: '0 21 * * 0'   # 매주 월요일 06:00 KST (일 21:00 UTC)
   workflow_dispatch: {}
 permissions:
   contents: write
