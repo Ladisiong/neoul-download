@@ -42,19 +42,21 @@ const SUBJECTS = [
 const ONLY=(process.env.ONLY_SUBJECTS||'').split(',').map(x=>x.trim()).filter(Boolean);
 const RUN=ONLY.length?SUBJECTS.filter(s=>ONLY.includes(s.sub)):SUBJECTS;
 
-const PROMPT = (s) => `당신은 대한민국 수능 ${s.cat}(${s.sub}) 최고 출제 전문가입니다. 무료 배포용 학습자료 1세트를 만드세요.
+const PROMPT = (s, unit) => `당신은 대한민국 수능 ${s.cat}(${s.sub}) 최고 출제 전문가입니다. 무료 배포용 학습자료 1세트를 만드세요.
+
+이번 자료의 단원(unit)은 「${unit}」 이다. 반드시 이 단원 범위 안에서만 개념·문항·해설을 구성하라(다른 단원 내용 혼입 금지).
 
 [절대 원칙]
 1. 자기완결성: 문제는 스스로 완결되어야 한다. "그림과 같이", "다음 그래프에서"처럼 도형·그래프를 언급하면 그 도형·그래프를 반드시 문항 안에 인라인 <svg>로 직접 그려 넣는다. 외부 이미지/링크 금지. 도형을 언급하면서 도형이 없는 문제 절대 금지.
-2. 수식: 모든 수식·기호는 반드시 인라인은 $ ... $, 별행은 $$ ... $$ 로 감싼다. (예: $\\lim_{x\\to 2}\\frac{x^2+ax+b}{x-2}=5$) 다른 구분자(\\( \\) \\[ \\])나 순수 텍스트 수식 금지.
+2. 수식: 모든 수식·기호는 반드시 인라인은 $ ... $, 별행은 $$ ... $$ 로 감싼다. (예: $\lim_{x\to 2}\frac{x^2+ax+b}{x-2}=5$) 다른 구분자나 순수 텍스트 수식 금지.
 3. 도형/그래프: <svg viewBox="0 0 W H"> 에 좌표축·눈금·라벨·점 좌표를 정확히 그린다. 함수 그래프는 실제 좌표로 <path>/<polyline>, 기하 도형은 정확한 비율·각도. 색은 흑/남색 위주, 폰트 12px 내외.
 4. 정확성: 정답·풀이 수치는 반드시 재검산(수학·과탐은 계산 2회 검증). 정답표와 해설의 수치가 일치해야 한다.
 5. 벤치마킹: 평가원 기출·EBS의 유형·난이도·평가요소만 차용하고, 지문·선지·수치·표현·도형은 완전히 새로 창작한다. 기출 원문 재수록·부분치환 절대 금지(저작권).
-6. 구성: 난이도 3단(기본·심화·킬러), 5~7문항. 해설 4블록(정답근거→오답분석→연관개념→메타인지).
+6. 구성: 난이도 3단(기본·심화·킬러), 5~7문항. 해설 4블록(정답근거 → 오답분석 → 연관개념 → 메타인지).
 7. 표기: "SKY 멘토 × AI 협업 출제"만 사용. 개인명(김태민 등)·특정 AI 모델명(gemini/gpt/claude 등)·타사 브랜드(메가/대성/시대인재/이투스/EBS 강사명 등)·성적보장·과장 표현 금지.
 
 [출력] 오직 JSON 하나만 출력(코드펜스 금지):
-{"concept_html":"개념요약 본문 HTML","problems_html":"문제편 본문 HTML","solutions_html":"해설편 본문 HTML"}
+{"topic":"이 단원의 핵심 소주제 한 줄(15자 내외)","concept_html":"개념요약 본문 HTML","problems_html":"문제편 본문 HTML","solutions_html":"해설편 본문 HTML"}
 - 각 값은 <html>/<body> 없이 본문 HTML만. 문항은 <div class="q"><span class="no">[기본] 1</span> ... </div> 구조.
 - 도형·그래프는 인라인 <svg>, 수식은 $ ... $ / $$ ... $$.`;
 
@@ -135,8 +137,21 @@ async function htmlToPdf(html, outPdf){
   } finally { await pg.close(); }
 }
 
-// ---- QC (자가치유) ----
-const CRIT = ['rawLatex','modelName','brand','figMissing'];
+// ---- 커리큘럼 단원 선택(누적) ----
+let CURRICULUM={}, COVERAGE={};
+try{ CURRICULUM=JSON.parse(readFileSync(new URL('./curriculum.json', import.meta.url),'utf-8')); }catch(e){ console.log('curriculum load fail: '+String(e).slice(0,90)); }
+try{ COVERAGE=JSON.parse(readFileSync('frontend/coverage.json','utf-8')); }catch(e){ COVERAGE={}; }
+function pickUnit(cat, sub){
+  const key=cat+'|'+sub; const units=CURRICULUM[key]||['1단원'];
+  let next=units.find(u=>!(COVERAGE[key]||[]).includes(u));
+  if(!next){ COVERAGE[key]=[]; next=units[0]; }
+  return next;
+}
+const plan = RUN.map(s=>({cat:s.cat, sub:s.sub, unit:pickUnit(s.cat,s.sub)}));
+console.log('생성 계획: '+plan.map(p=>p.sub+'/'+p.unit).join(', '));
+
+// ---- QC(자가치유) ----
+const CRIT=['rawLatex','modelName','brand','figMissing'];
 function qcStatic(d){
   const html=[d.concept_html,d.problems_html,d.solutions_html].join(' ');
   const pr=d.problems_html||'';
@@ -149,57 +164,63 @@ function qcStatic(d){
   return flags;
 }
 const RETRY_NOTE='\n\n[재요청] 직전 출력에 결함이 있었다. 규칙 100% 준수: 모든 수식은 $ … $ / $$ … $$, 도형·그래프는 반드시 인라인 <svg>, 특정 AI 모델명·타사 브랜드·개인명 금지. 다시 출력하라.';
-async function genData(s, extra){
+async function genData(s, unit, extra){
   for(const pv of FALLBACK){ if(!KEYS[pv]) continue;
-    try{ return { data: extractJSON(await CALL[pv](PROMPT(s)+(extra||''))), used:pv }; }
+    try{ return { data: extractJSON(await CALL[pv](PROMPT(s, unit)+(extra||''))), used:pv }; }
     catch(e){ console.log(` [${s.cat}] ${s.sub} ${pv} 실패: ${String(e).slice(0,100)}`); }
   }
   return null;
 }
-async function answerAudit(s, data){
+async function answerAudit(s, unit, data){
   if(!KEYS.anthropic) return null;
   const strip=(h)=>String(h||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').slice(0,3500);
-  const prompt=`다음은 수능 ${s.cat}(${s.sub}) 문제편과 해설편이다. 각 문항의 정답과 풀이가 문제와 논리적으로 일치하고 계산이 정확한지 점검하라. 오류가 있는 문항 번호와 한줄 사유만 JSON으로: {"issues":[{"no":정수,"why":"..."}]}. 문제 없으면 {"issues":[]}. 오직 JSON만 출력.\n\n[문제편]\n${strip(data.problems_html)}\n\n[해설편]\n${strip(data.solutions_html)}`;
+  const prompt=`다음은 수능 ${s.cat}(${s.sub}) 「${unit}」 문제편과 해설편이다. 각 문항의 정답과 풀이가 문제와 논리적으로 일치하고 계산이 정확한지 점검하라. 오류가 있는 문항 번호와 한줄 사유만 JSON으로: {"issues":[{"no":정수,"why":"..."}]}. 문제 없으면 {"issues":[]}. 오직 JSON만.\n\n[문제편]\n${strip(data.problems_html)}\n\n[해설편]\n${strip(data.solutions_html)}`;
   try{ const j=extractJSON(await callAnthropic(prompt)); return Array.isArray(j.issues)? j.issues : []; }catch(e){ return null; }
 }
-
-// 표본 정답점검 대상(수학·과탐 최대 4개; 파일럿이면 실행 과목 전부)
 const AUDIT = ONLY.length
-  ? new Set(RUN.map(s=>s.cat+'|'+s.sub))
-  : (()=>{ const pool=SUBJECTS.filter(s=>s.cat==='수학'||s.cat==='과탐'); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} return new Set(pool.slice(0,4).map(s=>s.cat+'|'+s.sub)); })();
+  ? new Set(plan.map(s=>s.cat+'|'+s.sub))
+  : (()=>{ const pool=plan.filter(s=>s.cat==='수학'||s.cat==='과탐'); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} return new Set(pool.slice(0,4).map(s=>s.cat+'|'+s.sub)); })();
 
+function fnsafe(u){ return String(u).replace(/[\/\\?%*:|"<>·().,\s]+/g,'').slice(0,28); }
 const items=[]; const qc=[];
-for (const s of RUN) {
-  let r = await genData(s);
-  if(!r){ console.log(` [${s.cat}] ${s.sub} 전 provider 실패 — 스킵`); qc.push({subject:s.sub,category:s.cat,status:'fail',flags:['noData']}); continue; }
+for (const s of plan) {
+  let r = await genData(s, s.unit);
+  if(!r){ console.log(` [${s.cat}] ${s.sub} 전 provider 실패 — 스킵`); qc.push({subject:s.sub,category:s.cat,unit:s.unit,status:'fail',flags:['noData']}); continue; }
   let flags = qcStatic(r.data);
   if(flags.some(f=>CRIT.includes(f))){
     console.log(` [${s.cat}] ${s.sub} QC 결함 ${JSON.stringify(flags)} → 1회 재생성`);
-    const r2 = await genData(s, RETRY_NOTE);
+    const r2 = await genData(s, s.unit, RETRY_NOTE);
     if(r2){ const f2=qcStatic(r2.data); if(f2.filter(f=>CRIT.includes(f)).length <= flags.filter(f=>CRIT.includes(f)).length){ r=r2; flags=f2; } }
   }
   const data=r.data;
-  const tag = `${s.cat} · ${s.sub} · SKY 멘토 × AI 협업 출제`;
+  const topic=String(data.topic||s.unit).slice(0,40);
+  const uf=fnsafe(s.unit);
+  const tag=`${s.cat} · ${s.sub} · ${s.unit} · SKY 멘토 × AI 협업 출제`;
   const set=[{type:'개념요약',body:data.concept_html},{type:'문제편',body:data.problems_html},{type:'해설편',body:data.solutions_html}];
-  for (const d of set){ if(!d.body) continue; const file=`${s.cat}_${s.sub}_${d.type}.pdf`;
-    try{ await htmlToPdf(page(`${s.cat} ${s.sub} · ${d.type}`, tag, d.body), `${OUT}/${file}`); items.push({category:s.cat,subject:s.sub,type:d.type,file}); console.log(` [${s.cat}] ${s.sub} ${d.type} PDF OK`);}catch(e){console.log(` [${s.cat}] ${s.sub} ${d.type} PDF 실패: ${String(e).slice(0,100)}`);}
+  for (const d of set){ if(!d.body) continue; const file=`${s.cat}_${s.sub}_${uf}_${d.type}.pdf`;
+    try{ await htmlToPdf(page(`${s.cat} ${s.sub} · ${s.unit} · ${d.type}`, tag, d.body), `${OUT}/${file}`); items.push({category:s.cat,subject:s.sub,unit:s.unit,topic,type:d.type,file}); console.log(` [${s.cat}] ${s.sub}/${s.unit} ${d.type} PDF OK`);}catch(e){console.log(` [${s.cat}] ${s.sub} ${d.type} PDF 실패: ${String(e).slice(0,100)}`);}
   }
-  const entry={subject:s.sub,category:s.cat,status: flags.length?'flagged':'ok', flags};
-  if(AUDIT.has(s.cat+'|'+s.sub)){ const iss=await answerAudit(s,data); if(iss!==null) entry.answerIssues=iss; }
+  const key=s.cat+'|'+s.sub; COVERAGE[key]=Array.from(new Set([...(COVERAGE[key]||[]), s.unit]));
+  const entry={subject:s.sub,category:s.cat,unit:s.unit,topic,status: flags.length?'flagged':'ok', flags};
+  if(AUDIT.has(s.cat+'|'+s.sub)){ const iss=await answerAudit(s, s.unit, data); if(iss!==null) entry.answerIssues=iss; }
   qc.push(entry);
 }
 if (BROWSER) await BROWSER.close();
 
-// ---- manifest (부분런은 기존과 병합해 나머지 과목 보존) ----
-let allItems = items;
-if (ONLY.length) {
-  try { const prev=(JSON.parse(readFileSync(MANIFEST,'utf-8')).items)||[]; const runSet=new Set(RUN.map(s=>s.cat+'|'+s.sub)); allItems = prev.filter(it=>!runSet.has(it.category+'|'+it.subject)).concat(items); } catch(e){ console.log('manifest merge skip: '+String(e).slice(0,80)); }
-}
-writeFileSync(MANIFEST, JSON.stringify({ updated:new Date().toISOString().slice(0,10), provenance:'SKY 멘토 × AI 협업 출제', items: allItems }, null, 2));
+// ---- 매니페스트 누적(단원키 병합) + 이번 주 무료 샘플 ----
+let prev=[]; try{ prev=(JSON.parse(readFileSync(MANIFEST,'utf-8')).items)||[]; }catch(e){}
+const runKeys=new Set(plan.map(s=>s.cat+'|'+s.sub+'|'+s.unit));
+let merged = prev.filter(it=> it.unit && !runKeys.has(it.category+'|'+it.subject+'|'+it.unit)).concat(items);
+merged.forEach(it=>{ delete it.sample; });
+const samplePick = plan.find(s=>s.cat==='수학'||s.cat==='과탐') || plan[0];
+const sampleKey = samplePick ? (samplePick.cat+'|'+samplePick.sub+'|'+samplePick.unit) : null;
+if(sampleKey) merged.forEach(it=>{ if(it.category+'|'+it.subject+'|'+it.unit===sampleKey) it.sample=true; });
+writeFileSync(MANIFEST, JSON.stringify({ updated:new Date().toISOString().slice(0,10), provenance:'SKY 멘토 × AI 협업 출제', sample:sampleKey, items:merged }, null, 2));
+writeFileSync('frontend/coverage.json', JSON.stringify(COVERAGE, null, 2));
 
 // ---- QC 리포트 ----
 const critCount = qc.filter(q=>(q.flags||[]).some(f=>CRIT.includes(f))).length;
-const answerFlagged = qc.filter(q=>Array.isArray(q.answerIssues)&&q.answerIssues.length>0).map(q=>q.subject);
-writeFileSync('frontend/qc_report.json', JSON.stringify({ generated:new Date().toISOString(), run: ONLY.length?('pilot:'+ONLY.join(',')):'full', subjects_checked:qc.length, critical_flagged:critCount, answer_flagged:answerFlagged, subjects:qc }, null, 2));
-console.log(`\n완료: PDF ${items.length}개 / QC ${qc.length}과목 (critical ${critCount} · 정답점검이슈 ${answerFlagged.length})`);
+const answerFlagged = qc.filter(q=>Array.isArray(q.answerIssues)&&q.answerIssues.length>0).map(q=>q.subject+'/'+q.unit);
+writeFileSync('frontend/qc_report.json', JSON.stringify({ generated:new Date().toISOString(), run: ONLY.length?('pilot:'+ONLY.join(',')):'full', sample:sampleKey, subjects_checked:qc.length, critical_flagged:critCount, answer_flagged:answerFlagged, subjects:qc }, null, 2));
+console.log(`\n완료: PDF ${items.length}개 / 누적 ${merged.length}개 / QC critical ${critCount} · 정답이슈 ${answerFlagged.length} / 무료샘플 ${sampleKey}`);
 if (items.length === 0) { console.error('생성 0개 — 실패로 종료'); process.exit(1); }
