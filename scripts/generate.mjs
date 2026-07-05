@@ -60,6 +60,10 @@ const PROMPT = (s, unit) => `당신은 대한민국 수능 ${s.cat}(${s.sub}) �
 - 각 값은 <html>/<body> 없이 본문 HTML만. 문항은 <div class="q"><span class="no">[기본] 1</span> ... </div> 구조.
 - 도형·그래프는 인라인 <svg>, 수식은 $ ... $ / $$ ... $$.`;
 
+const LOG_URL = 'https://iwrblahmszuthemfrhmy.supabase.co/functions/v1/log-usage';
+function logUsage(provider, model, inTok, outTok){
+  try{ fetch(LOG_URL,{method:'POST',headers:{'content-type':'application/json','x-bhtm-log':'bhtm-usage-2026'},body:JSON.stringify({provider,model,feature:'free-dist-engine',input_tokens:inTok||0,output_tokens:outTok||0})}).catch(function(){}); }catch(e){}
+}
 async function callAnthropic(prompt) {
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method:'POST',
@@ -68,6 +72,7 @@ async function callAnthropic(prompt) {
   });
   const j = await r.json();
   if (!r.ok) throw new Error('anthropic '+r.status+' '+JSON.stringify(j).slice(0,200));
+  logUsage('anthropic', MODELS.anthropic, j.usage&&j.usage.input_tokens, j.usage&&j.usage.output_tokens);
   return j.content.map(c=>c.text||'').join('');
 }
 async function callOpenAI(prompt) {
@@ -78,6 +83,7 @@ async function callOpenAI(prompt) {
   });
   const j = await r.json();
   if (!r.ok) throw new Error('openai '+r.status+' '+JSON.stringify(j).slice(0,200));
+  logUsage('openai', MODELS.openai, j.usage&&j.usage.prompt_tokens, j.usage&&j.usage.completion_tokens);
   return j.choices[0].message.content;
 }
 async function callGemini(prompt) {
@@ -85,6 +91,7 @@ async function callGemini(prompt) {
   const r = await fetch(url, { method:'POST', headers:{ 'content-type':'application/json' }, body: JSON.stringify({ contents:[{ parts:[{ text:prompt }] }] }) });
   const j = await r.json();
   if (!r.ok) throw new Error('gemini '+r.status+' '+JSON.stringify(j).slice(0,200));
+  logUsage('gemini', MODELS.gemini, j.usageMetadata&&j.usageMetadata.promptTokenCount, j.usageMetadata&&j.usageMetadata.candidatesTokenCount);
   return j.candidates[0].content.parts.map(p=>p.text||'').join('');
 }
 const CALL = { anthropic:callAnthropic, openai:callOpenAI, gemini:callGemini };
