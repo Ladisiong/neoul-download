@@ -42,7 +42,7 @@ const SUBJECTS = [
 const ONLY=(process.env.ONLY_SUBJECTS||'').split(',').map(x=>x.trim()).filter(Boolean);
 const RUN=ONLY.length?SUBJECTS.filter(s=>ONLY.includes(s.sub)):SUBJECTS;
 
-const PROMPT = (s, unit) => `당신은 대한민국 수능·내신 ${s.cat}(${s.sub}) 최고 출제·해설 집필 전문가입니다. 시중 최상위 문제집과 평가원 해설집 수준의 학습자료 1세트를 만드세요. 타깃 독자는 고3 1~2등급·재수생 상위권이다.
+const PROMPT = (s, unit) => `당신은 대한민국 수능·내신 ${s.cat}(${s.sub}) 최고 출제·해설 집필 전문가입니다. 시중 최상위 문제집과 평가원 해설집 수준의 학습자료 1세트를 만드세요. 타깃 독자는 고3 1~2등급·재수생 상위권이다. 시대인재·대성 최상위 프리미엄 교재 수준으로 만들어 '무료 배포이지만 유료 교재보다 낫다'는 인상을 주어야 한다(화장품이 샘플에 최고 퀄리티를 넣는 전략과 동일—무료라고 퀄리티가 낮으면 실패한다). 이 자료의 궁극 목적은 학생이 감탄해 '너울(NEOUL)'로 유입되는 매개체가 되는 것이다.
 
 이번 자료의 단원(unit)은 「${unit}」 이다. 반드시 이 단원 범위 안에서만 개념·문항·해설을 구성하라(다른 단원 내용 혼입 금지).
 
@@ -52,9 +52,11 @@ const PROMPT = (s, unit) => `당신은 대한민국 수능·내신 ${s.cat}(${s.
 3. 도형/그래프: <svg viewBox="0 0 W H"> 에 좌표축·눈금·라벨·점 좌표를 정확히 그린다. 함수 그래프는 실제 좌표로 <path>/<polyline>, 기하 도형은 정확한 비율·각도. 색은 흑/남색 위주, 폰트 12px 내외.
 4. 정확성: 정답·풀이 수치는 반드시 재검산(수학·과탐은 계산 2회 검증). 정답표와 해설의 수치가 일치해야 한다.
 5. 벤치마킹: 평가원 기출·EBS의 유형·난이도·평가요소만 차용하고, 지문·선지·수치·표현·도형은 완전히 새로 창작한다. 기출 원문 재수록·부분치환 절대 금지(저작권).
-6. 난이도(고3 1~2등급·재수 상위권 상향): 5~7문항. 전체 기준선은 "1·2등급이 풀어야 실력이 붙는" 수준으로, 단순 대입·생기초 유형은 배제한다. 3단으로 구성 — 기본=평가원 3점 상~4점 하(1·2등급 변별, 개념의 정확한 적용·정오 판별, 단순 대입 금지), 심화=4점 준킬러(2~3개 개념 통합·조건 해석·역방향 사고), 킬러=최상위 4점 킬러(평가원 21·22·29·30번급: 발상·다단계 추론·경우 나눔·극한/미정계수 결합, 단순 계산으로는 안 풀리게). 각 문항 [기본]/[심화]/[킬러] 옆에 배점 [3점] 또는 [4점]을 표기하고 킬러를 최소 1문항 포함한다. 흔한 실수(부호·정의역·극한의 존재조건·경계값·필요충분·수렴판정)를 유발하는 매력적 오답 선지를 의도적으로 배치한다. 정답은 반드시 깔끔한 값이어야 하며(지저분한 분수·무리수 남발 금지), 모든 수치는 손계산으로 2회 재검산해 문항·정답표·해설이 완전히 일치해야 한다. 7. 개념요약(빈약·생기초 금지): concept_html은 고3 1~2등급이 시험 직전 단권화로 쓸 밀도여야 한다. 정의 나열에 그치지 말고 ①핵심 정의·정리·공식(필요 시 유도 과정) ②시험 빈출 유형별 접근 전략 ③자주 틀리는 함정·주의점 ④암기용 요약표/도식을 담는다. 중학·자명 상식 수준(생기초) 서술 금지. <h3> 소제목으로 구획한다.
-8. 해설편(가독성·해설집 어휘·스텝 필수, 특히 수학·과탐): 각 문항 풀이는 줄글 나열 절대 금지. 반드시 <div class="sol"> 안에서 <div class="step"><b>Step 1.</b> …</div> 을 단계마다 반복해 각 단계에서 '무엇을 왜' 하는지 짧게 제시하고, 핵심 수식은 별행 $$…$$. 실제 시중 해설집·평가원 해설의 표준 어휘·표기("조건에 의하여", "주어진 식을 정리하면", "~이므로", "양변을 …", "∴", "따라서", "그러므로")를 사용한다. 스텝 풀이 뒤에 <div class="blk">…</div>로 4블록(<span class="lb">정답근거</span> → <span class="lb">오답분석</span>[배치한 함정 명시] → <span class="lb">연관개념</span> → <span class="lb">메타인지</span> 한 줄)을 붙인다.
+6. 난이도(고3 1~2등급·재수 상위권 상향): 5~7문항. 전체 기준선은 "1·2등급이 풀어야 실력이 붙는" 수준으로, 단순 대입·생기초 유형은 배제한다. 3단으로 구성 — 기본=평가원 3점 상~4점 하(1·2등급 변별, 개념의 정확한 적용·정오 판별, 단순 대입 금지), 심화=4점 준킬러(2~3개 개념 통합·조건 해석·역방향 사고), 킬러=최상위 4점 킬러(평가원 21·22·29·30번급). ★킬러는 말 그대로 의대·치대·한의대 지망 최상위권(1등급 최상단)을 변별하는 난이도·퀄리티여야 한다—단순 계산량이 아니라 발상 전환·숨은 조건 포착·다단계 추론·경우 나눔이 결합돼 시대인재 킬러 N제/서바이벌 모의고사급 변별력을 낸다. 무료 자료라고 절대 쉽게 내지 말 것. 각 문항 [기본]/[심화]/[킬러] 옆에 배점 [3점] 또는 [4점]을 표기하고 킬러를 최소 1문항 포함한다. ★배점↔체감난이도 정합 강제: [3점]은 3점다운(핵심 개념+1회 사고), [4점]은 4점다운(다단계·개념 통합) 실제 난이도여야 하며, 배점만 높고 쉬운(또는 배점 낮고 어려운) 불일치는 금지. 흔한 실수(부호·정의역·극한의 존재조건·경계값·필요충분·수렴판정)를 유발하는 매력적 오답 선지를 의도적으로 배치한다. 정답은 반드시 깔끔한 값이어야 하며(지저분한 분수·무리수 남발 금지), 모든 수치는 손계산으로 2회 재검산해 문항·정답표·해설이 완전히 일치해야 한다. 7. 개념요약(빈약·생기초 금지): concept_html은 고3 1~2등급이 시험 직전 단권화로 쓸 밀도여야 한다. 정의 나열에 그치지 말고 ①핵심 정의·정리·공식(필요 시 유도 과정) ②시험 빈출 유형별 접근 전략 ③자주 틀리는 함정·주의점 ④암기용 요약표/도식을 담는다. 중학·자명 상식 수준(생기초) 서술 금지. <h3> 소제목으로 구획한다.
+8. 해설편(가독성·해설집 어휘·스텝 필수, 전 과목 공통 — 시각적 구조화 필수): 어떤 과목이든 줄글 나열식 해설은 학생이 즉시 스킵하므로 반드시 단계로 끊는다. ▸수학·과탐=계산·논리 단계 / ▸국어·영어=[지문 근거 찾기]→[선지 대조]→[정답 확정] / ▸사탐·한국사=[개념 적용]→[자료 해석]→[선지 판별]로 사고 흐름을 단계화한다. 반드시 <div class="sol"> 안에서 <div class="step"><b>Step 1.</b> …</div> 을 단계마다 반복해 각 단계에서 '무엇을 왜' 하는지 짧게 제시하고, 핵심 수식은 별행 $$…$$. 실제 시중 해설집·평가원 해설의 표준 어휘·표기("조건에 의하여", "주어진 식을 정리하면", "~이므로", "양변을 …", "∴", "따라서", "그러므로")를 사용한다. 스텝 풀이 뒤에 <div class="blk">…</div>로 4블록(<span class="lb">정답근거</span> → <span class="lb">오답분석</span>[배치한 함정 명시] → <span class="lb">연관개념</span> → <span class="lb">메타인지</span> 한 줄)을 붙인다.
 9. 표기: "SKY 멘토 × AI 협업 출제"만 사용. 개인명(김태민 등)·특정 AI 모델명(gemini/gpt/claude 등)·타사 브랜드(메가/대성/시대인재/이투스/EBS 강사명 등)·성적보장·과장 표현 금지.
+10. 시각화·가독성 최우선(개념·문제·해설 전부): 긴 글 덩어리 금지. 핵심은 <table>(비교·분류·공식표), <div class="box">(정의·핵심·함정 강조 박스), <b>색 강조</b>, 번호 목록, 필요한 곳엔 인라인 <svg> 도식(개념 관계도·그래프·기하)으로 시각화한다. 한눈에 구조가 들어오는 프리미엄 편집(시대인재式)을 지향한다.
+11. 통합사회·통합과학: 절대 중학·기초 나열 수준 금지. 수능 통합과학/통합사회 상위 수준으로 여러 개념의 연결·자료(그래프·표) 해석·실생활 적용 추론을 담아 고3 상위권도 사고하게 만든다.
 
 [출력] 오직 JSON 하나만 출력(코드펜스 금지):
 {"topic":"이 단원의 핵심 소주제 한 줄(15자 내외)","concept_html":"개념요약 본문 HTML","problems_html":"문제편 본문 HTML","solutions_html":"해설편 본문 HTML"}
@@ -141,7 +143,8 @@ const KATEX_JS =
   '<script>window.addEventListener("load",function(){function done(){document.body.setAttribute("data-katex-done","1");}function render(){try{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}catch(e){}setTimeout(done,180);}var fam=["KaTeX_Main","KaTeX_Math","KaTeX_Size1","KaTeX_Size2","KaTeX_Size3","KaTeX_Size4","KaTeX_AMS","KaTeX_Caligraphic","KaTeX_Fraktur","KaTeX_SansSerif","KaTeX_Script","KaTeX_Typewriter"];if(document.fonts&&document.fonts.load){var ps=[];fam.forEach(function(f){["16px ","italic 16px ","bold 16px "].forEach(function(w){ps.push(document.fonts.load(w+f).catch(function(){}));});});Promise.all(ps).then(function(){return (document.fonts.ready||Promise.resolve()).catch(function(){});}).then(render);}else{setTimeout(render,700);}});</script>';
 
 const FOOT = `<div class="foot">너울(NEOUL) 무료 학습자료 · SKY 출신 교과 멘토 × AI 협업 출제 · ${new Date().toISOString().slice(0,10)}<br>교육과정 성취기준 기반 새 창작(기출 지문·문항 미수록). 어떤 성적도 보장하지 않습니다. 학습 목적 제공·무단 상업적 재배포 금지.</div>`;
-const page = (title, tag, body) => `<!doctype html><html><head><meta charset="utf-8">${CSS}</head><body><h1>${title}</h1><div class="tag">${tag}</div>${body}${FOOT}${KATEX_JS}</body></html>`;
+const CTA = '<div class="box" style="text-align:center;margin-top:16px"><b>이 자료가 도움이 됐다면</b> — 너울(NEOUL)은 5회독 누적복습·AI 맞춤 학습으로 이어집니다. 무료 자료 더 보기 → <b>neoulai.com</b></div>';
+const page = (title, tag, body) => `<!doctype html><html><head><meta charset="utf-8">${CSS}</head><body><h1>${title}</h1><div class="tag">${tag}</div>${body}${CTA}${FOOT}${KATEX_JS}</body></html>`;
 
 let BROWSER = null;
 async function getBrowser(){ if(!BROWSER) BROWSER = await chromium.launch({ args:['--no-sandbox'] }); return BROWSER; }
