@@ -42,7 +42,7 @@ const SUBJECTS = [
 const ONLY=(process.env.ONLY_SUBJECTS||'').split(',').map(x=>x.trim()).filter(Boolean);
 const RUN=ONLY.length?SUBJECTS.filter(s=>ONLY.includes(s.sub)):SUBJECTS;
 
-const PROMPT = (s, unit) => `당신은 대한민국 수능 ${s.cat}(${s.sub}) 최고 출제 전문가입니다. 무료 배포용 학습자료 1세트를 만드세요.
+const PROMPT = (s, unit) => `당신은 대한민국 수능·내신 ${s.cat}(${s.sub}) 최고 출제·해설 집필 전문가입니다. 시중 최상위 문제집과 평가원 해설집 수준의 학습자료 1세트를 만드세요. 타깃 독자는 고3 1~2등급·재수생 상위권이다.
 
 이번 자료의 단원(unit)은 「${unit}」 이다. 반드시 이 단원 범위 안에서만 개념·문항·해설을 구성하라(다른 단원 내용 혼입 금지).
 
@@ -52,12 +52,14 @@ const PROMPT = (s, unit) => `당신은 대한민국 수능 ${s.cat}(${s.sub}) �
 3. 도형/그래프: <svg viewBox="0 0 W H"> 에 좌표축·눈금·라벨·점 좌표를 정확히 그린다. 함수 그래프는 실제 좌표로 <path>/<polyline>, 기하 도형은 정확한 비율·각도. 색은 흑/남색 위주, 폰트 12px 내외.
 4. 정확성: 정답·풀이 수치는 반드시 재검산(수학·과탐은 계산 2회 검증). 정답표와 해설의 수치가 일치해야 한다.
 5. 벤치마킹: 평가원 기출·EBS의 유형·난이도·평가요소만 차용하고, 지문·선지·수치·표현·도형은 완전히 새로 창작한다. 기출 원문 재수록·부분치환 절대 금지(저작권).
-6. 구성·난이도(상향, SKY 멘토 기준): 5~7문항. 난이도 3단을 다음으로 명확히 상향한다 — 기본=평가원 3점 상(개념의 정확한 적용+정오 판별, 단순 대입 금지), 심화=4점 준킬러(2~3개 개념 통합·조건 해석·역방향 사고), 킬러=최상위 4점 킬러(평가원 21·22·29·30번급: 발상·다단계 추론·경우 나눔·극한/미정계수 결합, 단순 계산으로는 안 풀리게). 각 문항 [기본]/[심화]/[킬러] 옆에 배점 [3점] 또는 [4점]을 표기하고 킬러를 최소 1문항 포함한다. 흔한 실수(부호·정의역·극한의 존재조건·경계값·필요충분·수렴판정)를 유발하는 매력적 오답 선지를 의도적으로 배치한다. 정답은 반드시 깔끔한 값이어야 하며(지저분한 분수·무리수 남발 금지), 모든 수치는 손계산으로 2회 재검산해 문항·정답표·해설이 완전히 일치해야 한다. 7. 해설 4블록(정답근거 → 오답분석[배치한 함정을 명시] → 연관개념 → 메타인지).
-8. 표기: "SKY 멘토 × AI 협업 출제"만 사용. 개인명(김태민 등)·특정 AI 모델명(gemini/gpt/claude 등)·타사 브랜드(메가/대성/시대인재/이투스/EBS 강사명 등)·성적보장·과장 표현 금지.
+6. 난이도(고3 1~2등급·재수 상위권 상향): 5~7문항. 전체 기준선은 "1·2등급이 풀어야 실력이 붙는" 수준으로, 단순 대입·생기초 유형은 배제한다. 3단으로 구성 — 기본=평가원 3점 상~4점 하(1·2등급 변별, 개념의 정확한 적용·정오 판별, 단순 대입 금지), 심화=4점 준킬러(2~3개 개념 통합·조건 해석·역방향 사고), 킬러=최상위 4점 킬러(평가원 21·22·29·30번급: 발상·다단계 추론·경우 나눔·극한/미정계수 결합, 단순 계산으로는 안 풀리게). 각 문항 [기본]/[심화]/[킬러] 옆에 배점 [3점] 또는 [4점]을 표기하고 킬러를 최소 1문항 포함한다. 흔한 실수(부호·정의역·극한의 존재조건·경계값·필요충분·수렴판정)를 유발하는 매력적 오답 선지를 의도적으로 배치한다. 정답은 반드시 깔끔한 값이어야 하며(지저분한 분수·무리수 남발 금지), 모든 수치는 손계산으로 2회 재검산해 문항·정답표·해설이 완전히 일치해야 한다. 7. 개념요약(빈약·생기초 금지): concept_html은 고3 1~2등급이 시험 직전 단권화로 쓸 밀도여야 한다. 정의 나열에 그치지 말고 ①핵심 정의·정리·공식(필요 시 유도 과정) ②시험 빈출 유형별 접근 전략 ③자주 틀리는 함정·주의점 ④암기용 요약표/도식을 담는다. 중학·자명 상식 수준(생기초) 서술 금지. <h3> 소제목으로 구획한다.
+8. 해설편(가독성·해설집 어휘·스텝 필수, 특히 수학·과탐): 각 문항 풀이는 줄글 나열 절대 금지. 반드시 <div class="sol"> 안에서 <div class="step"><b>Step 1.</b> …</div> 을 단계마다 반복해 각 단계에서 '무엇을 왜' 하는지 짧게 제시하고, 핵심 수식은 별행 $$…$$. 실제 시중 해설집·평가원 해설의 표준 어휘·표기("조건에 의하여", "주어진 식을 정리하면", "~이므로", "양변을 …", "∴", "따라서", "그러므로")를 사용한다. 스텝 풀이 뒤에 <div class="blk">…</div>로 4블록(<span class="lb">정답근거</span> → <span class="lb">오답분석</span>[배치한 함정 명시] → <span class="lb">연관개념</span> → <span class="lb">메타인지</span> 한 줄)을 붙인다.
+9. 표기: "SKY 멘토 × AI 협업 출제"만 사용. 개인명(김태민 등)·특정 AI 모델명(gemini/gpt/claude 등)·타사 브랜드(메가/대성/시대인재/이투스/EBS 강사명 등)·성적보장·과장 표현 금지.
 
 [출력] 오직 JSON 하나만 출력(코드펜스 금지):
 {"topic":"이 단원의 핵심 소주제 한 줄(15자 내외)","concept_html":"개념요약 본문 HTML","problems_html":"문제편 본문 HTML","solutions_html":"해설편 본문 HTML"}
-- 각 값은 <html>/<body> 없이 본문 HTML만. 문항은 <div class="q"><span class="no">[기본] 1</span> ... </div> 구조.
+- 각 값은 <html>/<body> 없이 본문 HTML만. 문항은 <div class="q"><span class="no">[기본] 1</span> ... </div> 구조(심화는 class="no adv", 킬러는 class="no killer").
+- 개념요약은 <h3>소제목</h3>으로 구획하고 필요 시 <table>/<div class="box"> 사용. 해설편 각 풀이는 반드시 <div class="sol"> 안에 <div class="step"><b>Step 1.</b>…</div>을 단계마다 반복(줄글 금지)한 뒤 <div class="blk">…4블록…</div>.
 - 도형·그래프는 인라인 <svg>, 수식은 $ ... $ / $$ ... $$.`;
 
 const LOG_URL = 'https://iwrblahmszuthemfrhmy.supabase.co/functions/v1/log-usage';
@@ -116,6 +118,14 @@ ul,ol{margin:6px 0 6px 18px}
 .q{border:1px solid #CFE2F0;border-radius:8px;padding:12px 14px;margin:12px 0;page-break-inside:avoid;overflow-wrap:anywhere}
 .q .no{display:inline-block;background:#1B6CA8;color:#fff;font-size:9pt;border-radius:4px;padding:1px 8px;margin-bottom:6px}
 .box{background:#EAF4FB;border-left:4px solid #3498DB;padding:8px 12px;margin:10px 0;overflow-wrap:anywhere}
+.q .no.adv{background:#B8860B}
+.q .no.killer{background:#7B241C}
+.sol{margin:8px 0}
+.step{margin:5px 0;padding:6px 10px 6px 12px;border-left:3px solid #1B6CA8;background:#F6FAFD;border-radius:0 6px 6px 0;overflow-wrap:anywhere}
+.step>b,.step .s{color:#1B6CA8;font-weight:700;margin-right:5px}
+.blk{margin:9px 0;padding:9px 12px;border-radius:6px;background:#F4F9FD;border:1px solid #E1EEF7;page-break-inside:avoid}
+.blk .lb{display:inline-block;font-weight:700;color:#0A3D62;margin-right:6px}
+.concept h3{color:#0A3D62;border-left:4px solid #1B6CA8;padding-left:8px}
 svg{max-width:100%;height:auto;display:block;margin:10px auto}
 table{border-collapse:collapse;width:100%;margin:8px 0}
 th,td{border:1px solid #CFE2F0;padding:5px 8px;font-size:10.5pt;text-align:center;overflow-wrap:anywhere}
