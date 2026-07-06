@@ -48,7 +48,7 @@ const PROMPT = (s, unit) => `당신은 대한민국 수능·내신 ${s.cat}(${s.
 
 [절대 원칙]
 1. 자기완결성: 문제는 스스로 완결되어야 한다. "그림과 같이", "다음 그래프에서"처럼 도형·그래프를 언급하면 그 도형·그래프를 반드시 문항 안에 인라인 <svg>로 직접 그려 넣는다. 외부 이미지/링크 금지. 도형을 언급하면서 도형이 없는 문제 절대 금지.
-2. 수식: 모든 수식·기호는 반드시 인라인은 $ ... $, 별행은 $$ ... $$ 로 감싼다. (예: $\lim_{x\to 2}\frac{x^2+ax+b}{x-2}=5$) 다른 구분자나 순수 텍스트 수식 금지.
+2. 수식: 모든 수식·기호는 반드시 인라인은 $ ... $, 별행은 $$ ... $$ 로 감싼다. (예: $\lim_{x\to 2}\frac{x^2+ax+b}{x-2}=5$) 다른 구분자나 순수 텍스트 수식 금지. 수식 안 부등호는 반드시 \lt \gt \le \ge 로 쓰고 원시 문자 <, >, ≤, ≥ 는 수식 안에서 사용 금지(HTML 파싱이 깨져 날raw LaTeX가 노출됨).
 3. 도형/그래프: <svg viewBox="0 0 W H"> 에 좌표축·눈금·라벨·점 좌표를 정확히 그린다. 함수 그래프는 실제 좌표로 <path>/<polyline>, 기하 도형은 정확한 비율·각도. 색은 흑/남색 위주, 폰트 12px 내외.
 4. 정확성: 정답·풀이 수치는 반드시 재검산(수학·과탐은 계산 2회 검증). 정답표와 해설의 수치가 일치해야 한다.
 5. 벤치마킹: 평가원 기출·EBS의 유형·난이도·평가요소만 차용하고, 지문·선지·수치·표현·도형은 완전히 새로 창작한다. 기출 원문 재수록·부분치환 절대 금지(저작권).
@@ -127,6 +127,7 @@ ul,ol{margin:6px 0 6px 18px}
 .blk .lb{display:inline-block;font-weight:700;color:#0A3D62;margin-right:6px}
 .concept h3{color:#0A3D62;border-left:4px solid #1B6CA8;padding-left:8px}
 svg{max-width:100%;height:auto;display:block;margin:10px auto}
+.katex svg{margin:0;max-width:none;height:inherit}
 table{border-collapse:collapse;width:100%;margin:8px 0}
 th,td{border:1px solid #CFE2F0;padding:5px 8px;font-size:10.5pt;text-align:center;overflow-wrap:anywhere}
 .foot{margin-top:22px;color:#5A7890;font-size:8.5pt;border-top:1px solid #D6E9F5;padding-top:8px}
