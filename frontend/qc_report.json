@@ -1,259 +1,73 @@
 {
-  "generated": "2026-07-06T20:05:54.379Z",
-  "run": "full",
-  "sample": "수학|수학1|지수와 로그",
-  "subjects_checked": 30,
+  "generated": "2026-07-06T20:28:47.545Z",
+  "run": "pilot:화학2,생명과학1,생명과학2,지구과학1",
+  "sample": "과탐|화학2|기체",
+  "subjects_checked": 4,
   "critical_flagged": 0,
   "answer_flagged": [
-    "지구과학2/지구의 형성과 지질조사"
+    "화학2/기체",
+    "생명과학1/생명 현상의 특성",
+    "지구과학1/고체지구: 판구조와 지질"
   ],
   "subjects": [
-    {
-      "subject": "독서",
-      "category": "국어",
-      "unit": "인문·예술 독서",
-      "topic": "인문·예술 지문 독해 전략",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "문학",
-      "category": "국어",
-      "unit": "현대시",
-      "topic": "현대시의 화자·정서·표현·주제",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "화법과작문",
-      "category": "국어",
-      "unit": "화법: 발표·토론·협상",
-      "topic": "발표·토론·협상의 담화 전략",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "언어와매체",
-      "category": "국어",
-      "unit": "음운과 단어",
-      "topic": "음운 변동과 단어의 형성·짜임",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "독해",
-      "category": "영어",
-      "unit": "대의 파악: 주제·요지·제목",
-      "topic": "주제·요지·제목 대의 파악",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "한국사",
-      "category": "한국사",
-      "unit": "전근대(고대~조선)",
-      "topic": "전근대 정치·제도사 통합(고대~조선)",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "수학1",
-      "category": "수학",
-      "unit": "지수와 로그",
-      "topic": "지수와 로그의 계산·활용",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "수학2",
-      "category": "수학",
-      "unit": "함수의 극한과 연속",
-      "topic": "함수의 극한과 연속의 통합 추론",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "확률과통계",
-      "category": "수학",
-      "unit": "경우의 수·순열과 조합",
-      "topic": "경우의 수·순열과 조합",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "미적분",
-      "category": "수학",
-      "unit": "수열의 극한",
-      "topic": "수열의 극한과 급수의 수렴·발산",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "기하",
-      "category": "수학",
-      "unit": "이차곡선",
-      "topic": "접선과 초점 조건",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "생활과윤리",
-      "category": "사탐",
-      "unit": "현대의 삶과 윤리 문제 접근",
-      "topic": "현대 윤리 문제와 접근 방법론",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "윤리와사상",
-      "category": "사탐",
-      "unit": "동양의 윤리 사상",
-      "topic": "동양의 윤리 사상: 유·불·도",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "한국지리",
-      "category": "사탐",
-      "unit": "국토 인식과 지도",
-      "topic": "국토 인식과 지도 읽기",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "세계지리",
-      "category": "사탐",
-      "unit": "세계화와 지역화",
-      "topic": "세계화와 지역화의 상호작용",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "정치와법",
-      "category": "사탐",
-      "unit": "민주정치와 헌법",
-      "topic": "민주정치의 발전과 헌법의 기본원리",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "경제",
-      "category": "사탐",
-      "unit": "경제생활과 합리적 선택",
-      "topic": "기회비용·합리적 선택과 편익분석",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "사회문화",
-      "category": "사탐",
-      "unit": "사회문화 현상과 연구방법",
-      "topic": "사회문화 현상의 탐구와 연구방법",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "동아시아사",
-      "category": "사탐",
-      "unit": "동아시아 세계의 형성",
-      "topic": "동아시아 세계의 형성과 국제질서",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "세계사",
-      "category": "사탐",
-      "unit": "문명의 발생과 고대 세계",
-      "topic": "문명의 발생과 고대 세계 문명·제국",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "물리학1",
-      "category": "과탐",
-      "unit": "역학: 운동·힘·에너지",
-      "topic": "운동·힘·역학적 에너지 통합",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "물리학2",
-      "category": "과탐",
-      "unit": "평면 운동과 원운동",
-      "topic": "평면 운동과 원운동",
-      "status": "ok",
-      "flags": [],
-      "answerIssues": []
-    },
-    {
-      "subject": "화학1",
-      "category": "과탐",
-      "unit": "화학의 언어: 몰과 화학식",
-      "topic": "몰과 화학식량, 화학식 결정",
-      "status": "ok",
-      "flags": []
-    },
     {
       "subject": "화학2",
       "category": "과탐",
       "unit": "기체",
-      "topic": "이상기체와 혼합",
+      "topic": "기체의 상태방정식과 부분압력",
       "status": "ok",
-      "flags": []
+      "flags": [],
+      "answerIssues": [
+        {
+          "no": 5,
+          "why": "연소 후 잔여 O₂ 2 atm + CO₂ 2/3 atm = 8/3≈2.67 atm이어야 하나 정답을 2.5 atm(④)로 제시함"
+        }
+      ]
     },
     {
       "subject": "생명과학1",
       "category": "과탐",
       "unit": "생명 현상의 특성",
-      "topic": "생명 현상 판별",
+      "topic": "생명 현상의 특성과 생명체 판별",
       "status": "ok",
-      "flags": []
+      "flags": [],
+      "answerIssues": [
+        {
+          "no": 5,
+          "why": "해설이 ①=세포구성/물질대사 배정을 오락가락하다 ㄷ 판정을 자의적으로 뒤집어 결론을 억지로 ⑤로 만듦; 논리 붕괴로 정답 신뢰 불가"
+        }
+      ]
     },
     {
       "subject": "생명과학2",
       "category": "과탐",
       "unit": "세포의 특성과 물질대사",
-      "topic": "세포막·효소·ATP",
+      "topic": "세포 소기관·효소·물질대사",
       "status": "ok",
-      "flags": []
+      "flags": [],
+      "answerIssues": []
     },
     {
       "subject": "지구과학1",
       "category": "과탐",
       "unit": "고체지구: 판구조와 지질",
-      "topic": "판경계와 지질해석",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "지구과학2",
-      "category": "과탐",
-      "unit": "지구의 형성과 지질조사",
-      "topic": "지구의 형성과 지질조사 방법",
+      "topic": "판구조론과 대륙 이동·지질 구조",
       "status": "ok",
       "flags": [],
       "answerIssues": [
         {
-          "no": 6,
-          "why": "P(4억년)가 A를 관입하므로 A는 4억년 이전이나, C는 P보다 나중이고 B는 중생대(2.5~0.66억년)로 C·Q(2억년) 사이 순서와 B 중생대 조건이 상호 모순—B가 중생대인데 A는 고생대 이전이어야 하는 층서상 무리가 있어 조건 정합성 설명이 부정확"
+          "no": 1,
+          "why": "ㄱ은 옳음(오래된 A가 서쪽이면 판은 서→동 이동)이고 ㄷ의 440km 근거가 억지이며 나이차 20Ma로 실제거리는 400km여야 하므로 정답④ 및 풀이 모두 오류."
+        },
+        {
+          "no": 3,
+          "why": "C의 위도 λC는 tanλC=√3/2로 λC≈41°가 맞으나 본문이 λB를 27°로 표기한 것은 tanλB=1/2(약26.6°)와 일관되긴 하나 ㄱ의 A위도 표기 tanλ=1/2√3는 약16°로 맞아 정답⑤ 자체는 타당(오류 아님)"
+        },
+        {
+          "no": 5,
+          "why": "ㄷ의 900km는 30Ma×3cm/년=900km로 계산은 맞으나 해설이 재검산 중 혼동해 결론을 흐림; 정답③(ㄱㄴ)이면 ㄷ 제외인데 900km 계산은 옳아 ㄷ도 참이 되어 정답 불일치."
         }
       ]
-    },
-    {
-      "subject": "통합사회",
-      "category": "통합사회",
-      "unit": "행복과 삶의 질",
-      "topic": "행복의 조건과 삶의 질 향상",
-      "status": "ok",
-      "flags": []
-    },
-    {
-      "subject": "통합과학",
-      "category": "통합과학",
-      "unit": "물질의 규칙성과 결합",
-      "topic": "주기율표·화학 결합의 규칙성",
-      "status": "ok",
-      "flags": []
     }
   ]
 }
