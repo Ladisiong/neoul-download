@@ -52,8 +52,8 @@ const PROMPT = (s, unit) => `당신은 대한민국 수능 ${s.cat}(${s.sub}) �
 3. 도형/그래프: <svg viewBox="0 0 W H"> 에 좌표축·눈금·라벨·점 좌표를 정확히 그린다. 함수 그래프는 실제 좌표로 <path>/<polyline>, 기하 도형은 정확한 비율·각도. 색은 흑/남색 위주, 폰트 12px 내외.
 4. 정확성: 정답·풀이 수치는 반드시 재검산(수학·과탐은 계산 2회 검증). 정답표와 해설의 수치가 일치해야 한다.
 5. 벤치마킹: 평가원 기출·EBS의 유형·난이도·평가요소만 차용하고, 지문·선지·수치·표현·도형은 완전히 새로 창작한다. 기출 원문 재수록·부분치환 절대 금지(저작권).
-6. 구성: 난이도 3단(기본·심화·킬러), 5~7문항. 해설 4블록(정답근거 → 오답분석 → 연관개념 → 메타인지).
-7. 표기: "SKY 멘토 × AI 협업 출제"만 사용. 개인명(김태민 등)·특정 AI 모델명(gemini/gpt/claude 등)·타사 브랜드(메가/대성/시대인재/이투스/EBS 강사명 등)·성적보장·과장 표현 금지.
+6. 구성·난이도(상향, SKY 멘토 기준): 5~7문항. 난이도 3단을 다음으로 명확히 상향한다 — 기본=평가원 3점 상(개념의 정확한 적용+정오 판별, 단순 대입 금지), 심화=4점 준킬러(2~3개 개념 통합·조건 해석·역방향 사고), 킬러=최상위 4점 킬러(평가원 21·22·29·30번급: 발상·다단계 추론·경우 나눔·극한/미정계수 결합, 단순 계산으로는 안 풀리게). 각 문항 [기본]/[심화]/[킬러] 옆에 배점 [3점] 또는 [4점]을 표기하고 킬러를 최소 1문항 포함한다. 흔한 실수(부호·정의역·극한의 존재조건·경계값·필요충분·수렴판정)를 유발하는 매력적 오답 선지를 의도적으로 배치한다. 정답은 반드시 깔끔한 값이어야 하며(지저분한 분수·무리수 남발 금지), 모든 수치는 손계산으로 2회 재검산해 문항·정답표·해설이 완전히 일치해야 한다. 7. 해설 4블록(정답근거 → 오답분석[배치한 함정을 명시] → 연관개념 → 메타인지).
+8. 표기: "SKY 멘토 × AI 협업 출제"만 사용. 개인명(김태민 등)·특정 AI 모델명(gemini/gpt/claude 등)·타사 브랜드(메가/대성/시대인재/이투스/EBS 강사명 등)·성적보장·과장 표현 금지.
 
 [출력] 오직 JSON 하나만 출력(코드펜스 금지):
 {"topic":"이 단원의 핵심 소주제 한 줄(15자 내외)","concept_html":"개념요약 본문 HTML","problems_html":"문제편 본문 HTML","solutions_html":"해설편 본문 HTML"}
@@ -127,7 +127,7 @@ b{color:#0A3D62}
 const KATEX_JS =
   '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>' +
   '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>' +
-  '<script>window.addEventListener("load",function(){try{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}catch(e){}document.body.setAttribute("data-katex-done","1");});</script>';
+  '<script>window.addEventListener("load",function(){try{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}catch(e){}var _fin=function(){document.body.setAttribute("data-katex-done","1");};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(_fin,120);});}else{setTimeout(_fin,450);}});</script>';
 
 const FOOT = `<div class="foot">너울(NEOUL) 무료 학습자료 · SKY 출신 교과 멘토 × AI 협업 출제 · ${new Date().toISOString().slice(0,10)}<br>교육과정 성취기준 기반 새 창작(기출 지문·문항 미수록). 어떤 성적도 보장하지 않습니다. 학습 목적 제공·무단 상업적 재배포 금지.</div>`;
 const page = (title, tag, body) => `<!doctype html><html><head><meta charset="utf-8">${CSS}</head><body><h1>${title}</h1><div class="tag">${tag}</div>${body}${FOOT}${KATEX_JS}</body></html>`;
