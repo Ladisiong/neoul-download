@@ -158,6 +158,7 @@ async function htmlToPdf(html, outPdf){
   } finally { await pg.close(); }
 }
 
+function fixStrayIneq(h){ return String(h).replace(/(\$\$[\s\S]*?\$\$|\$[^$]*?\$)|\\lt|\\gt|\\le|\\ge/g, function(m, math){ if(math) return math; return m==='\\lt'?'&lt;':m==='\\gt'?'&gt;':m==='\\le'?'≤':'≥'; }); }
 // ---- 커리큘럼 단원 선택(누적) ----
 let CURRICULUM={}, COVERAGE={};
 try{ CURRICULUM=JSON.parse(readFileSync(new URL('./curriculum.json', import.meta.url),'utf-8')); }catch(e){ console.log('curriculum load fail: '+String(e).slice(0,90)); }
@@ -214,6 +215,7 @@ for (const s of plan) {
     if(r2){ const f2=qcStatic(r2.data); if(f2.filter(f=>CRIT.includes(f)).length <= flags.filter(f=>CRIT.includes(f)).length){ r=r2; flags=f2; } }
   }
   const data=r.data;
+  ['concept_html','problems_html','solutions_html'].forEach(function(k){ if(typeof data[k]==='string') data[k]=fixStrayIneq(data[k]); });
   const topic=String(data.topic||s.unit).slice(0,40);
   const uf=fnsafe(s.unit);
   const tag=`${s.cat} · ${s.sub} · ${s.unit} · SKY 멘토 × AI 협업 출제`;
