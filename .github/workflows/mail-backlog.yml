@@ -1,8 +1,11 @@
-name: mail-backlog (5min unmanned)
+name: mail-backlog (manual backup)
+
+# NOTE(2026-07-08): 주 파이프라인은 Supabase 트리거(os_inbox → os_backlog).
+# 이 IMAP 워커는 "진짜 24/7 실시간" 업그레이드용 수동 백업이다.
+# 활성화하려면 repo Secrets에 SUPABASE_SERVICE_KEY + MAIL_*_USER/PASS 등록 후 수동 실행.
+# 자동 크론 비활성(빈 실행 스팸·os_inbox 경로와 thread_id 중복 방지).
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'   # 5분마다 (GitHub Actions 스케줄은 최선노력 ~5-15분)
   workflow_dispatch: {}
 
 concurrency:
