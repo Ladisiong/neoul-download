@@ -9,7 +9,7 @@ import { ImapFlow } from 'imapflow';
 
 const SUPA_URL = process.env.SUPABASE_URL || 'https://iwrblahmszuthemfrhmy.supabase.co';
 const SUPA_KEY = process.env.SUPABASE_SERVICE_KEY;
-if (!SUPA_KEY) { console.error('FATAL: SUPABASE_SERVICE_KEY missing'); process.exit(1); }
+if (!SUPA_KEY) { console.log('SKIP: SUPABASE_SERVICE_KEY not set yet (add repo secrets to activate).'); process.exit(0); }
 
 const ACCOUNTS = [
   { name: '개인',  user: process.env.MAIL_PERSONAL_USER, pass: process.env.MAIL_PERSONAL_PASS, host: 'imap.gmail.com' },
