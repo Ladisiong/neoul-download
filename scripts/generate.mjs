@@ -12,6 +12,7 @@ import { chromium } from 'playwright';
 
 const OUT = 'frontend/materials';
 const MANIFEST = 'frontend/materials.json';
+const KBROWS = [];  // tutor_kb(RAG) sidecar: weekly concept -> learn tutor KB
 mkdirSync(OUT, { recursive: true });
 
 const MODELS = {
@@ -216,6 +217,10 @@ for (const s of plan) {
   }
   const data=r.data;
   ['concept_html','problems_html','solutions_html'].forEach(function(k){ if(typeof data[k]==='string') data[k]=fixStrayIneq(data[k]); });
+  if (data && typeof data.concept_html === 'string') {
+    const _kbt = String(data.concept_html).replace(/<[^>]+>/g,' ').replace(/&[a-z]+;/g,' ').replace(/\s+/g,' ').trim().slice(0,5000);
+    if (_kbt) KBROWS.push({ subject: s.cat, title: `${s.cat} ${s.sub} · ${s.unit} 개념`, content: _kbt });
+  }
   const topic=String(data.topic||s.unit).slice(0,40);
   const uf=fnsafe(s.unit);
   const tag=`${s.cat} · ${s.sub} · ${s.unit} · SKY 멘토 × AI 협업 출제`;
@@ -238,6 +243,7 @@ merged.forEach(it=>{ delete it.sample; });
 const samplePick = plan.find(s=>s.cat==='수학'||s.cat==='과탐') || plan[0];
 const sampleKey = samplePick ? (samplePick.cat+'|'+samplePick.sub+'|'+samplePick.unit) : null;
 if(sampleKey) merged.forEach(it=>{ if(it.category+'|'+it.subject+'|'+it.unit===sampleKey) it.sample=true; });
+writeFileSync('frontend/tutor_kb.json', JSON.stringify({ updated:new Date().toISOString().slice(0,10), rows:KBROWS }, null, 2));
 writeFileSync(MANIFEST, JSON.stringify({ updated:new Date().toISOString().slice(0,10), provenance:'SKY 멘토 × AI 협업 출제', sample:sampleKey, items:merged }, null, 2));
 writeFileSync('frontend/coverage.json', JSON.stringify(COVERAGE, null, 2));
 
