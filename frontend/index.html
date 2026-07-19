@@ -76,6 +76,30 @@
   .modal .fine{font-size:.72rem;color:#93a7b8;margin-top:12px;text-align:center;line-height:1.5}
   .modal .x{float:right;border:none;background:none;font-size:1.3rem;color:var(--muted);cursor:pointer;line-height:1;margin:-6px -4px 0 0}
   .modal .err{color:#c0392b;font-size:.78rem;margin-top:8px;min-height:1em}
+  /* ── 폴더형 정리(과목=폴더, 단원=통합카드) ── */
+  #grid{display:block}
+  .folder{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:16px;background:#fff;box-shadow:0 10px 30px -24px rgba(10,61,98,.5)}
+  .folder-h{width:100%;display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--mist);border:none;border-bottom:1px solid var(--line);cursor:pointer;font-family:inherit;text-align:left}
+  .folder.collapsed .folder-h{border-bottom:none}
+  .fh-cat{font-size:.7rem;font-weight:800;color:var(--ocean);letter-spacing:.03em}
+  .fh-name{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.08rem}
+  .fh-count{font-size:.76rem;color:var(--muted)}
+  .fh-free{font-size:.7rem;font-weight:800;background:#e9f9ef;color:#1e8449;border-radius:12px;padding:3px 10px}
+  .fh-chev{margin-left:auto;color:var(--muted);font-size:1rem;transition:transform .2s}
+  .folder.collapsed .fh-chev{transform:rotate(-90deg)}
+  .folder.collapsed .folder-b{display:none}
+  .folder-b{padding:16px}
+  .ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+  .card .crow{display:flex;align-items:center;gap:9px;margin-top:10px;padding:9px 0 11px;border-bottom:1px dashed var(--line)}
+  .card .clab{font-size:.78rem;font-weight:800;color:var(--ocean)}
+  .card .drow{display:flex;align-items:center;gap:9px;margin-top:9px}
+  .dlab{flex:0 0 44px;text-align:center;font-size:.74rem;font-weight:800;border-radius:7px;padding:4px 0}
+  .dlab.b{background:#eaf4fb;color:#1B6CA8}.dlab.a{background:#fff4e5;color:#9a5b00}.dlab.k{background:#fdecec;color:#c0392b}
+  .dlab.all{flex-basis:auto;padding:4px 10px;background:#eef2f6;color:#5A7890}
+  .dbtns{display:flex;gap:7px;flex-wrap:wrap}
+  .card .dl{padding:8px 13px;font-size:.82rem}
+  .dl.freebtn{background:#27ae60}.dl.freebtn:hover{background:#219150}
+  .dl.ghost.freebtn{background:#fff;color:#1e8449;border-color:#27ae60}
 </style>
 </head>
 <body>
@@ -174,36 +198,77 @@
   }
 
   function catIdx(c){ var i=CATS.indexOf(c); return i<0?99:i; }
+  // 단원명에서 난이도(· 기본/심화/킬러) 분리 → 통합 카드용
+  function parseUnit(u){
+    var m=String(u||'').match(/^([\s\S]*?)\s*·\s*(기본|심화|킬러)\s*$/);
+    return m ? {base:m[1].trim(), diff:m[2]} : {base:String(u||'').trim(), diff:null};
+  }
+  function dlBtn(f, matBase, typeLabel, cat){
+    var free=!!f.sample, mat=matBase+'_'+f.type;
+    return '<button class="dl'+(f.type==='해설편'?' ghost':'')+(free?' freebtn':'')+'" data-href="'+esc(f.download)+
+      '" data-mat="'+esc(mat)+'" data-cat="'+esc(cat)+'" data-free="'+(free?'1':'')+'">⬇ '+esc(typeLabel||f.type)+'</button>';
+  }
   function render(){
     var grid=document.getElementById('grid'), state=document.getElementById('state'), hook=document.getElementById('hook');
     var items = cur==='전체' ? ALL : ALL.filter(function(x){return x.category===cur;});
-    var groups={};
-    items.forEach(function(x){ var k=x.category+'|'+x.subject+'|'+(x.unit||''); (groups[k]=groups[k]||[]).push(x); });
-    var keys=Object.keys(groups).sort(function(a,b){ var ga=groups[a][0], gb=groups[b][0];
-      return catIdx(ga.category)-catIdx(gb.category) || String(ga.subject).localeCompare(String(gb.subject),'ko') || String(ga.unit||'').localeCompare(String(gb.unit||''),'ko'); });
-    if(keys.length===0){ hook.style.display='none'; state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
-    hook.style.display='flex'; state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
-    var order={'개념요약':0,'문제편':1,'해설편':2};
-    keys.forEach(function(k){
-      var arr=groups[k].slice().sort(function(x,y){return (order[x.type]!=null?order[x.type]:9)-(order[y.type]!=null?order[y.type]:9);});
-      var first=arr[0], free=!!first.sample;
-      var files=arr.map(function(f){
-        var mat=first.category+'_'+first.subject+'_'+(first.unit||'')+'_'+f.type;
-        return '<button class="dl'+(f.type==='해설편'?' ghost':'')+'" data-href="'+esc(f.download)+'" data-mat="'+esc(mat)+'" data-cat="'+esc(first.category)+'" data-free="'+(free?'1':'')+'">⬇ '+esc(f.type)+'</button>';
-      }).join('');
-      var badge = free ? '<span class="badge free">🎁 이번 주 무료 단원</span>' : '<span class="badge lock">🔒 무료 회원 전용</span>';
-      var card=document.createElement('div'); card.className='card'+(free?' free':'');
-      card.innerHTML='<div class="subj">'+esc(first.category)+' · '+esc(first.subject)+'</div>'+
-        '<div class="unit">'+esc(first.unit||first.subject)+'</div>'+
-        (first.topic?'<div class="topic">'+esc(first.topic)+'</div>':'')+
-        badge+
-        '<div class="files">'+files+'</div>';
-      grid.appendChild(card);
+    // 과목(폴더) 단위로 묶기
+    var subs={};
+    items.forEach(function(x){ var sk=x.category+'|'+x.subject; (subs[sk]=subs[sk]||[]).push(x); });
+    var subKeys=Object.keys(subs).sort(function(a,b){ var xa=subs[a][0], xb=subs[b][0];
+      return catIdx(xa.category)-catIdx(xb.category) || String(xa.subject).localeCompare(String(xb.subject),'ko'); });
+    if(subKeys.length===0){ hook.style.display='none'; state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
+    hook.style.display='flex'; state.style.display='none'; grid.style.display='block'; grid.innerHTML='';
+    var dorder=['기본','심화','킬러','_'];
+    var startCollapsed = subKeys.length > 6;  // 과목이 많으면(전체 보기 등) 접힌 채로 = 깔끔한 폴더 목록
+
+    subKeys.forEach(function(sk){
+      var sarr=subs[sk], cat0=sarr[0].category, subj0=sarr[0].subject;
+      // 단원(base) 그룹화
+      var units={};
+      sarr.forEach(function(x){ var pu=parseUnit(x.unit); x._diff=pu.diff; (units[pu.base]=units[pu.base]||[]).push(x); });
+      var uKeys=Object.keys(units).sort(function(a,b){ return String(a).localeCompare(String(b),'ko'); });
+      var subjFree=sarr.some(function(x){return x.sample;});
+
+      var folder=document.createElement('section'); folder.className='folder'+(startCollapsed?' collapsed':'');
+      folder.innerHTML='<button class="folder-h" type="button">'
+        +'<span class="fh-cat">'+esc(cat0)+'</span>'
+        +'<span class="fh-name">'+esc(subj0)+'</span>'
+        +'<span class="fh-count">'+uKeys.length+'개 단원</span>'
+        +(subjFree?'<span class="fh-free">🎁 이번 주 무료</span>':'')
+        +'<span class="fh-chev">▾</span></button>';
+      var body=document.createElement('div'); body.className='folder-b';
+      var g=document.createElement('div'); g.className='ugrid';
+
+      uKeys.forEach(function(ub){
+        var arr=units[ub];
+        var free=arr.some(function(x){return x.sample;});
+        var topic=''; for(var i=0;i<arr.length;i++){ if(arr[i].topic){topic=arr[i].topic;break;} }
+        var matBase=cat0+'_'+subj0+'_'+ub;
+        var concept=null, diffs={};
+        arr.forEach(function(x){ if(x.type==='개념요약'){concept=x;return;} var d=x._diff||'_'; (diffs[d]=diffs[d]||{})[x.type]=x; });
+        var html='<div class="subj">'+esc(cat0)+' · '+esc(subj0)+'</div>'
+          +'<div class="unit">'+esc(ub)+'</div>'
+          +(topic?'<div class="topic">'+esc(topic)+'</div>':'')
+          +(free?'<span class="badge free">🎁 이번 주 무료 단원</span>':'<span class="badge lock">🔒 무료 회원 전용</span>');
+        if(concept){ html+='<div class="crow"><span class="clab">📘 개념요약</span>'+dlBtn(concept, matBase, '개념요약', cat0)+'</div>'; }
+        dorder.forEach(function(d){
+          var slot=diffs[d]; if(!slot) return;
+          var lbl = d==='_' ? '<span class="dlab all">문제·해설</span>' : '<span class="dlab '+(d==='기본'?'b':d==='심화'?'a':'k')+'">'+d+'</span>';
+          var btns='';
+          ['문제편','해설편'].forEach(function(t){ if(slot[t]) btns+=dlBtn(slot[t], matBase+(d==='_'?'':'_'+d), t, cat0); });
+          if(btns) html+='<div class="drow">'+lbl+'<span class="dbtns">'+btns+'</span></div>';
+        });
+        var card=document.createElement('div'); card.className='card'+(free?' free':''); card.innerHTML=html;
+        g.appendChild(card);
+      });
+      body.appendChild(g); folder.appendChild(body); grid.appendChild(folder);
     });
   }
 
   // 다운로드 클릭 → (무료 샘플=바로 / 그 외=무료 회원가입 게이팅)
   document.getElementById('grid').addEventListener('click', function(e){
+    var fh = e.target.closest('.folder-h');
+    if(fh){ if(fh.parentNode) fh.parentNode.classList.toggle('collapsed'); return; }
     var b = e.target.closest('.dl'); if(!b) return;
     var href=b.getAttribute('data-href'), mat=b.getAttribute('data-mat'), cat=b.getAttribute('data-cat'), free=b.getAttribute('data-free')==='1';
     var lead=getLead();
