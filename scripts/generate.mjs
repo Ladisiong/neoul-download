@@ -83,10 +83,20 @@ const MATH_SET = (s, unit, diff) => `당신은 대한민국 수능 수학(${s.su
 1. 각 문항은 <div class="q"><span class="no${diff==='기본'?'':diff==='심화'?' adv':' killer'}">[${diff}] N</span> …</div> 구조. 배점(점수·N점)은 절대 표기하지 않고 [${diff}]만 표기.
 2. 수식은 $ … $ / $$ … $$ (KaTeX). 부등호가 필요하면 수식 안에서 처리하고 평문에는 '크다·작다·이상·이하'로 쓴다.
 3. 도형·그래프를 언급하면("그림과 같이" 등) 반드시 인라인 <svg>로 문항 안에 직접 그린다(외부 이미지/링크 금지, 도형 없는 도형문제 금지).
-4. 정답은 깔끔한 값이어야 하며, 모든 수치는 손계산으로 2회 재검산해 문제·정답표·해설이 완전히 일치해야 한다.${s.sub==='미적분'?' ★미적분 특칙: 삼각함수 및 도형·그래프 문항 전면 제외(순수 대수·해석적으로 완결).':''}
+4. 출제한 8문항을 스스로 처음부터 끝까지 풀어 검산한다. 각 문항은 조건이 서로 모순되지 않고 유일하고 깔끔한 정답이 반드시 존재하며, 해설이 그 정답까지 완결되어야 한다. 조건이 모순되거나 정답이 안 떨어지는 문항은 폐기하고 조건이 명확한 새 문항으로 교체한 뒤 다시 검산한다. 해설에 '정정'·'설계 오류'·'재설계'·'모순'·'미확정'·'정정이 필요' 등 미완결·오류를 자인하는 표현이 나오면 실패이므로 절대 금지한다.${s.sub==='미적분'?' ★미적분 특칙: 삼각함수 및 도형·그래프 문항 전면 제외(순수 대수·해석적으로 완결).':''}
 5. 표기: "SKY 멘토 × AI 협업 출제"만, 개인명·특정 AI 모델명·타사 브랜드·성적보장 금지.
 [해설] 해설편은 각 문항마다 <div class="sol"> 안에 <div class="step"><b>Step 1.</b> …</div>을 단계마다 반복하고(줄글 나열 금지, 존댓말), 끝에 <div class="blk"><span class="lb">정답근거</span> … → <span class="lb">오답분석</span>[배치한 함정 명시] → <span class="lb">연관개념</span> → <span class="lb">메타인지</span></div> 4블록을 붙인다. 핵심 수식은 별행 $$ … $$.
 [출력] 오직 JSON 하나만(코드펜스 금지): {"problems_html":"문제편 본문 HTML","solutions_html":"해설편 본문 HTML"}`;
+
+const MATH_VERIFY = (s, unit, diff, pr, sol) => `당신은 대한민국 수능 수학(${s.sub}) 최고 검수관입니다. 아래는 단원 「${unit}」 [${diff}] 난이도 문제편·해설편(HTML)입니다. 8문항 각각을 처음부터 끝까지 직접 풀어 엄격히 검증하세요.
+[검증] 각 문항이 (a) 조건이 서로 모순되지 않고 (b) 유일하고 깔끔한 정답이 존재하며 (c) 해설이 그 정답까지 완결되는지 확인한다.
+[불량] 조건 모순·정답 불명·해설 미완결이거나, 해설에 '정정'·'설계 오류'·'재설계'·'모순'·'미확정'·'필요합니다' 등 오류를 자인하는 표현이 있는 문항은 불량이다.
+[교정] 불량 문항은 같은 [${diff}] 난이도·같은 평가요소로, 조건이 명확하고 정답이 깔끔히 떨어지는 새 문항으로 완전히 교체하고 해설도 처음부터 완결되게 다시 쓴다. 정상 문항은 원문 그대로 둔다. 총 8문항·번호·<div class="q">/<span class="no…">·<div class="sol">/Step·해설 끝 4블록(정답근거·오답분석·연관개념·메타인지)·$…$(KaTeX)·인라인 <svg> 등 원본 구조와 표기 규칙을 동일하게 유지한다. 도형 문항의 <svg>는 새 조건에 맞게 다시 그린다. 자평·변경사유 등 메타설명은 출력에 넣지 않는다.
+[출력] 오직 JSON 하나만(코드펜스 금지): {"problems_html":"교정된 문제편 HTML","solutions_html":"교정된 해설편 HTML"}
+[문제편]
+${pr}
+[해설편]
+${sol}`;
 
 const LOG_URL = 'https://iwrblahmszuthemfrhmy.supabase.co/functions/v1/log-usage';
 function logUsage(provider, model, inTok, outTok){
@@ -187,7 +197,7 @@ function fixStrayIneq(h){ return String(h).replace(/(\$\$[\s\S]*?\$\$|\$[^$]*?\$
 // ---- 커리큘럼 단원 선택(누적) ----
 let CURRICULUM={}, COVERAGE={};
 try{ CURRICULUM=JSON.parse(readFileSync(new URL('./curriculum.json', import.meta.url),'utf-8')); }catch(e){ console.log('curriculum load fail: '+String(e).slice(0,90)); }
-try{ COVERAGE=JSON.parse(readFileSync('frontend/coverage.json','utf-8')); }catch(e){ COVERAGE={}; }
+try{ COVERAGE=JSON.parse(readFileSync('frontend/materials/_coverage.json','utf-8')); }catch(e){ try{ COVERAGE=JSON.parse(readFileSync('frontend/coverage.json','utf-8')); }catch(e2){ COVERAGE={}; } }
 function pickUnit(cat, sub){
   const key=cat+'|'+sub; const units=CURRICULUM[key]||['1단원'];
   let next=units.find(u=>!(COVERAGE[key]||[]).includes(u));
@@ -255,7 +265,16 @@ async function genMath(s){
   for(const diff of ['기본','심화','킬러']){
     const r = await callBest(MATH_SET(s,unit,diff), 32000);
     if(!r){ console.log(` [수학] ${s.sub}/${unit} ${diff} 생성 실패`); qc.push({subject:s.sub,category:s.cat,unit:`${unit} · ${diff}`,status:'fail',flags:['noData']}); continue; }
-    const pr=fixStrayIneq(r.data.problems_html||''), sol=fixStrayIneq(r.data.solutions_html||'');
+    let pr=fixStrayIneq(r.data.problems_html||''), sol=fixStrayIneq(r.data.solutions_html||'');
+    // 검수·교정 패스: 모든 문항을 스스로 풀어 모순·미완결 문항을 새 문항으로 교체(미끼상품 정확성 보증)
+    try{
+      const v = await callBest(MATH_VERIFY(s,unit,diff,pr.slice(0,22000),sol.slice(0,40000)), 32000);
+      if(v && typeof v.data.problems_html==='string' && typeof v.data.solutions_html==='string'
+         && v.data.problems_html.length>150 && v.data.solutions_html.length>300){
+        pr=fixStrayIneq(v.data.problems_html); sol=fixStrayIneq(v.data.solutions_html);
+        console.log(` [수학] ${s.sub}/${unit} ${diff} 검수·교정 패스 반영`);
+      }
+    }catch(e){ console.log('  math verify skip: '+String(e).slice(0,80)); }
     const du=`${unit} · ${diff}`, duf=fnsafe(du);
     const dtag=`${s.cat} · ${s.sub} · ${du} · SKY 멘토 × AI 협업 출제`;
     for(const d of [{type:'문제편',body:pr},{type:'해설편',body:sol}]){
@@ -313,7 +332,7 @@ const sampleKey = samplePick ? (samplePick.cat+'|'+samplePick.sub+'|'+samplePick
 if(sampleKey) merged.forEach(it=>{ if(it.category+'|'+it.subject+'|'+it.unit===sampleKey) it.sample=true; });
 writeFileSync('frontend/tutor_kb.json', JSON.stringify({ updated:new Date().toISOString().slice(0,10), rows:KBROWS }, null, 2));
 writeFileSync(MANIFEST, JSON.stringify({ updated:new Date().toISOString().slice(0,10), provenance:'SKY 멘토 × AI 협업 출제', sample:sampleKey, items:merged }, null, 2));
-writeFileSync('frontend/coverage.json', JSON.stringify(COVERAGE, null, 2));
+writeFileSync('frontend/materials/_coverage.json', JSON.stringify(COVERAGE, null, 2));
 
 // ---- QC 리포트 ----
 const critCount = qc.filter(q=>(q.flags||[]).some(f=>CRIT.includes(f))).length;
