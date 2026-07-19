@@ -197,6 +197,8 @@ function fixStrayIneq(h){ return String(h).replace(/(\$\$[\s\S]*?\$\$|\$[^$]*?\$
 // 짝 없는(홀수) $ 제거: 유효한 $$…$$ / $…$ 스팬은 보존하고 스팬 밖의 떠돌이 $만 삭제
 function fixStrayDollar(h){ h=String(h); let out='', last=0, m; const re=/\$\$[\s\S]*?\$\$|\$[^$\n]{1,600}?\$/g; while((m=re.exec(h))){ out += h.slice(last,m.index).replace(/\$/g,''); out += m[0]; last=m.index+m[0].length; } out += h.slice(last).replace(/\$/g,''); return out; }
 function balancedDollar(h){ const s=String(h).replace(/\$\$[\s\S]*?\$\$/g,'').replace(/\$[^$\n]{1,600}?\$/g,''); return s.indexOf('$')===-1; }
+// 수식 스팬 안의 리터럴 <,> 를 \lt \gt 로 치환(HTML 파서가 <b… 를 태그로 오인해 KaTeX가 깨지는 것 방지). SVG 등 스팬 밖은 불변.
+function fixMathAngle(h){ return String(h).replace(/\$\$[\s\S]*?\$\$|\$[^$\n]{1,600}?\$/g, function(m){ return m.replace(/</g,'\\lt ').replace(/>/g,'\\gt '); }); }
 // ---- 커리큘럼 단원 선택(누적) ----
 let CURRICULUM={}, COVERAGE={};
 try{ CURRICULUM=JSON.parse(readFileSync(new URL('./curriculum.json', import.meta.url),'utf-8')); }catch(e){ console.log('curriculum load fail: '+String(e).slice(0,90)); }
@@ -256,7 +258,7 @@ async function genMath(s){
   const tag=`${s.cat} · ${s.sub} · ${unit} · SKY 멘토 × AI 협업 출제`;
   const rc = await callBest(MATH_CONCEPT(s,unit), 16000);
   if(rc && typeof rc.data.concept_html==='string'){
-    const body=fixStrayDollar(fixStrayIneq(rc.data.concept_html));
+    const body=fixStrayDollar(fixStrayIneq(fixMathAngle(rc.data.concept_html)));
     const file=`${s.cat}_${s.sub}_${uf}_개념요약.pdf`;
     try{ await htmlToPdf(page(`${s.cat} ${s.sub} · ${unit} · 개념요약`, tag, body), `${OUT}/${file}`);
       items.push({category:s.cat,subject:s.sub,unit,topic:String(rc.data.topic||unit).slice(0,40),type:'개념요약',file});
@@ -268,7 +270,7 @@ async function genMath(s){
   for(const diff of ['기본','심화','킬러']){
     const r = await callBest(MATH_SET(s,unit,diff), 32000);
     if(!r){ console.log(` [수학] ${s.sub}/${unit} ${diff} 생성 실패`); qc.push({subject:s.sub,category:s.cat,unit:`${unit} · ${diff}`,status:'fail',flags:['noData']}); continue; }
-    let pr=fixStrayIneq(r.data.problems_html||''), sol=fixStrayIneq(r.data.solutions_html||'');
+    let pr=fixStrayIneq(fixMathAngle(r.data.problems_html||'')), sol=fixStrayIneq(fixMathAngle(r.data.solutions_html||''));
     // 비파괴 검수: 불량 문항만 스스로 풀어 새 문항으로 교체(정상 문항 원문 100% 보존 → 재작성 부작용 차단)
     try{
       const v = await callBest(MATH_VERIFY(s,unit,diff,pr.slice(0,20000),sol.slice(0,42000)), 24000);
@@ -280,7 +282,7 @@ async function genMath(s){
         if(qBase>=0 && sBase>=0 && (qParts.length-qBase)===8 && (sParts.length-sBase)===8){
           for(const b of bad){
             const n=parseInt(b.no,10);
-            const ph=fixStrayIneq(String(b.problem_html||'')), sh=fixStrayIneq(String(b.solution_html||''));
+            const ph=fixStrayIneq(fixMathAngle(String(b.problem_html||''))), sh=fixStrayIneq(fixMathAngle(String(b.solution_html||'')));
             if(!(n>=1&&n<=8)) continue;
             if(!/class="q"/.test(ph) || !/class="sol"/.test(sh)) continue;
             if(!balancedDollar(ph) || !balancedDollar(sh)) continue;
@@ -319,7 +321,7 @@ for (const s of plan) {
     if(r2){ const f2=qcStatic(r2.data); if(f2.filter(f=>CRIT.includes(f)).length <= flags.filter(f=>CRIT.includes(f)).length){ r=r2; flags=f2; } }
   }
   const data=r.data;
-  ['concept_html','problems_html','solutions_html'].forEach(function(k){ if(typeof data[k]==='string') data[k]=fixStrayDollar(fixStrayIneq(data[k])); });
+  ['concept_html','problems_html','solutions_html'].forEach(function(k){ if(typeof data[k]==='string') data[k]=fixStrayDollar(fixStrayIneq(fixMathAngle(data[k]))); });
   if (data && typeof data.concept_html === 'string') {
     const _kbt = String(data.concept_html).replace(/<[^>]+>/g,' ').replace(/&[a-z]+;/g,' ').replace(/\s+/g,' ').trim().slice(0,5000);
     if (_kbt) KBROWS.push({ subject: s.cat, title: `${s.cat} ${s.sub} · ${s.unit} 개념`, content: _kbt });
