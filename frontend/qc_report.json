@@ -1,49 +1,37 @@
 {
-  "generated": "2026-07-19T05:54:52.613Z",
-  "run": "pilot:수학1",
-  "sample": "수학|수학1|지수와 로그 · 기본",
+  "generated": "2026-07-19T06:51:46.534Z",
+  "run": "pilot:문학",
+  "sample": "국어|문학|현대시 · 기본",
   "subjects_checked": 3,
   "critical_flagged": 0,
-  "answer_flagged": [
-    "수학1/지수와 로그 · 기본",
-    "수학1/지수와 로그 · 심화"
-  ],
+  "answer_flagged": [],
   "subjects": [
     {
-      "subject": "수학1",
-      "category": "수학",
-      "unit": "지수와 로그 · 기본",
-      "topic": "지수와 로그 기본",
+      "subject": "문학",
+      "category": "국어",
+      "unit": "현대시 · 기본",
+      "topic": "현대시 기본",
       "status": "ok",
       "flags": [],
-      "answerIssues": [
-        {
-          "no": 8,
-          "why": "해설편에 8번 문제의 풀이가 전혀 제시되지 않았고, 7번도 D 계산 도중 잘림"
-        }
-      ]
+      "answerIssues": []
     },
     {
-      "subject": "수학1",
-      "category": "수학",
-      "unit": "지수와 로그 · 심화",
-      "topic": "지수와 로그 심화",
+      "subject": "문학",
+      "category": "국어",
+      "unit": "현대시 · 심화",
+      "topic": "현대시 심화",
       "status": "ok",
       "flags": [],
-      "answerIssues": [
-        {
-          "no": 7,
-          "why": "p,q는 p+q=6,pq=5로 유일하게 {1,5}로 결정되어 log_ab+log_ba=26/5 한 값뿐인데 '될 수 있는 모든 값의 합' 설정 자체가 부적절하며 값도 26/5로 확정"
-        }
-      ]
+      "answerIssues": []
     },
     {
-      "subject": "수학1",
-      "category": "수학",
-      "unit": "지수와 로그 · 킬러",
-      "topic": "지수와 로그 킬러",
+      "subject": "문학",
+      "category": "국어",
+      "unit": "현대시 · 킬러",
+      "topic": "현대시 킬러",
       "status": "ok",
-      "flags": []
+      "flags": [],
+      "answerIssues": []
     }
   ]
 }
