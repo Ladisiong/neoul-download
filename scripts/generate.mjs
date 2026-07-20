@@ -295,6 +295,34 @@ async function callBest(prompt, maxTok, extra){
   }
   return null;
 }
+// 한 난이도 세트 생성+검수(API·정제만, 병렬 가능 — 공유 상태 미접근). 렌더링은 호출부에서 순차.
+async function genTier(s, unit, diff){
+  const r = await callBest(SET_G(s,unit,diff), 32000);
+  if(!r) return { diff, fail:true };
+  let pr=fixStrayIneq(fixMathAngle(r.data.problems_html||'')), sol=fixStrayIneq(fixMathAngle(r.data.solutions_html||''));
+  let fixed=0;
+  try{
+    const v = await callBest(VERIFY_G(s,unit,diff,pr.slice(0,20000),sol.slice(0,42000)), 24000);
+    const bad = (v && Array.isArray(v.data.bad)) ? v.data.bad : [];
+    if(bad.length){
+      const qParts=pr.split(/(?=<div class="q")/), sParts=sol.split(/(?=<div class="sol")/);
+      const qBase=qParts.findIndex(p=>/^<div class="q"/.test(p)), sBase=sParts.findIndex(p=>/^<div class="sol"/.test(p));
+      if(qBase>=0 && sBase>=0 && (qParts.length-qBase)===8 && (sParts.length-sBase)===8){
+        for(const b of bad){
+          const n=parseInt(b.no,10);
+          const ph=fixStrayIneq(fixMathAngle(String(b.problem_html||''))), sh=fixStrayIneq(fixMathAngle(String(b.solution_html||'')));
+          if(!(n>=1&&n<=8)) continue;
+          if(!/class="q"/.test(ph) || !/class="sol"/.test(sh)) continue;
+          if(!balancedDollar(ph) || !balancedDollar(sh)) continue;
+          qParts[qBase+n-1]=ph.trim(); sParts[sBase+n-1]=sh.trim(); fixed++;
+        }
+        if(fixed){ pr=qParts.join(''); sol=sParts.join(''); }
+      }
+    }
+  }catch(e){ console.log('  verify skip: '+String(e).slice(0,80)); }
+  pr=fixStrayDollar(pr); sol=fixStrayDollar(sol);
+  return { diff, pr, sol, fixed };
+}
 async function genUnit(s){
   const unit=s.unit, uf=fnsafe(unit);
   const tag=`${s.cat} · ${s.sub} · ${unit} · SKY 멘토 × AI 협업 출제`;
@@ -309,45 +337,23 @@ async function genUnit(s){
     const kb=String(rc.data.concept_html).replace(/<[^>]+>/g,' ').replace(/&[a-z]+;/g,' ').replace(/\s+/g,' ').trim().slice(0,5000);
     if(kb) KBROWS.push({subject:s.cat,title:`${s.cat} ${s.sub} · ${unit} 개념`,content:kb});
   } else { console.log(` [${s.cat}]${s.sub}/${unit} 개념요약 생성 실패`); }
-  for(const diff of ['기본','심화','킬러']){
-    const r = await callBest(SET_G(s,unit,diff), 32000);
-    if(!r){ console.log(` [${s.cat}]${s.sub}/${unit} ${diff} 생성 실패`); qc.push({subject:s.sub,category:s.cat,unit:`${unit} · ${diff}`,status:'fail',flags:['noData']}); continue; }
-    let pr=fixStrayIneq(fixMathAngle(r.data.problems_html||'')), sol=fixStrayIneq(fixMathAngle(r.data.solutions_html||''));
-    // 비파괴 검수: 불량 문항만 스스로 풀어 새 문항으로 교체(정상 문항 원문 100% 보존 → 재작성 부작용 차단)
-    try{
-      const v = await callBest(VERIFY_G(s,unit,diff,pr.slice(0,20000),sol.slice(0,42000)), 24000);
-      const bad = (v && Array.isArray(v.data.bad)) ? v.data.bad : [];
-      if(bad.length){
-        const qParts=pr.split(/(?=<div class="q")/), sParts=sol.split(/(?=<div class="sol")/);
-        const qBase=qParts.findIndex(p=>/^<div class="q"/.test(p)), sBase=sParts.findIndex(p=>/^<div class="sol"/.test(p));
-        let fixed=0;
-        if(qBase>=0 && sBase>=0 && (qParts.length-qBase)===8 && (sParts.length-sBase)===8){
-          for(const b of bad){
-            const n=parseInt(b.no,10);
-            const ph=fixStrayIneq(fixMathAngle(String(b.problem_html||''))), sh=fixStrayIneq(fixMathAngle(String(b.solution_html||'')));
-            if(!(n>=1&&n<=8)) continue;
-            if(!/class="q"/.test(ph) || !/class="sol"/.test(sh)) continue;
-            if(!balancedDollar(ph) || !balancedDollar(sh)) continue;
-            qParts[qBase+n-1]=ph.trim(); sParts[sBase+n-1]=sh.trim(); fixed++;
-          }
-          if(fixed){ pr=qParts.join(''); sol=sParts.join(''); console.log(` [${s.cat}]${s.sub}/${unit} ${diff} 불량 ${fixed}문항 교체`); }
-        } else { console.log(` [${s.cat}]${s.sub}/${unit} ${diff} 문항 분할 불일치 → 검수 스킵(원문 유지)`); }
-      }
-    }catch(e){ console.log('  math verify skip: '+String(e).slice(0,80)); }
-    pr=fixStrayDollar(pr); sol=fixStrayDollar(sol);
-    const du=`${unit} · ${diff}`, duf=fnsafe(du);
+  // 기본/심화/킬러 3티어 동시(병렬) 생성 → 렌더링은 순차(공유 브라우저·배열 보호)
+  const tiers = await Promise.all(['기본','심화','킬러'].map(diff => genTier(s, unit, diff)));
+  for(const t of tiers){
+    const du=`${unit} · ${t.diff}`, duf=fnsafe(du);
+    if(t.fail){ console.log(` [${s.cat}]${s.sub}/${unit} ${t.diff} 생성 실패`); qc.push({subject:s.sub,category:s.cat,unit:du,status:'fail',flags:['noData']}); continue; }
+    const pr=t.pr, sol=t.sol;
+    if(t.fixed) console.log(` [${s.cat}]${s.sub}/${unit} ${t.diff} 불량 ${t.fixed}문항 교체`);
     const dtag=`${s.cat} · ${s.sub} · ${du} · SKY 멘토 × AI 협업 출제`;
     for(const d of [{type:'문제편',body:pr},{type:'해설편',body:sol}]){
       if(!d.body) continue; const file=`${s.cat}_${s.sub}_${duf}_${d.type}.pdf`;
       try{ await htmlToPdf(page(`${s.cat} ${s.sub} · ${du} · ${d.type}`, dtag, d.body), `${OUT}/${file}`);
-        items.push({category:s.cat,subject:s.sub,unit:du,topic:`${unit} ${diff}`,type:d.type,file});
+        items.push({category:s.cat,subject:s.sub,unit:du,topic:`${unit} ${t.diff}`,type:d.type,file});
         console.log(` [${s.cat}]${s.sub}/${du} ${d.type} PDF OK`);
       }catch(e){ console.log(` [${s.cat}]${s.sub} ${du} ${d.type} PDF 실패: ${String(e).slice(0,80)}`); }
     }
     const flags=qcStatic({concept_html:'',problems_html:pr,solutions_html:sol});
-    const entry={subject:s.sub,category:s.cat,unit:du,topic:`${unit} ${diff}`,status: flags.length?'flagged':'ok', flags};
-    if(KEYS.anthropic){ const iss=await answerAudit(s, du, {problems_html:pr, solutions_html:sol}); if(iss!==null) entry.answerIssues=iss; }
-    qc.push(entry);
+    qc.push({subject:s.sub,category:s.cat,unit:du,topic:`${unit} ${t.diff}`,status: flags.length?'flagged':'ok', flags, fixed:t.fixed||0});
   }
   const key=s.cat+'|'+s.sub; COVERAGE[key]=Array.from(new Set([...(COVERAGE[key]||[]), unit]));
 }
