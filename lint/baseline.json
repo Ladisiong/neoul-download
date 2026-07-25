@@ -1,0 +1,17 @@
+{
+  "note": "승인된 잔여 위반 목록. 근거는 docs/LIVE_EXCEPTIONS.md. 신규 위반은 여기에 없으므로 CI에서 FAIL 한다.",
+  "accepted": [
+    {
+      "key": "1fa384d4c041",
+      "rule": "R04",
+      "file": "frontend/index.html",
+      "msg": "섀도 색 rgba(39,174,96) — rgba(26,58,92,x)만 허용"
+    },
+    {
+      "key": "057adb4d8fdc",
+      "rule": "R04",
+      "file": "index.html",
+      "msg": "섀도 색 rgba(39,174,96) — rgba(26,58,92,x)만 허용"
+    }
+  ]
+}
