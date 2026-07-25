@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>너울(NEOUL) — 교육자료 배포 시스템 | 무료 학습자료</title>
 <meta name="description" content="너울 수능·내신 무료 학습자료 배포. 국어·수학·영어·사탐·과탐·한국사·통합사회·통합과학. SKY 출신 교과 멘토와 AI가 협업해 출제한 자료. 상표 출원 40-2026-0081306·0081307." />
-<meta name="theme-color" content="#1A3A5C" />
+<meta name="theme-color" content="#0A3D62" />
 <meta property="og:title" content="너울 — 교육자료 배포 시스템" />
 <meta property="og:description" content="오늘의 한 물결이, 내일의 너울이 된다. 수능·내신 무료 학습자료 원클릭 다운로드." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M2 13c4 0 4-6 8-6s4 6 8 6 4-6 8-6' stroke='%230A3D62' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M2 21c4 0 4-5 8-5s4 5 8 5 4-5 8-5' stroke='%233498DB' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
@@ -13,12 +13,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <style>
-  :root{--deep:#1A3A5C;--ocean:#2B5F8B;--sky:#2B5F8B;--wave:#A8C4DD;--mist:#F5F9FC;--line:#E4E7EB;--ink:#1F2937;--muted:#64748b;--serif:"Noto Serif KR",serif;--sans:"Pretendard","Noto Sans KR",system-ui,sans-serif}
+  :root{--deep:#0A3D62;--ocean:#1B6CA8;--sky:#3498DB;--wave:#AED6F1;--mist:#EAF4FB;--line:#D6E9F5;--ink:#12222f;--muted:#5A7890;--serif:"Noto Serif KR",serif;--sans:"Pretendard","Noto Sans KR",system-ui,sans-serif}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:var(--sans);color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
   a{color:inherit;text-decoration:none}
-  .hero{background:linear-gradient(155deg,#1A3A5C,#2B5F8B);color:#fff;padding:48px 0 40px;text-align:center}
+  .hero{background:linear-gradient(155deg,#0A3D62,#1B6CA8);color:#fff;padding:48px 0 40px;text-align:center}
   .hero .logo{display:inline-flex;align-items:center;gap:9px;font-family:var(--serif);font-weight:700;font-size:1.5rem}
   .hero .logo svg{width:34px;height:34px}
   .hero h1{font-family:var(--serif);font-size:1.4rem;margin:14px 0 6px;font-weight:700}
@@ -29,18 +29,18 @@
   .notice b{color:var(--deep)}
   .tabs{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .tabs .wrap{display:flex;gap:7px;overflow-x:auto;padding:12px 20px}
-  .tab{white-space:nowrap;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:12px;padding:7px 15px;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+  .tab{white-space:nowrap;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:20px;padding:7px 15px;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
   .tab.on{background:var(--deep);color:#fff;border-color:var(--deep)}
   main{padding:28px 0 60px;min-height:40vh}
   .state{text-align:center;color:var(--muted);padding:60px 20px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
   .card{border:1px solid var(--line);border-radius:14px;padding:20px;background:#fff;transition:.2s}
-  .card:hover{box-shadow:0 14px 34px -20px rgba(26,58,92,.4);transform:translateY(-2px)}
+  .card:hover{box-shadow:0 14px 34px -20px rgba(10,61,98,.4);transform:translateY(-2px)}
   .card .cat{font-size:.74rem;font-weight:800;color:var(--ocean);letter-spacing:.04em}
   .card h3{font-family:var(--serif);font-size:1.12rem;color:var(--deep);margin:5px 0 4px}
   .badge{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:12px;margin-bottom:10px}
-  .badge.author{background:#F5F9FC;color:#2B5F8B}
-  .badge.ai{background:#FAF3E0;color:#8C6719}
+  .badge.author{background:#eaf4fb;color:#1B6CA8}
+  .badge.ai{background:#fff4e5;color:#9a5b00}
   .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
   .dl{display:inline-flex;align-items:center;gap:6px;background:var(--sky);color:#fff;border-radius:9px;padding:9px 14px;font-weight:700;font-size:.85rem;cursor:pointer;border:none;font-family:inherit}
   .dl:hover{background:#2980B9}
@@ -48,21 +48,10 @@
   footer{background:#06283d;color:#93aabd;padding:34px 0;font-size:.82rem}
   footer .wrap{text-align:center}footer b{color:#fff}
   footer .cr{margin-top:8px;font-size:.76rem;color:#6d8ba3}
-  /* ── 단원/주제/무료샘플/후킹 ── */
-  .card.free{border:2px solid #2F855A;box-shadow:0 12px 32px -18px rgba(39,174,96,.55)}
-  .card .subj{font-size:.72rem;color:var(--muted);font-weight:700}
-  .card .unit{font-family:var(--serif);font-size:1.12rem;color:var(--deep);margin:4px 0 2px}
-  .card .topic{font-size:.85rem;color:var(--muted);margin-bottom:9px}
-  .badge.free{background:#EAF4EE;color:#256745}
-  .badge.lock{background:#fef3f2;color:#b23b3b}
-  .hook{background:linear-gradient(135deg,#1A3A5C,#2B5F8B);color:#fff;border-radius:14px;padding:15px 18px;margin:0 0 20px;display:flex;gap:12px 16px;align-items:center;flex-wrap:wrap;font-size:.9rem}
-  .hook b{color:#A8C4DD}
-  .hook .cta{margin-left:auto;background:#fff;color:var(--deep);border-radius:10px;padding:10px 17px;font-weight:800;font-size:.86rem;border:none;cursor:pointer;font-family:inherit;white-space:nowrap}
-  .hook .cta:hover{filter:brightness(.96)}
   /* ── 게이티드 퍼널 모달 ── */
   .modal-bg{position:fixed;inset:0;background:rgba(6,40,61,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
   .modal-bg.on{display:flex}
-  .modal{background:#fff;border-radius:12px;max-width:420px;width:100%;padding:28px 26px 24px;box-shadow:0 30px 70px -20px rgba(6,40,61,.6);animation:pop .18s ease}
+  .modal{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:28px 26px 24px;box-shadow:0 30px 70px -20px rgba(6,40,61,.6);animation:pop .18s ease}
   @keyframes pop{from{transform:translateY(10px) scale(.98);opacity:0}to{transform:none;opacity:1}}
   .modal h2{font-family:var(--serif);color:var(--deep);font-size:1.24rem;margin-bottom:6px}
   .modal .sub{color:var(--muted);font-size:.88rem;margin-bottom:18px}
@@ -71,43 +60,19 @@
   .modal input[type=email]:focus,.modal select:focus{outline:none;border-color:var(--sky)}
   .modal .agree{display:flex;align-items:flex-start;gap:8px;margin:16px 0 4px;font-size:.8rem;color:var(--muted);line-height:1.45}
   .modal .agree input{margin-top:3px}
-  .modal .submit{width:100%;margin-top:16px;background:linear-gradient(135deg,#1A3A5C,#2B5F8B);color:#fff;border:none;border-radius:11px;padding:13px;font-weight:800;font-size:.98rem;cursor:pointer;font-family:inherit}
+  .modal .submit{width:100%;margin-top:16px;background:linear-gradient(135deg,#0A3D62,#2B5F8B);color:#fff;border:none;border-radius:11px;padding:13px;font-weight:800;font-size:.98rem;cursor:pointer;font-family:inherit}
   .modal .submit:hover{filter:brightness(1.08)}
   .modal .fine{font-size:.72rem;color:#93a7b8;margin-top:12px;text-align:center;line-height:1.5}
   .modal .x{float:right;border:none;background:none;font-size:1.3rem;color:var(--muted);cursor:pointer;line-height:1;margin:-6px -4px 0 0}
-  .modal .err{color:#C53030;font-size:.78rem;margin-top:8px;min-height:1em}
-  /* ── 폴더형 정리(과목=폴더, 단원=통합카드) ── */
-  #grid{display:block}
-  .folder{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:16px;background:#fff;box-shadow:0 10px 30px -24px rgba(26,58,92,0.16)}
-  .folder-h{width:100%;display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--mist);border:none;border-bottom:1px solid var(--line);cursor:pointer;font-family:inherit;text-align:left}
-  .folder.collapsed .folder-h{border-bottom:none}
-  .fh-cat{font-size:.7rem;font-weight:800;color:var(--ocean);letter-spacing:.03em}
-  .fh-name{font-family:var(--serif);font-weight:700;color:var(--deep);font-size:1.08rem}
-  .fh-count{font-size:.76rem;color:var(--muted)}
-  .fh-free{font-size:.7rem;font-weight:800;background:#EAF4EE;color:#256745;border-radius:12px;padding:3px 10px}
-  .fh-chev{margin-left:auto;color:var(--muted);font-size:1rem;transition:transform .2s}
-  .folder.collapsed .fh-chev{transform:rotate(-90deg)}
-  .folder.collapsed .folder-b{display:none}
-  .folder-b{padding:16px}
-  .ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
-  .card .crow{display:flex;align-items:center;gap:9px;margin-top:10px;padding:9px 0 11px;border-bottom:1px dashed var(--line)}
-  .card .clab{font-size:.78rem;font-weight:800;color:var(--ocean)}
-  .card .drow{display:flex;align-items:center;gap:9px;margin-top:9px}
-  .dlab{flex:0 0 44px;text-align:center;font-size:.74rem;font-weight:800;border-radius:7px;padding:4px 0}
-  .dlab.b{background:#F5F9FC;color:#2B5F8B}.dlab.a{background:#FAF3E0;color:#8C6719}.dlab.k{background:#fdecec;color:#C53030}
-  .dlab.all{flex-basis:auto;padding:4px 10px;background:#eef2f6;color:#64748b}
-  .dbtns{display:flex;gap:7px;flex-wrap:wrap}
-  .card .dl{padding:8px 13px;font-size:.82rem}
-  .dl.freebtn{background:#2F855A}.dl.freebtn:hover{background:#219150}
-  .dl.ghost.freebtn{background:#fff;color:#256745;border-color:#2F855A}
+  .modal .err{color:#c0392b;font-size:.78rem;margin-top:8px;min-height:1em}
 </style>
 </head>
 <body>
 <header class="hero">
   <div class="wrap">
-    <span class="logo"><svg viewBox="0 0 32 32"><path d="M2 13c4 0 4-6 8-6s4 6 8 6 4-6 8-6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M2 21c4 0 4-5 8-5s4 5 8 5 4-5 8-5" stroke="#A8C4DD" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>너울 NEOUL</span>
+    <span class="logo"><svg viewBox="0 0 32 32"><path d="M2 13c4 0 4-6 8-6s4 6 8 6 4-6 8-6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M2 21c4 0 4-5 8-5s4 5 8 5 4-5 8-5" stroke="#AED6F1" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>너울 NEOUL</span>
     <h1>교육자료 배포 시스템</h1>
-    <p>수능·내신 무료 학습자료 · 원클릭 다운로드 · 매주 새 단원 업데이트</p>
+    <p>수능·내신 무료 학습자료 · 원클릭 다운로드</p>
     <p class="tag">"오늘의 한 물결이, 내일의 너울이 된다."</p>
   </div>
 </header>
@@ -119,10 +84,6 @@
 <nav class="tabs"><div class="wrap" id="tabs"></div></nav>
 
 <main><div class="wrap">
-  <div id="hook" class="hook" style="display:none">
-    <div>🎁 <b>이번 주 무료 단원</b>은 회원가입 없이 바로 받으세요 — 나머지 <b>전 과목·전 단원</b>도 이메일 하나면 <b>100% 무료</b>. 매주 <b>새 단원</b>이 차곡차곡 쌓입니다.</div>
-    <button class="cta" id="hookCta">무료로 전체 열기 →</button>
-  </div>
   <div id="state" class="state">너울 학습자료를 불러오는 중입니다…<br/><span style="font-size:.82rem">최초 접속 시 5~10초 정도 소요될 수 있습니다.</span></div>
   <div id="grid" class="grid" style="display:none"></div>
 </div></main>
@@ -137,8 +98,8 @@
 <div class="modal-bg" id="modalBg">
   <div class="modal" role="dialog" aria-modal="true">
     <button class="x" id="modalClose" aria-label="닫기">×</button>
-    <h2>무료 회원가입하고 전체 받기</h2>
-    <p class="sub">이메일과 간단한 2가지만 남기면 <b>전 과목·전 단원 자료를 100% 무료</b>로 받으실 수 있어요. 매주 새 단원도 계속 열립니다.</p>
+    <h2>무료 학습자료 받기</h2>
+    <p class="sub">이 자료는 <b>무료</b>입니다. 이메일과 간단한 2가지만 알려주시면 바로 받으실 수 있어요.</p>
     <label for="fEmail">이메일</label>
     <input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email" />
     <label for="fGrade">학년</label>
@@ -153,13 +114,13 @@
     </select>
     <label class="agree"><input type="checkbox" id="fAgree" /><span>개인정보(이메일·학년·관심영역) 수집·이용에 동의합니다. 수집 정보는 <b>자료 제공·학습 안내 목적</b>으로만 사용되며 제3자에게 제공하지 않습니다.</span></label>
     <div class="err" id="fErr"></div>
-    <button class="submit" id="fSubmit">무료로 전체 받기 →</button>
+    <button class="submit" id="fSubmit">자료 받기 →</button>
     <div class="fine">신청 즉시 자료가 새 창으로 열립니다. 언제든 수신거부하실 수 있습니다.</div>
   </div>
 </div>
 
 <script>
-  // tmkim Apps Script 웹앱 URL(/exec). 백엔드 재배포로 URL이 바뀌면 여기만 교체.
+  // tmkim Apps Script 웹앱 URL(/exec). 백엔드 v2 재배포 후에도 URL이 바뀌면 여기만 교체.
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
   var LEAD_KEY = "neoul_lead_v1";
   var CATS = ["전체","국어","수학","영어","사탐","과탐","한국사","통합사회","통합과학"];
@@ -193,86 +154,41 @@
     tabsEl.appendChild(b);
   });
 
+  window.__neoulData = function(res){
+    if(!res || !res.ok){ fail(res && res.error); return; }
+    ALL = res.items || [];
+    render();
+  };
   function fail(msg){
     document.getElementById('state').innerHTML='⚠️ 자료를 불러오지 못했습니다.<br/><span style="font-size:.82rem">'+(msg||'잠시 후 새로고침해 주세요.')+'</span>';
   }
-
-  function catIdx(c){ var i=CATS.indexOf(c); return i<0?99:i; }
-  // 단원명에서 난이도(· 기본/심화/킬러) 분리 → 통합 카드용
-  function parseUnit(u){
-    var m=String(u||'').match(/^([\s\S]*?)\s*·\s*(기본|심화|킬러)\s*$/);
-    return m ? {base:m[1].trim(), diff:m[2]} : {base:String(u||'').trim(), diff:null};
-  }
-  function dlBtn(f, matBase, typeLabel, cat){
-    var free=!!f.sample, mat=matBase+'_'+f.type;
-    return '<button class="dl'+(f.type==='해설편'?' ghost':'')+(free?' freebtn':'')+'" data-href="'+esc(f.download)+
-      '" data-mat="'+esc(mat)+'" data-cat="'+esc(cat)+'" data-free="'+(free?'1':'')+'">⬇ '+esc(typeLabel||f.type)+'</button>';
-  }
   function render(){
-    var grid=document.getElementById('grid'), state=document.getElementById('state'), hook=document.getElementById('hook');
+    var grid=document.getElementById('grid'), state=document.getElementById('state');
     var items = cur==='전체' ? ALL : ALL.filter(function(x){return x.category===cur;});
-    // 과목(폴더) 단위로 묶기
-    var subs={};
-    items.forEach(function(x){ var sk=x.category+'|'+x.subject; (subs[sk]=subs[sk]||[]).push(x); });
-    var subKeys=Object.keys(subs).sort(function(a,b){ var xa=subs[a][0], xb=subs[b][0];
-      return catIdx(xa.category)-catIdx(xb.category) || String(xa.subject).localeCompare(String(xb.subject),'ko'); });
-    if(subKeys.length===0){ hook.style.display='none'; state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
-    hook.style.display='flex'; state.style.display='none'; grid.style.display='block'; grid.innerHTML='';
-    var dorder=['기본','심화','킬러','_'];
-    var startCollapsed = subKeys.length > 6;  // 과목이 많으면(전체 보기 등) 접힌 채로 = 깔끔한 폴더 목록
-
-    subKeys.forEach(function(sk){
-      var sarr=subs[sk], cat0=sarr[0].category, subj0=sarr[0].subject;
-      // 단원(base) 그룹화
-      var units={};
-      sarr.forEach(function(x){ var pu=parseUnit(x.unit); x._diff=pu.diff; (units[pu.base]=units[pu.base]||[]).push(x); });
-      var uKeys=Object.keys(units).sort(function(a,b){ return String(a).localeCompare(String(b),'ko'); });
-      var subjFree=sarr.some(function(x){return x.sample;});
-
-      var folder=document.createElement('section'); folder.className='folder'+(startCollapsed?' collapsed':'');
-      folder.innerHTML='<button class="folder-h" type="button">'
-        +'<span class="fh-cat">'+esc(cat0)+'</span>'
-        +'<span class="fh-name">'+esc(subj0)+'</span>'
-        +'<span class="fh-count">'+uKeys.length+'개 단원</span>'
-        +(subjFree?'<span class="fh-free">🎁 이번 주 무료</span>':'')
-        +'<span class="fh-chev">▾</span></button>';
-      var body=document.createElement('div'); body.className='folder-b';
-      var g=document.createElement('div'); g.className='ugrid';
-
-      uKeys.forEach(function(ub){
-        var arr=units[ub];
-        var free=arr.some(function(x){return x.sample;});
-        var topic=''; for(var i=0;i<arr.length;i++){ if(arr[i].topic){topic=arr[i].topic;break;} }
-        var matBase=cat0+'_'+subj0+'_'+ub;
-        var concept=null, diffs={};
-        arr.forEach(function(x){ if(x.type==='개념요약'){concept=x;return;} var d=x._diff||'_'; (diffs[d]=diffs[d]||{})[x.type]=x; });
-        var html='<div class="subj">'+esc(cat0)+' · '+esc(subj0)+'</div>'
-          +'<div class="unit">'+esc(ub)+'</div>'
-          +(topic?'<div class="topic">'+esc(topic)+'</div>':'')
-          +(free?'<span class="badge free">🎁 이번 주 무료 단원</span>':'<span class="badge lock">🔒 무료 회원 전용</span>');
-        if(concept){ html+='<div class="crow"><span class="clab">📘 개념요약</span>'+dlBtn(concept, matBase, '개념요약', cat0)+'</div>'; }
-        dorder.forEach(function(d){
-          var slot=diffs[d]; if(!slot) return;
-          var lbl = d==='_' ? '<span class="dlab all">문제·해설</span>' : '<span class="dlab '+(d==='기본'?'b':d==='심화'?'a':'k')+'">'+d+'</span>';
-          var btns='';
-          ['문제편','해설편'].forEach(function(t){ if(slot[t]) btns+=dlBtn(slot[t], matBase+(d==='_'?'':'_'+d), t, cat0); });
-          if(btns) html+='<div class="drow">'+lbl+'<span class="dbtns">'+btns+'</span></div>';
-        });
-        var card=document.createElement('div'); card.className='card'+(free?' free':''); card.innerHTML=html;
-        g.appendChild(card);
-      });
-      body.appendChild(g); folder.appendChild(body); grid.appendChild(folder);
+    var groups={};
+    items.forEach(function(x){ var k=x.category+'|'+x.subject+'|'+x.provenance; (groups[k]=groups[k]||[]).push(x); });
+    var keys=Object.keys(groups);
+    if(keys.length===0){ state.style.display='block'; grid.style.display='none'; state.innerHTML='해당 과목의 자료가 아직 없습니다.'; return; }
+    state.style.display='none'; grid.style.display='grid'; grid.innerHTML='';
+    keys.forEach(function(k){
+      var arr=groups[k], first=arr[0];
+      var files=arr.map(function(f){
+        var mat=first.category+'_'+first.subject+'_'+f.type;
+        return '<button class="dl'+(f.type==='해설편'?' ghost':'')+'" data-href="'+esc(f.download)+'" data-mat="'+esc(mat)+'" data-cat="'+esc(first.category)+'">⬇ '+esc(f.type)+'</button>';
+      }).join('');
+      var card=document.createElement('div'); card.className='card';
+      card.innerHTML='<div class="cat">'+esc(first.category)+'</div><h3>'+esc(first.subject)+'</h3>'+
+        '<span class="badge author">'+esc(first.provenance)+'</span>'+
+        '<div class="files">'+files+'</div>';
+      grid.appendChild(card);
     });
   }
 
-  // 다운로드 클릭 → (무료 샘플=바로 / 그 외=무료 회원가입 게이팅)
+  // 다운로드 클릭 → 게이팅
   document.getElementById('grid').addEventListener('click', function(e){
-    var fh = e.target.closest('.folder-h');
-    if(fh){ if(fh.parentNode) fh.parentNode.classList.toggle('collapsed'); return; }
     var b = e.target.closest('.dl'); if(!b) return;
-    var href=b.getAttribute('data-href'), mat=b.getAttribute('data-mat'), cat=b.getAttribute('data-cat'), free=b.getAttribute('data-free')==='1';
+    var href=b.getAttribute('data-href'), mat=b.getAttribute('data-mat'), cat=b.getAttribute('data-cat');
     var lead=getLead();
-    if(free){ if(lead&&lead.done) logLead(lead.email,lead.grade,lead.interest,mat+'#sample'); startDownload(href); return; }
     if(lead && lead.done){ logLead(lead.email, lead.grade, lead.interest, mat); startDownload(href); return; }
     openModal(href, mat, cat);
   });
@@ -306,11 +222,8 @@
     startDownload(href);
   };
 
-  var hookCtaEl=document.getElementById('hookCta');
-  if(hookCtaEl){ hookCtaEl.onclick=function(){ openModal(null, 'hook_cta', cur==='전체'?'':cur); }; }
-
   (function load(){
-    // 자료 목록 = Vercel 호스팅 매니페스트(same-origin).
+    // 자료 목록 = Vercel 호스팅 매니페스트(same-origin). Drive/Apps Script 의존 제거.
     fetch('materials.json?t='+Date.now(),{cache:'no-store'})
       .then(function(r){ if(!r.ok) throw 0; return r.json(); })
       .then(function(res){
