@@ -190,6 +190,8 @@
 <script>
   // tmkim Apps Script 웹앱 URL(/exec). 백엔드 재배포로 URL이 바뀌면 여기만 교체.
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsVNBCcCwLMavq8gcgYAx8p3ss5Xj9vue3vRmqeUziGIqnwySjZ_uK5gk-hlkrfKGl/exec";
+  var SB_LEAD_URL = "https://iwrblahmszuthemfrhmy.supabase.co/functions/v1/lead-capture";
+  var SB_ANON = "sb_publishable_k-WJ3TAhq32b4fyp5EsQhg_Mo8yKGso";
   var LEAD_KEY = "neoul_lead_v1";
   var CATS = ["전체","국어","수학","영어","사탐","과탐","한국사","통합사회","통합과학"];
   var ALL = [], cur = "전체", pending = null;
@@ -210,6 +212,13 @@
         + '&ua=' + encodeURIComponent((navigator.userAgent||'').slice(0,180));
       fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', credentials:'omit',
         headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body });
+      try{
+        fetch(SB_LEAD_URL, { method:'POST', credentials:'omit',
+          headers:{'Content-Type':'application/json','apikey':SB_ANON,'Authorization':'Bearer '+SB_ANON},
+          body: JSON.stringify({ email:email||'', grade:grade||'', interest:interest||'',
+            material:material||'', consent:'Y', src:'neoul-download',
+            ua:(navigator.userAgent||'').slice(0,180) }) });
+      }catch(e){}
     }catch(e){}
   }
   function startDownload(href){ if(href){ window.open(href, '_blank', 'noopener'); } }
